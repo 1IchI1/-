@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国際物流 課題分析レポート</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ===== HEADER ===== */
+.report-header {
+  background: #1a3a6b;
+  color: white;
+  padding: 36px 48px 28px;
+}
+.report-header h1 { font-size: 26px; font-weight: 700; letter-spacing: 0.04em; }
+.report-header .subtitle { font-size: 13px; opacity: 0.75; margin-top: 6px; }
+.report-header .meta { font-size: 12px; opacity: 0.6; margin-top: 16px; }
+
+/* ===== SECTION ===== */
+.section {
+  background: white;
+  margin: 20px 32px;
+  padding: 28px 32px;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a3a6b;
+  border-left: 4px solid #1a5faa;
+  padding-left: 12px;
+  margin-bottom: 22px;
+  letter-spacing: 0.03em;
+}
+
+/* ===== AS IS / TO BE ===== */
+.asis-tobe-wrap {
+  display: grid;
+  grid-template-columns: 1fr 72px 1fr;
+  gap: 0;
+  align-items: stretch;
+}
+.tobe-col {
+  background: #1a5faa;
+  color: white;
+  padding: 20px 22px;
+  border-radius: 6px 0 0 6px;
+}
+.asis-col {
+  background: #e87722;
+  color: white;
+  padding: 20px 22px;
+  border-radius: 0 6px 6px 0;
+}
+.gap-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+.gap-arrow-icon { font-size: 28px; color: #555; }
+.gap-label-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #555;
+  text-align: center;
+  margin-top: 4px;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.1em;
+}
+.col-heading {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.35);
+  letter-spacing: 0.04em;
+}
+.col-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 9px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.col-item .lbl {
+  font-weight: 700;
+  min-width: 18px;
+  opacity: 0.75;
+}
+
+/* ===== GAP CARDS ===== */
+.gap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 24px;
+}
+.gap-card {
+  border: 1.5px solid #c5d5ea;
+  border-radius: 5px;
+  padding: 14px;
+  background: #fafdff;
+  position: relative;
+}
+.gap-card.selected {
+  border-color: #f59e0b;
+  background: #fffbeb;
+  box-shadow: 0 0 0 2px #fde68a;
+}
+.gap-card-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a5faa;
+  margin-bottom: 4px;
+}
+.gap-card.selected .gap-card-num { color: #92400e; }
+.gap-card-title {
+  font-weight: 700;
+  font-size: 12px;
+  color: #1a3a6b;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.gap-card.selected .gap-card-title { color: #78350f; }
+.gap-card dl dt {
+  font-size: 10px;
+  font-weight: 700;
+  color: #888;
+  margin-top: 7px;
+}
+.gap-card dl dd {
+  font-size: 11px;
+  color: #555;
+  line-height: 1.45;
+}
+.selected-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #f59e0b;
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+}
+
+/* ===== SELECTION RATIONALE ===== */
+.rationale-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.rationale-item {
+  background: #f0f6ff;
+  border-left: 3px solid #1a5faa;
+  padding: 12px 14px;
+  border-radius: 0 4px 4px 0;
+}
+.rationale-item .r-title {
+  font-weight: 700;
+  font-size: 11px;
+  color: #1a3a6b;
+  margin-bottom: 5px;
+}
+.rationale-item .r-body { font-size: 11px; color: #444; line-height: 1.5; }
+
+/* ===== TAGS ===== */
+.tag {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+.tag-s4 { background: #16a34a; color: white; }    /* ◎ 技術解決 */
+.tag-s3 { background: #84cc16; color: white; }    /* ○ */
+.tag-s2 { background: #f59e0b; color: white; }    /* △ */
+.tag-s1 { background: #9ca3af; color: white; }    /* ✗ */
+.tag-ph { background: #ef4444; color: white; }    /* 優先度：高 */
+.tag-pm { background: #f97316; color: white; }    /* 優先度：中 */
+.tag-pl { background: #d1d5db; color: #555; }     /* 優先度：低 */
+
+/* ===== TREE ===== */
+.tree-outer { overflow-x: auto; padding: 8px 0 8px 8px; }
+
+.tree, .tree ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tree li {
+  position: relative;
+  padding: 3px 0 3px 26px;
+  margin-bottom: 2px;
+}
+
+/* vertical connector */
+.tree li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  border-left: 2px solid #c8d6e8;
+}
+
+/* horizontal connector */
+.tree li::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 14px;
+  width: 14px;
+  border-top: 2px solid #c8d6e8;
+}
+
+/* last child: clip vertical line at midpoint */
+.tree li:last-child::before {
+  height: 14px;
+  bottom: auto;
+}
+
+/* root item has no connector */
+.tree > li::before,
+.tree > li::after {
+  display: none;
+}
+
+/* nested ul */
+.tree ul {
+  margin-top: 4px;
+}
+
+/* ===== NODES ===== */
+.node {
+  display: inline-flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 1.45;
+  max-width: 340px;
+  vertical-align: top;
+}
+.node-text { flex: 1; min-width: 0; }
+
+.n-root {
+  background: #1a3a6b;
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+  max-width: 240px;
+}
+.n-w1 { background: #1a5faa; color: white; font-weight: 700; max-width: 280px; }
+.n-w2 { background: #2d80d4; color: white; max-width: 280px; }
+.n-w3 { background: #93c5fd; color: #1e3a5f; max-width: 300px; }
+.n-w4 { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; max-width: 320px; }
+.n-w5 { background: #f0f9ff; color: #374151; border: 1px solid #bae6fd; max-width: 320px; }
+.n-leaf { border-width: 1.5px; }
+
+/* highlight leaf nodes with high priority + good solvability */
+.n-highlight {
+  border: 2px solid #16a34a !important;
+  background: #f0fdf4 !important;
+  color: #14532d !important;
+}
+
+/* ===== PRIORITY TABLE ===== */
+.priority-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+  font-size: 12px;
+}
+.priority-table th {
+  background: #1a3a6b;
+  color: white;
+  padding: 9px 12px;
+  text-align: left;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.priority-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.priority-table tr:nth-child(even) td { background: #f9fafb; }
+.priority-table tr:hover td { background: #eff6ff; }
+.num-cell {
+  font-weight: 700;
+  color: #1a3a6b;
+  white-space: nowrap;
+}
+.direction-cell { color: #1a5faa; font-weight: 700; }
+
+/* ===== FLOW SUMMARY ===== */
+.flow-boxes {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 8px;
+  overflow-x: auto;
+}
+.flow-box {
+  background: #1a5faa;
+  color: white;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  min-width: 110px;
+  line-height: 1.4;
+}
+.flow-box.phase2 { background: #2d80d4; }
+.flow-box.phase3 { background: #3b99f7; }
+.flow-arrow {
+  font-size: 20px;
+  color: #1a5faa;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+.flow-sub {
+  font-size: 10px;
+  opacity: 0.8;
+  font-weight: 400;
+  margin-top: 3px;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="report-header">
+  <h1>国際物流 課題分析レポート</h1>
+  <p class="subtitle">As is / To be フレームワーク × なぜ思考ロジックツリー</p>
+  <p class="meta">作成日：2026年5月17日　｜　対象領域：国際物流（越境EC・中小輸出入企業）</p>
+</div>
+
+
+<!-- ===== SECTION 1: As is / To be ===== -->
+<div class="section">
+  <div class="section-title">① As is / To be フレームワーク</div>
+
+  <div class="asis-tobe-wrap">
+    <div class="tobe-col">
+      <div class="col-heading">① To be（あるべき理想の姿）</div>
+      <div class="col-item"><span class="lbl">A)</span><span>貿易書類（インボイス・BL・CO等）がデジタル一元管理され、書類間の整合性が自動チェックされる。エラーはリアルタイムで警告され、通関申告まで一気通貫でデータが流れる</span></div>
+      <div class="col-item"><span class="lbl">B)</span><span>フォワーダー・通関業者の業務がデジタル化され、引き継ぎ・対応履歴が自動蓄積。属人化が解消され誰でも業務継続できる</span></div>
+      <div class="col-item"><span class="lbl">C)</span><span>HS分類・EPA原産地判定・規制確認が専門家でなくてもガイダンスで判断できる。コンプライアンスリスクの可視化と学習環境が整う</span></div>
+      <div class="col-item"><span class="lbl">D)</span><span>中小輸出企業が財務実績・取引履歴・船積み書類を根拠にスピーディーかつ適切なコストで貿易金融・保険にアクセスできる</span></div>
+      <div class="col-item"><span class="lbl">E)</span><span>越境EC事業者がラストマイル配送をリアルタイムで把握・管理でき、不達・遅延時は自動アラートと対応フローが起動。消費者に多言語でタイムリー通知が届く</span></div>
+      <div class="col-item"><span class="lbl">F)</span><span>フォワーダー・輸出入企業がコンテナ・航空便・トラックのスペースと運賃をオンラインで比較・予約できる。透明な価格でスペースを確保できる</span></div>
+    </div>
+    <div class="gap-center">
+      <div class="gap-arrow-icon">⇔</div>
+      <div class="gap-label-text">ギャップ分析</div>
+    </div>
+    <div class="asis-col">
+      <div class="col-heading">② As is（現在の状況）</div>
+      <div class="col-item"><span class="lbl">a.</span><span>インボイス・BL・COなど複数書類をExcel＋メールで個別管理。整合性チェックは担当者の目視に依存し、エラー発見が通関直前になる</span></div>
+      <div class="col-item"><span class="lbl">b.</span><span>荷主からの指示はFAX・メール・電話で受け付け、業務はほぼ手入力。ベテラン担当者の頭に業務ロジックが集中し、退職で即業務停止リスクがある</span></div>
+      <div class="col-item"><span class="lbl">c.</span><span>HS分類・EPA原産地判定などの専門知識は習得に数年かかるが体系的な研修がなく、「わかる人が一人いれば何とかなる」状態が常態化している</span></div>
+      <div class="col-item"><span class="lbl">d.</span><span>信用状・輸出保険は大手向け設計で審査が重く、中小企業は前払い条件を飲むか取引を断念するかしかない。機会損失が常態化している</span></div>
+      <div class="col-item"><span class="lbl">e.</span><span>海外現地の配送状況はリアルタイムで把握できず、不達・遅延時は現地業者への個別問い合わせに依存。消費者クレームにタイムリーに回答できない</span></div>
+      <div class="col-item"><span class="lbl">f.</span><span>コンテナ・航空便・トラックのスペース・運賃はキャリアや代理店との個別交渉で決まる。中小事業者は相場を知る手段もなく高い運賃を支払わされる</span></div>
+    </div>
+  </div>
+
+  <!-- GAP CARDS -->
+  <div class="gap-grid" style="margin-top:28px;">
+
+    <div class="gap-card">
+      <div class="gap-card-num">ギャップ①（A ↔ a）</div>
+      <div class="gap-card-title">貿易書類の分断管理による「直前ミス」構造</div>
+      <dl>
+        <dt>ギャップの本質</dt>
+        <dd>デジタル化は「保存形式だけ」でデータ連携・活用がゼロ</dd>
+        <dt>影響を受ける人</dt>
+        <dd>中小輸出入企業の貿易担当者・通関業者</dd>
+      </dl>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-num">ギャップ②（B ↔ b）</div>
+      <div class="gap-card-title">フォワーダー業務の極度な属人化による組織的脆弱性</div>
+      <dl>
+        <dt>ギャップの本質</dt>
+        <dd>業務の「見える化」と「標準化」の両方が欠如</dd>
+        <dt>影響を受ける人</dt>
+        <dd>中小フォワーダー・通関業者の経営者と従業員</dd>
+      </dl>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-num">ギャップ③（C ↔ c）</div>
+      <div class="gap-card-title">通関・規制知識の「一極集中」による機会損失</div>
+      <dl>
+        <dt>ギャップの本質</dt>
+        <dd>FTA活用漏れ等、知識のアップデートループが組織に不在</dd>
+        <dt>影響を受ける人</dt>
+        <dd>中小輸出入企業の貿易担当者・経営者</dd>
+      </dl>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-num">ギャップ④（D ↔ d）</div>
+      <div class="gap-card-title">中小輸出企業が貿易金融から構造的に排除されている</div>
+      <dl>
+        <dt>ギャップの本質</dt>
+        <dd>従来の信用評価モデルが中小企業の実態と乖離</dd>
+        <dt>影響を受ける人</dt>
+        <dd>中小輸出製造業・越境EC事業者</dd>
+      </dl>
+    </div>
+
+    <div class="gap-card selected">
+      <div class="selected-badge">★ 深堀対象</div>
+      <div class="gap-card-num">ギャップ⑤（E ↔ e）</div>
+      <div class="gap-card-title">越境ECラストマイルの「情報断絶」によるCS崩壊</div>
+      <dl>
+        <dt>ギャップの本質</dt>
+        <dd>配送追跡データが現地パートナーに閉じており情報が物理的に断絶</dd>
+        <dt>影響を受ける人</dt>
+        <dd>越境EC中小事業者・CSチーム・海外消費者</dd>
+      </dl>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-num">ギャップ⑥（F ↔ f）</div>
+      <div class="gap-card-title">運賃・スペース市場の情報非対称性</div>
+      <dl>
+        <dt>ギャップの本質</dt>
+        <dd>情報を持つ側（大手）が圧倒的優位な逆進的コスト構造</dd>
+        <dt>影響を受ける人</dt>
+        <dd>中小フォワーダー・中小輸出入企業・越境EC事業者</dd>
+      </dl>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ===== SECTION 2: 選定理由 ===== -->
+<div class="section">
+  <div class="section-title">② ギャップ⑤を選定した理由</div>
+  <div class="rationale-grid">
+    <div class="rationale-item">
+      <div class="r-title">遅延に重きを置いた課題</div>
+      <div class="r-body">配送遅延・不達・返品対応遅延が中心課題。「時間」が損失の本質であり、遅延コストが積み上がる構造</div>
+    </div>
+    <div class="rationale-item">
+      <div class="r-title">表層的でない構造的問題</div>
+      <div class="r-body">「追跡ツールがない」ではなく「現地配送業者との情報断絶」という多レイヤーの構造的課題</div>
+    </div>
+    <div class="rationale-item">
+      <div class="r-title">タイミー的ユニークさ</div>
+      <div class="r-body">現地の問題解決者（バイリンガル・現地在住）をオンデマンドマッチングするギグ的アプローチが載せられる</div>
+    </div>
+    <div class="rationale-item">
+      <div class="r-title">100億円以上の市場規模</div>
+      <div class="r-body">日本の越境EC市場4,000億円・年率15〜20%成長。返品・CS市場だけで数百億円規模の機会</div>
+    </div>
+    <div class="rationale-item">
+      <div class="r-title">技術的実現可能性が高い</div>
+      <div class="r-body">API連携・マッチングアルゴリズム・LLM多言語対応は全て既存技術。新規発明不要で組み合わせで解決可能</div>
+    </div>
+    <div class="rationale-item">
+      <div class="r-title">投資家訴求力が高い</div>
+      <div class="r-body">越境EC × ロジスティクステック × ギグエコノミーの3つの成長テーマが重なる。グローバルでも注目領域</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== SECTION 3: WHY LOGIC TREE ===== -->
+<div class="section">
+  <div class="section-title">③ 「なぜ思考」ロジックツリー ── ギャップ⑤ の根本原因分析（Why × 4〜5層）</div>
+
+  <div class="legend">
+    <strong>技術解決可能性：</strong>
+    <div class="legend-item"><span class="tag tag-s4">◎</span> 技術で明確に解決可能</div>
+    <div class="legend-item"><span class="tag tag-s3">○</span> 技術で解決できる可能性が高い</div>
+    <div class="legend-item"><span class="tag tag-s2">△</span> 技術だけでは難しい</div>
+    <div class="legend-item"><span class="tag tag-s1">✗</span> 技術での解決が困難</div>
+    <strong style="margin-left:12px;">優先度：</strong>
+    <div class="legend-item"><span class="tag tag-ph">高</span></div>
+    <div class="legend-item"><span class="tag tag-pm">中</span></div>
+    <div class="legend-item"><span class="tag tag-pl">低</span></div>
+    <div class="legend-item" style="margin-left:12px;"><span style="display:inline-block;width:12px;height:12px;border:2px solid #16a34a;background:#f0fdf4;border-radius:2px;"></span> 有望ノード（技術◎○ × 優先度高中）</div>
+  </div>
+
+  <div class="tree-outer">
+    <ul class="tree">
+      <li>
+        <span class="node n-root"><span class="node-text">中心課題：越境ECラストマイルの情報断絶</span></span>
+
+        <ul>
+          <!-- WHY1-A -->
+          <li>
+            <span class="node n-w1"><span class="node-text">【Why1-A】 海外配送業者のトラッキングデータが日本側に届かない</span></span>
+            <ul>
+              <!-- WHY2-A1 -->
+              <li>
+                <span class="node n-w2"><span class="node-text">【Why2-A1】 現地ラストマイル業者とのAPI連携が存在しない</span></span>
+                <ul>
+                  <!-- WHY3-A1a -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-A1a】 現地業者がAPIを公開・整備していない</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf"><span class="node-text">【Why4-A1a-i】 中小ローカル配送業者はシステム投資余力がなくデジタル化が遅れている</span></span>
+                        <ul>
+                          <li>
+                            <span class="node n-w5 n-leaf"><span class="node-text">【Why5】 IT人材・資金調達が困難な新興国市場の構造問題</span><span class="tag tag-s1">✗</span><span class="tag tag-pl">低</span></span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="node n-w4 n-leaf"><span class="node-text">【Why4-A1a-ii】 標準化されたトラッキングAPIの国際規格が普及していない</span></span>
+                        <ul>
+                          <li>
+                            <span class="node n-w5 n-leaf"><span class="node-text">【Why5】 物流EDI標準（GS1等）の越境EC領域への適用が遅延している</span><span class="tag tag-s2">△</span><span class="tag tag-pm">中</span></span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- WHY3-A1b -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-A1b】 日本の越境EC事業者側にAPI統合を実装するエンジニアリソースがない</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf"><span class="node-text">【Why4-A1b-i】 中小事業者は専任エンジニアを持てないコスト構造にある</span><span class="tag tag-s2">△</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-A1b-ii】 国ごとに異なる業者・フォーマットへの個別対応コストが膨大</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <!-- WHY2-A2 -->
+              <li>
+                <span class="node n-w2"><span class="node-text">【Why2-A2】 トラッキング情報が国際ハブ〜現地間で途絶する「情報のブラックホール」がある</span></span>
+                <ul>
+                  <!-- WHY3-A2a -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-A2a】 国際キャリアから現地配送業者へのハンドオフ時にデータ引き継ぎがされない</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-A2a-i】 キャリア間のシステムが非互換でデータ連携プロトコルが未整備</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                      <li>
+                        <span class="node n-w4 n-leaf"><span class="node-text">【Why4-A2a-ii】 ハンドオフの責任範囲が契約上曖昧でデータ提供義務がない</span><span class="tag tag-s1">✗</span><span class="tag tag-pl">低</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- WHY3-A2b -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-A2b】 現地業者がスキャン・更新を行わないまま配送が進む運用実態がある</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf"><span class="node-text">【Why4-A2b-i】 ドライバーへのスキャン教育・インセンティブ設計が不十分</span><span class="tag tag-s2">△</span><span class="tag tag-pm">中</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+
+          <!-- WHY1-B -->
+          <li>
+            <span class="node n-w1"><span class="node-text">【Why1-B】 異常検知・エスカレーションの仕組みが手動依存になっている</span></span>
+            <ul>
+              <!-- WHY2-B1 -->
+              <li>
+                <span class="node n-w2"><span class="node-text">【Why2-B1】 配送ステータスの「異常」を自動で判定するロジックがない</span></span>
+                <ul>
+                  <!-- WHY3-B1a -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-B1a】 正常配達の所要日数ベースラインデータが蓄積・活用されていない</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-B1a-i】 過去配送データが業者ごと・国ごとに散在しており統合されていない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-B1a-ii】 異常検知モデルを構築するデータサイエンス知見が社内にない</span><span class="tag tag-s3">○</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- WHY3-B1b -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-B1b】 閾値・ルールを設定・更新する運用体制が整っていない</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-B1b-i】 CSチームがシステム設定変更を自力でできるUIが提供されていない</span><span class="tag tag-s4">◎</span><span class="tag tag-pm">中</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <!-- WHY2-B2 -->
+              <li>
+                <span class="node n-w2"><span class="node-text">【Why2-B2】 異常発生時の対応フロー（誰が・何を・いつ）が定義されていない</span></span>
+                <ul>
+                  <!-- WHY3-B2a -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-B2a】 返金・再送の判断権限と基準がドキュメント化されていない</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf"><span class="node-text">【Why4-B2a-i】 意思決定ルールの標準化を行う社内プロジェクトに優先度が割かれていない</span><span class="tag tag-s1">✗</span><span class="tag tag-pm">中</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- WHY3-B2b -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-B2b】 現地業者への問い合わせ手順が属人化・非効率化している</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-B2b-i】 多言語での問い合わせテンプレートとエスカレーション先DBが整備されていない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+
+          <!-- WHY1-C -->
+          <li>
+            <span class="node n-w1"><span class="node-text">【Why1-C】 消費者への配送状況通知が多言語・リアルタイムで提供できていない</span></span>
+            <ul>
+              <!-- WHY2-C1 -->
+              <li>
+                <span class="node n-w2"><span class="node-text">【Why2-C1】 通知システムが日本語単一言語・手動運用ベースで構築されている</span></span>
+                <ul>
+                  <!-- WHY3-C1a -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-C1a】 多言語対応の自動通知基盤を構築するコストと知見が不足している</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-C1a-i】 翻訳APIの活用や多言語テンプレート設計のノウハウが中小事業者にない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-C1a-ii】 消費者向け通知チャネルが国ごとに異なり対応困難（SMS/WhatsApp/LINE/Kakao等）</span><span class="tag tag-s3">○</span><span class="tag tag-pm">中</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- WHY3-C1b -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-C1b】 上流のトラッキングデータが届かないため通知のトリガーイベントが存在しない</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-C1b-i】 Why1-A・B の未解決が通知基盤そのものを無効化している（上位課題に依存）</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <!-- WHY2-C2 -->
+              <li>
+                <span class="node n-w2"><span class="node-text">【Why2-C2】 消費者への問い合わせ対応が言語・時差の壁を超えられていない</span></span>
+                <ul>
+                  <!-- WHY3-C2a -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-C2a】 CSエージェントが海外消費者の言語で対応できる人員がいない</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-C2a-i】 多言語CS人材の採用コストが中小事業者には許容できない</span><span class="tag tag-s3">○</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- WHY3-C2b -->
+                  <li>
+                    <span class="node n-w3"><span class="node-text">【Why3-C2b】 時差により営業時間外のクレームが翌営業日まで放置される</span></span>
+                    <ul>
+                      <li>
+                        <span class="node n-w4 n-leaf n-highlight"><span class="node-text">【Why4-C2b-i】 24時間対応の自動応答（チャットボット等）が未導入</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ===== SECTION 4: PRIORITY TABLE ===== -->
+<div class="section">
+  <div class="section-title">④ 有望ノードリスト（技術解決◎○ × 優先度 高・中）</div>
+  <table class="priority-table">
+    <thead>
+      <tr>
+        <th style="width:40px;">#</th>
+        <th style="width:80px;">ノードID</th>
+        <th style="width:280px;">根本原因</th>
+        <th style="width:80px;">解決性</th>
+        <th style="width:60px;">優先度</th>
+        <th>想定ソリューション方向性</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="num-cell">1</td>
+        <td>Why4-A1b-ii</td>
+        <td>国ごとに異なる業者・フォーマットへの個別対応コストが膨大</td>
+        <td><span class="tag tag-s4">◎</span></td>
+        <td><span class="tag tag-ph">高</span></td>
+        <td class="direction-cell">マルチキャリア統合トラッキングAPI（越境EC特化版・自動フォーマット変換）</td>
+      </tr>
+      <tr>
+        <td class="num-cell">2</td>
+        <td>Why4-A2a-i</td>
+        <td>キャリア間のシステムが非互換でハンドオフ時のデータ連携が未整備</td>
+        <td><span class="tag tag-s4">◎</span></td>
+        <td><span class="tag tag-ph">高</span></td>
+        <td class="direction-cell">物流ハンドオフ標準フォーマット＋中継ハブシステム（Webhookデータリレー）</td>
+      </tr>
+      <tr>
+        <td class="num-cell">3</td>
+        <td>Why4-B1a-i</td>
+        <td>過去配送データが業者・国ごとに散在し統合されていない</td>
+        <td><span class="tag tag-s4">◎</span></td>
+        <td><span class="tag tag-ph">高</span></td>
+        <td class="direction-cell">配送実績データレイク＋BIダッシュボード（配送SLAの可視化・ベンチマーク提供）</td>
+      </tr>
+      <tr>
+        <td class="num-cell">4</td>
+        <td>Why4-B1a-ii</td>
+        <td>異常検知モデルを構築するデータサイエンス知見が社内にない</td>
+        <td><span class="tag tag-s3">○</span></td>
+        <td><span class="tag tag-ph">高</span></td>
+        <td class="direction-cell">配送遅延・不達の予兆検知AIモデル（業者×国×商品カテゴリ別の異常スコアリング）</td>
+      </tr>
+      <tr>
+        <td class="num-cell">5</td>
+        <td>Why4-B1b-i</td>
+        <td>CSチームがシステム設定変更を自力でできるUIが提供されていない</td>
+        <td><span class="tag tag-s4">◎</span></td>
+        <td><span class="tag tag-pm">中</span></td>
+        <td class="direction-cell">ノーコード型アラートルールビルダー（CS担当者がしきい値・通知先を自己設定）</td>
+      </tr>
+      <tr>
+        <td class="num-cell">6</td>
+        <td>Why4-B2b-i</td>
+        <td>多言語での問い合わせテンプレートとエスカレーション先DBが整備されていない</td>
+        <td><span class="tag tag-s4">◎</span></td>
+        <td><span class="tag tag-ph">高</span></td>
+        <td class="direction-cell">現地配送業者DB＋多言語問い合わせテンプレートエンジン（自動文面生成＋送信）</td>
+      </tr>
+      <tr>
+        <td class="num-cell">7</td>
+        <td>Why4-C1a-i</td>
+        <td>翻訳APIと多言語通知テンプレート設計のノウハウが不足</td>
+        <td><span class="tag tag-s4">◎</span></td>
+        <td><span class="tag tag-ph">高</span></td>
+        <td class="direction-cell">多言語自動通知プラットフォーム（DeepL/GPT連携＋配送ステータス別テンプレート自動生成）</td>
+      </tr>
+      <tr>
+        <td class="num-cell">8</td>
+        <td>Why4-C1a-ii</td>
+        <td>消費者向け通知チャネルが国ごとに異なり対応困難</td>
+        <td><span class="tag tag-s3">○</span></td>
+        <td><span class="tag tag-pm">中</span></td>
+        <td class="direction-cell">マルチチャネル通知ルーター（国別にSMS/WhatsApp/LINE/Email/Kakaoを自動切替）</td>
+      </tr>
+      <tr>
+        <td class="num-cell">9</td>
+        <td>Why4-C2a-i</td>
+        <td>多言語CS人材の採用コストが中小事業者には許容できない</td>
+        <td><span class="tag tag-s3">○</span></td>
+        <td><span class="tag tag-ph">高</span></td>
+        <td class="direction-cell">LLMベースの多言語CSチャットボット（越境EC文脈に特化したRAG型自動応答）</td>
+      </tr>
+      <tr>
+        <td class="num-cell">10</td>
+        <td>Why4-C2b-i</td>
+        <td>24時間対応の自動応答が未導入</td>
+        <td><span class="tag tag-s4">◎</span></td>
+        <td><span class="tag tag-ph">高</span></td>
+        <td class="direction-cell">配送ステータス連動型チャットボット（「今どこ？」にリアルタイム自動回答）</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ===== SECTION 5: 事業化示唆 ===== -->
+<div class="section">
+  <div class="section-title">⑤ 課題の構造と事業化示唆</div>
+
+  <p style="font-size:12px;color:#555;margin-bottom:20px;">根本原因は <strong>「データ断絶（上流）」「判断ロジック不在（中流）」「顧客接点の言語・時間障壁（下流）」</strong> の3レイヤーに構造化される。</p>
+
+  <div class="flow-boxes">
+    <div class="flow-box">
+      データ取得基盤<br>
+      <div class="flow-sub">マルチキャリア統合API<br>ハンドオフ中継ハブ</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box phase2">
+      異常検知エンジン<br>
+      <div class="flow-sub">遅延予兆AIモデル<br>データレイク・BIダッシュ</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box phase3">
+      顧客通知・CS自動化<br>
+      <div class="flow-sub">多言語通知ルーター<br>LLM CSチャットボット</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:#1e7a3a;">
+      タイミー的拡張<br>
+      <div class="flow-sub">現地問題解決者<br>オンデマンドマッチング</div>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:#888;margin-top:16px;">※ 上流（データ取得）を解決することで、中流・下流の価値が連鎖的に発揮される。逆に上流が未解決の状態でAI通知・チャットボットを整備しても効果は限定的。<strong>開発優先順位：データ基盤 → 異常検知 → 顧客通知</strong></p>
+</div>
+
+<div style="text-align:center;padding:20px;font-size:11px;color:#999;">
+  国際物流 課題分析レポート　|　作成日：2026年5月17日
+</div>
+
+</body>
+</html>

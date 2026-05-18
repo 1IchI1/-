@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>視点⑤ サプライチェーンリスク管理 – 課題分析レポート</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;background:#f4f6fb;color:#1e293b;font-size:14px;line-height:1.6}
+header{background:linear-gradient(135deg,#1a3a6b 0%,#1a5faa 100%);color:#fff;padding:28px 40px}
+header h1{font-size:22px;font-weight:700;letter-spacing:.04em}
+header p{font-size:13px;opacity:.8;margin-top:4px}
+.container{max-width:1200px;margin:0 auto;padding:32px 24px}
+.section{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);padding:28px 32px;margin-bottom:28px}
+.section-title{font-size:16px;font-weight:700;color:#1a5faa;border-left:4px solid #1a5faa;padding-left:12px;margin-bottom:20px}
+/* As is / To be */
+.gap-table{width:100%;border-collapse:collapse}
+.gap-table th{padding:10px 14px;font-size:12px;font-weight:600;text-align:center}
+.gap-table th.h-asis{background:#e87722;color:#fff;border-radius:6px 0 0 6px}
+.gap-table th.h-tobe{background:#1a5faa;color:#fff;border-radius:0 6px 6px 0}
+.gap-table th.h-gap{background:#64748b;color:#fff;width:60px}
+.gap-table td{padding:10px 14px;border-bottom:1px solid #e8edf4;vertical-align:top}
+.gap-table tr:last-child td{border-bottom:none}
+.gap-table tr.selected{background:#eff6ff}
+.asis-cell{color:#92400e;background:#fff7ed;border-radius:6px;padding:6px 10px;font-size:13px}
+.tobe-cell{color:#1e40af;background:#eff6ff;border-radius:6px;padding:6px 10px;font-size:13px}
+.gap-badge{background:#1a5faa;color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin:0 auto}
+.gap-badge.selected{background:#e87722}
+/* Selection rationale */
+.criteria-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.criteria-card{border:1px solid #e2e8f0;border-radius:8px;padding:14px}
+.criteria-card h4{font-size:12px;font-weight:700;color:#475569;margin-bottom:6px}
+.criteria-card p{font-size:12px;color:#334155}
+.criteria-card.good{border-color:#16a34a;background:#f0fdf4}
+.criteria-card.good h4{color:#15803d}
+/* Logic tree */
+.tree-wrap{overflow-x:auto;padding-bottom:8px}
+.tree{list-style:none;padding:0;margin:0}
+.tree,.tree ul{list-style:none;padding-left:0}
+.tree ul{padding-left:32px;position:relative}
+.tree li{position:relative;padding:4px 0 4px 18px}
+.tree ul li::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;border-left:2px solid #c8d6e8}
+.tree ul li::after{content:'';position:absolute;left:0;top:14px;width:14px;height:0;border-top:2px solid #c8d6e8}
+.tree ul li:last-child::before{height:14px;bottom:auto}
+.node{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;line-height:1.4;max-width:560px;flex-wrap:wrap}
+.n-root{background:#1a3a6b;color:#fff;font-size:13px;padding:8px 16px}
+.n-w1{background:#1a5faa;color:#fff}
+.n-w2{background:#2d80d4;color:#fff}
+.n-w3{background:#93c5fd;color:#1e3a5f}
+.n-w4{background:#dbeafe;color:#1e3a5f;border:1px solid #93c5fd}
+.n-highlight{border:2px solid #16a34a!important;background:#f0fdf4!important;color:#14532d!important}
+.tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;line-height:1.4}
+.tag-s4{background:#16a34a}
+.tag-s3{background:#84cc16;color:#fff}
+.tag-s2{background:#f59e0b}
+.tag-s1{background:#9ca3af}
+.tag-ph{background:#ef4444}
+.tag-pm{background:#f97316}
+.tag-pl{background:#d1d5db;color:#374151}
+/* Priority table */
+.p-table{width:100%;border-collapse:collapse}
+.p-table th{background:#1a5faa;color:#fff;padding:10px 12px;font-size:12px;text-align:left}
+.p-table td{padding:10px 12px;border-bottom:1px solid #e8edf4;font-size:12px;vertical-align:top}
+.p-table tr:last-child td{border-bottom:none}
+.p-table tr.prom{background:#f0fdf4}
+.p-table .num{color:#64748b;font-weight:700}
+/* Architecture flow */
+.arch-flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;justify-content:center}
+.arch-box{background:#1a5faa;color:#fff;border-radius:8px;padding:12px 16px;text-align:center;font-size:12px;font-weight:600;min-width:110px;flex:1}
+.arch-box small{display:block;font-weight:400;font-size:10px;opacity:.85;margin-top:2px}
+.arch-arrow{display:flex;align-items:center;color:#94a3b8;font-size:18px;padding:0 4px}
+.kv-box{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #16a34a;border-radius:10px;padding:16px 20px;margin-top:16px}
+.kv-box h4{color:#15803d;font-size:14px;font-weight:700;margin-bottom:8px}
+.kv-box p{font-size:13px;color:#166534}
+.timee-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #d97706;border-radius:10px;padding:14px 18px;margin-top:16px}
+.timee-box h4{color:#92400e;font-size:13px;font-weight:700;margin-bottom:6px}
+.timee-box p{font-size:12px;color:#78350f}
+footer{text-align:center;padding:20px;color:#94a3b8;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>視点⑤ サプライチェーンリスク管理 ─ 課題分析レポート</h1>
+  <p>国際物流ビジネス開発 | なぜ×4-5思考ロジックツリー分析</p>
+</header>
+<div class="container">
+
+<!-- ① As is / To be -->
+<div class="section">
+  <div class="section-title">① As is（現状）vs To be（理想）─ ギャップ分析</div>
+  <table class="gap-table">
+    <thead>
+      <tr>
+        <th class="h-gap">#</th>
+        <th class="h-asis">As is（現状）</th>
+        <th class="h-tobe">To be（理想）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="gap-badge">G1</div></td>
+        <td><div class="asis-cell">サプライヤーの経営・品質リスクを財務情報や現地ニュースから人手で収集するため発覚が遅れる</div></td>
+        <td><div class="tobe-cell">AIがサプライヤーの経営・品質・政治リスクをリアルタイムに検知し早期警告を自動発報</div></td>
+      </tr>
+      <tr>
+        <td><div class="gap-badge">G2</div></td>
+        <td><div class="asis-cell">代替サプライヤーの候補リストが存在せず、有事に初めて探し始める</div></td>
+        <td><div class="tobe-cell">平時から代替候補をティア別にスタンバイ登録し、有事に即発注できる状態を維持</div></td>
+      </tr>
+      <tr class="selected">
+        <td><div class="gap-badge selected">G3</div></td>
+        <td><div class="asis-cell">代替調達先への切り替えに評価・試作・契約・量産移行で6〜18ヶ月かかり、その間の供給断絶が損失を拡大させる</div></td>
+        <td><div class="tobe-cell">代替サプライヤーの評価から量産立ち上げまでを2〜4週間に圧縮し、供給断絶のダメージを最小化</div></td>
+      </tr>
+      <tr>
+        <td><div class="gap-badge">G4</div></td>
+        <td><div class="asis-cell">BCP（事業継続計画）が文書として存在するが実際の有事シミュレーションが行われておらず机上の空論</div></td>
+        <td><div class="tobe-cell">デジタルツイン上で有事シナリオを定期シミュレーションし、BCPの実効性を定量評価</div></td>
+      </tr>
+      <tr>
+        <td><div class="gap-badge">G5</div></td>
+        <td><div class="asis-cell">サプライヤーの品質・ESG・コンプライアンス評価が現地訪問監査依存で年1〜2回しかできない</div></td>
+        <td><div class="tobe-cell">リモートIoT監査＋AI書類審査で月次以上の頻度でサプライヤーの健全性をスコアリング</div></td>
+      </tr>
+      <tr>
+        <td><div class="gap-badge">G6</div></td>
+        <td><div class="asis-cell">地政学的リスク（紛争・制裁・自然災害）が調達戦略に反映されるまで経営判断を要し数ヶ月かかる</div></td>
+        <td><div class="tobe-cell">地政学AIが供給リスクをスコアリングし調達ポートフォリオの最適化案を自動提案</div></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ② 選定理由 -->
+<div class="section">
+  <div class="section-title">② ギャップG3「代替調達先の有事スイッチング速度の遅さ」を選んだ理由</div>
+  <div class="criteria-grid">
+    <div class="criteria-card good">
+      <h4>遅延への焦点</h4>
+      <p>切り替えに6〜18ヶ月かかる間の供給断絶は製造業で最大のロスイベント。1日の供給停止が億単位の損失になるケースも。速度が全て。</p>
+    </div>
+    <div class="criteria-card good">
+      <h4>非表層的な課題構造</h4>
+      <p>「代替先を探す」表面課題の裏には、サプライヤーDB不在・監査員不足・技術文書移転・与信設定と多層の実行ボトルネックが存在する。</p>
+    </div>
+    <div class="criteria-card good">
+      <h4>タイミー的ユニークさ</h4>
+      <p>工場監査員をギグワーカーとしてオンデマンド派遣するプラットフォーム。タイミーが即日雇用を実現したように、有事の監査を「翌日対応」で可能にする。</p>
+    </div>
+    <div class="criteria-card good">
+      <h4>100億円市場</h4>
+      <p>製造業の調達・SCM部門は国内5万社以上。SaaS年間120万円/社×1万社=120億円。有事対応コンサルティング・監査代行の従量課金で上積み可能。</p>
+    </div>
+    <div class="criteria-card good">
+      <h4>技術的実現可能性</h4>
+      <p>サプライヤーDB構築×LLMベース書類審査×ギグ監査員マッチングの組み合わせ。コアはデータ統合とマーケットプレイス設計。実現可能性高。</p>
+    </div>
+    <div class="criteria-card good">
+      <h4>投資家訴求</h4>
+      <p>コロナ・台湾有事リスク・米中デカップリングで供給網強靭化は政策課題。経産省・防衛省・大企業の予算が流入。BI/セキュリティ領域で高評価。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ③ Why Logic Tree -->
+<div class="section">
+  <div class="section-title">③ なぜ×4-5思考ロジックツリー ─ 根本原因の深掘り</div>
+  <div class="tree-wrap">
+    <ul class="tree">
+      <li>
+        <span class="node n-root">なぜ「代替調達先へのスイッチング」に6〜18ヶ月かかるのか</span>
+        <ul>
+          <!-- W1a -->
+          <li>
+            <span class="node n-w1">W1a：代替候補の評価・選定に時間がかかる</span>
+            <ul>
+              <!-- W2a -->
+              <li>
+                <span class="node n-w2">W2a：サプライヤー情報が分散・非構造化されている</span>
+                <ul>
+                  <li>
+                    <span class="node n-w3">W3a：代替候補DBが存在せず有事に都度サーチが必要</span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight">W4a：業界横断のサプライヤーインテリジェンスDBが存在しない <span class="tag tag-s4">技術解決◎</span><span class="tag tag-ph">優先度：高</span></span></li>
+                      <li><span class="node n-w4 n-highlight">W4b：サプライヤー情報の標準フォーマット・共有基盤がない <span class="tag tag-s4">技術解決◎</span><span class="tag tag-ph">優先度：高</span></span></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span class="node n-w3">W3b：候補サプライヤーの技術力・品質を短期間で評価できない</span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight">W4c：工場監査に専門員の現地派遣が必要で数週間かかる <span class="tag tag-s4">技術解決◎</span><span class="tag tag-ph">優先度：高</span></span></li>
+                      <li><span class="node n-w4 n-highlight">W4d：品質認証書・過去監査レポートがデジタル共有されていない <span class="tag tag-s3">技術解決○</span><span class="tag tag-pm">優先度：中</span></span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <!-- W2b -->
+              <li>
+                <span class="node n-w2">W2b：サプライヤー適格性確認（認証・コンプライアンス）に時間がかかる</span>
+                <ul>
+                  <li>
+                    <span class="node n-w3">W3c：デューデリジェンスが書類収集と手動確認中心</span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight">W4e：サプライヤーの各種認証をデジタルで即時確認できない <span class="tag tag-s3">技術解決○</span><span class="tag tag-pm">優先度：中</span></span></li>
+                      <li><span class="node n-w4">W4f：ESG・コンプライアンス評価のリアルタイム化が未実現 <span class="tag tag-s2">技術解決△</span><span class="tag tag-pm">優先度：中</span></span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <!-- W1b -->
+          <li>
+            <span class="node n-w1">W1b：新サプライヤーへの移行プロセスが標準化されていない</span>
+            <ul>
+              <!-- W2c -->
+              <li>
+                <span class="node n-w2">W2c：品質試作・量産移行に時間がかかる</span>
+                <ul>
+                  <li>
+                    <span class="node n-w3">W3d：試作評価のプロセスが属人的・非効率</span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight">W4g：デジタルツイン・AI活用のリモート工場検査が普及していない <span class="tag tag-s4">技術解決◎</span><span class="tag tag-ph">優先度：高</span></span></li>
+                      <li><span class="node n-w4 n-highlight">W4h：試作評価のスコアカードが標準化されておらず属人的判断に依存 <span class="tag tag-s3">技術解決○</span><span class="tag tag-pm">優先度：中</span></span></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span class="node n-w3">W3e：量産移行のナレッジ移転が困難</span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight">W4i：技術文書・品質基準のデジタル共有・多言語化基盤がない <span class="tag tag-s3">技術解決○</span><span class="tag tag-pm">優先度：中</span></span></li>
+                      <li><span class="node n-w4">W4j：現地語・現地規格への翻訳・適応に時間がかかる <span class="tag tag-s3">技術解決○</span><span class="tag tag-pl">優先度：低</span></span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <!-- W2d -->
+              <li>
+                <span class="node n-w2">W2d：契約・与信・物流設定の変更に時間がかかる</span>
+                <ul>
+                  <li>
+                    <span class="node n-w3">W3f：新サプライヤーとの契約交渉・締結が遅い</span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight">W4k：標準契約テンプレートとデジタル契約基盤がない <span class="tag tag-s4">技術解決◎</span><span class="tag tag-pm">優先度：中</span></span></li>
+                      <li><span class="node n-w4 n-highlight">W4l：与信審査・取引保険の手配に時間がかかり発注を遅らせる <span class="tag tag-s3">技術解決○</span><span class="tag tag-pm">優先度：中</span></span></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span class="node n-w3">W3g：物流ルート・通関設定の変更対応が遅い</span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight">W4m：新調達先対応の物流設定・通関情報を即時変更できるシステムがない <span class="tag tag-s4">技術解決◎</span><span class="tag tag-ph">優先度：高</span></span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ④ Priority Table -->
+<div class="section">
+  <div class="section-title">④ 有望リーフノード 優先度評価</div>
+  <table class="p-table">
+    <thead>
+      <tr>
+        <th style="width:36px">#</th>
+        <th>リーフノード（根本原因）</th>
+        <th style="width:100px">技術解決度</th>
+        <th style="width:80px">優先度</th>
+        <th>解決アプローチ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="prom">
+        <td class="num">W4a</td>
+        <td>業界横断のサプライヤーインテリジェンスDBが存在しない</td>
+        <td><span class="tag tag-s4">技術解決◎</span></td>
+        <td><span class="tag tag-ph">優先度：高</span></td>
+        <td>公開情報×参加企業データのクロールでサプライヤーDB構築、ティア別スコアリング</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4b</td>
+        <td>サプライヤー情報の標準フォーマット・共有基盤がない</td>
+        <td><span class="tag tag-s4">技術解決◎</span></td>
+        <td><span class="tag tag-ph">優先度：高</span></td>
+        <td>業界標準スキーマ策定＋プラットフォームへのオンボーディングインセンティブ設計</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4c</td>
+        <td>工場監査に専門員の現地派遣が必要で数週間かかる</td>
+        <td><span class="tag tag-s4">技術解決◎</span></td>
+        <td><span class="tag tag-ph">優先度：高</span></td>
+        <td><strong>ギグ型サプライヤー監査員マッチング</strong>：タイミー型オンデマンド派遣で翌日〜2日以内に現地監査実施</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4g</td>
+        <td>デジタルツイン・AI活用のリモート工場検査が普及していない</td>
+        <td><span class="tag tag-s4">技術解決◎</span></td>
+        <td><span class="tag tag-ph">優先度：高</span></td>
+        <td>IoTカメラ＋AI画像解析でリモート工場監査。現地不要で品質評価を48時間以内に完了</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4m</td>
+        <td>新調達先対応の物流設定・通関情報を即時変更できるシステムがない</td>
+        <td><span class="tag tag-s4">技術解決◎</span></td>
+        <td><span class="tag tag-ph">優先度：高</span></td>
+        <td>物流設定ワンクリック切り替えAPI＋通関書類テンプレート自動生成モジュール</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4d</td>
+        <td>品質認証書・過去監査レポートがデジタル共有されていない</td>
+        <td><span class="tag tag-s3">技術解決○</span></td>
+        <td><span class="tag tag-pm">優先度：中</span></td>
+        <td>ブロックチェーン／クラウドストレージで認証書をデジタル管理・即時共有</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4e</td>
+        <td>サプライヤーの各種認証をデジタルで即時確認できない</td>
+        <td><span class="tag tag-s3">技術解決○</span></td>
+        <td><span class="tag tag-pm">優先度：中</span></td>
+        <td>ISO/認証機関APIとの連携＋AIによる証明書OCR＆真正性チェック</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4h</td>
+        <td>試作評価のスコアカードが標準化されておらず属人的判断に依存</td>
+        <td><span class="tag tag-s3">技術解決○</span></td>
+        <td><span class="tag tag-pm">優先度：中</span></td>
+        <td>業界別標準評価スコアカードテンプレート＋監査員が入力するモバイルアプリ</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4i</td>
+        <td>技術文書・品質基準のデジタル共有・多言語化基盤がない</td>
+        <td><span class="tag tag-s3">技術解決○</span></td>
+        <td><span class="tag tag-pm">優先度：中</span></td>
+        <td>LLM多言語技術文書翻訳＋クラウドドキュメントポータルで切り替え先への即時共有</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4k</td>
+        <td>標準契約テンプレートとデジタル契約基盤がない</td>
+        <td><span class="tag tag-s4">技術解決◎</span></td>
+        <td><span class="tag tag-pm">優先度：中</span></td>
+        <td>業種別標準調達契約テンプレート＋電子署名基盤で契約締結を48時間以内に</td>
+      </tr>
+      <tr class="prom">
+        <td class="num">W4l</td>
+        <td>与信審査・取引保険の手配に時間がかかり発注を遅らせる</td>
+        <td><span class="tag tag-s3">技術解決○</span></td>
+        <td><span class="tag tag-pm">優先度：中</span></td>
+        <td>AIによる即時与信スコアリング＋貿易保険APIとの自動接続で発注と保険を同時完了</td>
+      </tr>
+      <tr>
+        <td class="num">W4f</td>
+        <td>ESG・コンプライアンス評価のリアルタイム化が未実現</td>
+        <td><span class="tag tag-s2">技術解決△</span></td>
+        <td><span class="tag tag-pm">優先度：中</span></td>
+        <td>ニュースモニタリング＋第三者評価機関API連携。ただし定性情報の自動化には限界あり</td>
+      </tr>
+      <tr>
+        <td class="num">W4j</td>
+        <td>現地語・現地規格への翻訳・適応に時間がかかる</td>
+        <td><span class="tag tag-s3">技術解決○</span></td>
+        <td><span class="tag tag-pl">優先度：低</span></td>
+        <td>LLMで翻訳は容易だが現地規格適合には専門家レビューが必要。ボトルネックは別にある</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ⑤ Architecture Flow -->
+<div class="section">
+  <div class="section-title">⑤ ソリューション構想 ─ サプライチェーン有事スイッチング加速プラットフォーム</div>
+
+  <div class="timee-box">
+    <h4>タイミー型コアアイデア：ギグ型サプライヤー監査員マッチングプラットフォーム</h4>
+    <p>世界中の工場監査資格保持者（QC、ISO審査員、サプライヤー評価員）をギグワーカーとして登録。有事に「翌日〜48時間以内」に現地監査員をオンデマンド派遣。従来の専門会社依頼では2〜4週間かかった現地監査を劇的に短縮。</p>
+  </div>
+
+  <div class="arch-flow" style="margin-top:16px">
+    <div class="arch-box" style="background:#7c3aed">リスク検知<small>AI早期警告</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box" style="background:#1a5faa">候補抽出<small>サプライヤーDB検索</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box" style="background:#0e7490">監査員派遣<small>ギグマッチング×翌日対応</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box" style="background:#065f46">リモート監査<small>AIカメラ＋スコアカード</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box" style="background:#92400e">契約締結<small>電子署名×48時間</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box" style="background:#b45309">物流切替<small>ワンクリック設定変更</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box" style="background:#1e3a5f">供給再開<small>2〜4週間で完了</small></div>
+  </div>
+
+  <div class="kv-box">
+    <h4>コアバリュープロポジション</h4>
+    <p>「有事の代替調達先切り替えに<strong>6〜18ヶ月かかっていたプロセスを2〜4週間に圧縮</strong>。ギグ型監査員マッチング×AI書類審査×デジタル契約基盤を組み合わせ、サプライチェーン断絶リスクを製造業の『解決できない問題』から『管理できる問題』へ転換する。」</p>
+    <p style="margin-top:8px;font-size:12px;color:#166534">マネタイズ：SaaS年間契約（SCM部門向け120万円〜）× 監査員派遣手数料（1件あたり5〜15万円）× 契約締結手数料 のトリプルモデル</p>
+  </div>
+</div>
+
+</div>
+<footer>視点⑤ サプライチェーンリスク管理 課題分析レポート ─ 国際物流ビジネス開発プロジェクト</footer>
+</body>
+</html>

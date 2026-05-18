@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>リーンキャンバス 7視点まとめ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;background:#f0f4f8;color:#1e293b;font-size:13px;line-height:1.5}
+header{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;padding:24px 40px;position:sticky;top:0;z-index:100}
+header h1{font-size:20px;font-weight:700}
+header p{font-size:12px;opacity:.7;margin-top:2px}
+.nav{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.nav a{color:#93c5fd;font-size:11px;font-weight:600;text-decoration:none;background:rgba(255,255,255,.1);padding:3px 10px;border-radius:20px;white-space:nowrap}
+.nav a:hover{background:rgba(255,255,255,.2)}
+.container{max-width:1280px;margin:0 auto;padding:28px 20px}
+
+/* Canvas wrapper */
+.canvas-wrap{margin-bottom:36px}
+.canvas-label{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.canvas-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.canvas-title{font-size:16px;font-weight:700}
+.canvas-sub{font-size:12px;color:#64748b;margin-left:4px}
+
+/* Lean Canvas Grid */
+.lc{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr 1fr;grid-template-rows:auto auto;border:2px solid;border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 2px 16px rgba(0,0,0,.09)}
+.lc-cell{padding:12px 14px;border-right:1px solid rgba(0,0,0,.1);border-bottom:1px solid rgba(0,0,0,.1);position:relative;min-height:130px}
+.lc-cell:last-child{border-right:none}
+.lc-cell.no-bottom{border-bottom:none}
+/* bottom row spans */
+.lc-bottom{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(0,0,0,.1)}
+.lc-bottom-cell{padding:12px 14px;min-height:70px}
+.lc-bottom-cell:first-child{border-right:1px solid rgba(0,0,0,.1)}
+
+.cell-label{font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.5;margin-bottom:5px}
+.cell-content{font-size:11px;color:#334155;line-height:1.5}
+.cell-content ul{padding-left:12px}
+.cell-content li{margin-bottom:2px}
+.cell-content strong{font-weight:700;color:#0f172a}
+.uvp-text{font-size:13px;font-weight:700;line-height:1.4;color:#0f172a}
+
+/* Color themes per canvas */
+.c0 .lc{border-color:#6366f1} .c0 .canvas-num{background:#6366f1} .c0 .lc-cell.uvp{background:#eef2ff}
+.c1 .lc{border-color:#0891b2} .c1 .canvas-num{background:#0891b2} .c1 .lc-cell.uvp{background:#ecfeff}
+.c2 .lc{border-color:#7c3aed} .c2 .canvas-num{background:#7c3aed} .c2 .lc-cell.uvp{background:#f5f3ff}
+.c3 .lc{border-color:#0369a1} .c3 .canvas-num{background:#0369a1} .c3 .lc-cell.uvp{background:#eff6ff}
+.c4 .lc{border-color:#b45309} .c4 .canvas-num{background:#b45309} .c4 .lc-cell.uvp{background:#fffbeb}
+.c5 .lc{border-color:#15803d} .c5 .canvas-num{background:#15803d} .c5 .lc-cell.uvp{background:#f0fdf4}
+.c6 .lc{border-color:#1e3a8a;border-width:3px} .c6 .canvas-num{background:linear-gradient(135deg,#1e3a8a,#1a5faa)} .c6 .lc-cell.uvp{background:#eff6ff}
+.c6 .canvas-title{color:#1e3a8a}
+
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;color:#fff;margin-bottom:5px}
+.badge-rec{background:#16a34a}
+.badge-ma{background:#7c3aed}
+.badge-core{background:#1e3a8a}
+
+/* Divider */
+.divider{text-align:center;padding:12px 0;color:#94a3b8;font-size:12px;letter-spacing:.05em}
+</style>
+</head>
+<body>
+<header>
+  <h1>リーンキャンバス ─ 7視点 事業機会まとめ</h1>
+  <p>国際物流ビジネス開発プロジェクト ｜ 各視点の課題分析から導いた事業モデル</p>
+  <div class="nav">
+    <a href="#c0">0. 越境ECラストマイル</a>
+    <a href="#c1">①書類オペレーション</a>
+    <a href="#c2">②輸出規制RegTech</a>
+    <a href="#c3">③貿易金融</a>
+    <a href="#c4">④輸出先開拓</a>
+    <a href="#c5">⑤SC リスク</a>
+    <a href="#c6">⑥両端BPaaS ★推奨</a>
+  </div>
+</header>
+<div class="container">
+
+<!-- ===== 0. 越境ECラストマイル ===== -->
+<div class="canvas-wrap c0" id="c0">
+  <div class="canvas-label">
+    <div class="canvas-num">0</div>
+    <div>
+      <div class="canvas-title">越境EC ラストマイル情報断絶</div>
+      <div class="canvas-sub">ギャップ：追跡情報の断絶により顧客体験が崩壊、返品・問い合わせが急増</div>
+    </div>
+  </div>
+  <div class="lc">
+    <div class="lc-cell">
+      <div class="cell-label">Problem</div>
+      <div class="cell-content"><ul>
+        <li>越境荷物が国境を越えると追跡が途切れる</li>
+        <li>現地配送業者のデータが非標準・多言語</li>
+        <li>問い合わせ対応に1件20〜30分かかる</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell" style="display:grid;grid-template-rows:1fr 1fr;padding:0">
+      <div style="padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.1)">
+        <div class="cell-label">Solution</div>
+        <div class="cell-content"><ul>
+          <li>多言語・多キャリア統合追跡API</li>
+          <li>AI自動返答チャットbot</li>
+          <li>遅延予測アラート自動送信</li>
+        </ul></div>
+      </div>
+      <div style="padding:12px 14px">
+        <div class="cell-label">Key Metrics</div>
+        <div class="cell-content"><ul>
+          <li>追跡カバレッジ率</li>
+          <li>問い合わせ削減率</li>
+          <li>返品率の変化</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="lc-cell uvp" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="cell-label">Unique Value Proposition</div>
+      <div class="uvp-text">「荷物がどこにあるか、<br>母国語でいつでもわかる」<br><br><span style="font-size:11px;font-weight:400;color:#64748b">越境EC事業者の問い合わせ対応コストを80%削減</span></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Unfair Advantage</div>
+      <div class="cell-content"><ul>
+        <li>全国保守ネットワーク×現場接点</li>
+        <li>OCR・帳票処理の知見</li>
+        <li>多言語AI処理ノウハウ</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Customer Segments</div>
+      <div class="cell-content">
+        <strong>主：</strong>越境EC事業者（月間出荷100件以上）<br><br>
+        <strong>早期採用者：</strong>中国向け輸出の問い合わせ対応に人手を割いているD2Cブランド
+      </div>
+    </div>
+    <div class="lc-bottom">
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Cost Structure</div>
+        <div class="cell-content">API開発・保守費 / 多言語モデル学習費 / キャリア連携交渉コスト</div>
+      </div>
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Revenue Streams</div>
+        <div class="cell-content">月額SaaS（追跡件数従量）/ 問い合わせbot利用料 / APIライセンス提供</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 1. 書類オペレーション ===== -->
+<div class="canvas-wrap c1" id="c1">
+  <div class="canvas-label">
+    <div class="canvas-num">①</div>
+    <div>
+      <div class="canvas-title">書類オペレーション ─ 通関士オンデマンドマーケットプレイス</div>
+      <div class="canvas-sub">ギャップ：書類不備の発覚タイミング遅延 → 1時間以内に専門家が動ける体制</div>
+    </div>
+  </div>
+  <div class="lc">
+    <div class="lc-cell">
+      <div class="cell-label">Problem</div>
+      <div class="cell-content"><ul>
+        <li>書類不備が税関で初めて発覚（出荷後）</li>
+        <li>通関士が特定フォワーダーに囲い込まれ中小が使えない</li>
+        <li>書類修正・再提出に2〜5日かかり荷物が止まる</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell" style="display:grid;grid-template-rows:1fr 1fr;padding:0">
+      <div style="padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.1)">
+        <div class="cell-label">Solution</div>
+        <div class="cell-content"><ul>
+          <li>AI-OCRで書類を出荷前にリアルタイムスキャン</li>
+          <li>不備検知→通関士を即時マッチング（タイミー型）</li>
+          <li>SLA：不備検知から解決まで1時間以内</li>
+        </ul></div>
+      </div>
+      <div style="padding:12px 14px">
+        <div class="cell-label">Key Metrics</div>
+        <div class="cell-content"><ul>
+          <li>不備検知率 / 解決時間中央値</li>
+          <li>通関士稼働率</li>
+          <li>荷物滞留削減日数</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="lc-cell uvp" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="cell-label">Unique Value Proposition</div>
+      <div class="uvp-text">「書類不備を出荷前に検知し、<br>1時間以内に専門家が解決する」<br><br><span style="font-size:11px;font-weight:400;color:#64748b">通関士のギグ化で中小企業が大企業並みの対応力を獲得</span></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Unfair Advantage</div>
+      <div class="cell-content"><ul>
+        <li>MFP設置×OCR処理の既存基盤</li>
+        <li>全国中小企業への直販ネットワーク</li>
+        <li>BPO運用力（例外処理の人的バックアップ）</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Customer Segments</div>
+      <div class="cell-content">
+        <strong>主：</strong>年間輸出件数100件以上の中小製造業・商社<br><br>
+        <strong>早期採用者：</strong>過去に通関トラブルで損失を出した経験のある輸出担当者
+      </div>
+    </div>
+    <div class="lc-bottom">
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Cost Structure</div>
+        <div class="cell-content">AI-OCRエンジン開発 / 通関士プール採用・認定コスト / マッチングシステム開発</div>
+      </div>
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Revenue Streams</div>
+        <div class="cell-content">月額SaaS（書類スキャン件数従量）/ 通関士マッチング手数料（成約額15〜20%）/ BPO委託固定費</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2. 輸出規制RegTech ===== -->
+<div class="canvas-wrap c2" id="c2">
+  <div class="canvas-label">
+    <div class="canvas-num">②</div>
+    <div>
+      <div class="canvas-title">輸出規制 RegTech ─ 中小企業の該非判定AI</div>
+      <div class="canvas-sub">ギャップ：安全保障貿易管理の空白地帯 → AI自動判定で輸出コンプライアンスを民主化</div>
+    </div>
+  </div>
+  <div class="lc">
+    <div class="lc-cell">
+      <div class="cell-label">Problem</div>
+      <div class="cell-content"><ul>
+        <li>外為法・経済安保法で中小にも管理義務が拡大</li>
+        <li>専門家への外注で1件5〜30万円・2〜4週間</li>
+        <li>誤った輸出で刑事罰・取引停止リスク</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell" style="display:grid;grid-template-rows:1fr 1fr;padding:0">
+      <div style="padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.1)">
+        <div class="cell-label">Solution</div>
+        <div class="cell-content"><ul>
+          <li>製品スペック入力→AI自動該非判定</li>
+          <li>法規制DBリアルタイム更新</li>
+          <li>判定根拠の記録・監査証跡自動生成</li>
+        </ul></div>
+      </div>
+      <div style="padding:12px 14px">
+        <div class="cell-label">Key Metrics</div>
+        <div class="cell-content"><ul>
+          <li>判定精度（専門家との一致率）</li>
+          <li>判定所要時間</li>
+          <li>ユーザー企業の輸出違反発生率</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="lc-cell uvp" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="cell-label">Unique Value Proposition</div>
+      <div class="uvp-text">「輸出規制の該非判定を<br>専門家なしで数分・数千円に」<br><br><span style="font-size:11px;font-weight:400;color:#64748b">B2G×B2Bで防衛・経産省の政策マネーが流入</span></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Unfair Advantage</div>
+      <div class="cell-content"><ul>
+        <li>商社機能で自社輸出データを実証基盤に</li>
+        <li>SIビジネスで顧客ERPと統合</li>
+        <li>業種別課題理解（製造・素材・電機）</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Customer Segments</div>
+      <div class="cell-content">
+        <strong>主：</strong>半導体・精密機器・材料を輸出する中小〜中堅製造業<br><br>
+        <strong>早期採用者：</strong>経産省から輸出管理強化を指導された経験のある企業
+      </div>
+    </div>
+    <div class="lc-bottom">
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Cost Structure</div>
+        <div class="cell-content">法規制DB構築・維持費 / 弁護士監修コスト / AIモデル開発・更新費</div>
+      </div>
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Revenue Streams</div>
+        <div class="cell-content">月額SaaS（判定件数従量）/ 規制DB更新サブスク / 監査証跡保管サービス / SI連携費</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3. 貿易金融 ===== -->
+<div class="canvas-wrap c3" id="c3">
+  <div class="canvas-label">
+    <div class="canvas-num">③</div>
+    <div>
+      <div class="canvas-title">貿易金融フィンテック ─ マイクロ・トレードファイナンス</div>
+      <div class="canvas-sub">ギャップ：船積後60〜120日の資金ギャップ → STP型即日ファクタリング</div>
+    </div>
+  </div>
+  <div class="lc">
+    <div class="lc-cell">
+      <div class="cell-label">Problem</div>
+      <div class="cell-content"><ul>
+        <li>輸出後60〜120日間の売掛金が資金繰りを圧迫</li>
+        <li>銀行L/C融資は中小に敷居が高く審査に2〜3週間</li>
+        <li>企業信用ではなく取引信用で評価できていない</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell" style="display:grid;grid-template-rows:1fr 1fr;padding:0">
+      <div style="padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.1)">
+        <div class="cell-label">Solution</div>
+        <div class="cell-content"><ul>
+          <li>船荷証券・インボイスをAI-OCRで即時スコアリング</li>
+          <li>取引信用ベースのSTP型即日ファクタリング</li>
+          <li>越境決済＋為替ヘッジのワンストップ</li>
+        </ul></div>
+      </div>
+      <div style="padding:12px 14px">
+        <div class="cell-label">Key Metrics</div>
+        <div class="cell-content"><ul>
+          <li>審査時間（目標：1時間以内）</li>
+          <li>ファクタリング回収率</li>
+          <li>取引額あたりデフォルト率</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="lc-cell uvp" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="cell-label">Unique Value Proposition</div>
+      <div class="uvp-text">「B/Lをスキャンしたら<br>翌日に現金が入る」<br><br><span style="font-size:11px;font-weight:400;color:#64748b">取引信用×STPで銀行の1/10のコストと1/100の時間</span></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Unfair Advantage</div>
+      <div class="cell-content"><ul>
+        <li>MFP×AI-OCRで書類をリアルタイム取得</li>
+        <li>商社機能で貿易取引データを保有</li>
+        <li>既存顧客への金融クロスセル基盤</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Customer Segments</div>
+      <div class="cell-content">
+        <strong>主：</strong>年間輸出額1〜50億円の中小輸出製造業<br><br>
+        <strong>早期採用者：</strong>東南アジア向けにD/A条件（書類渡し）で輸出しているメーカー
+      </div>
+    </div>
+    <div class="lc-bottom">
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Cost Structure</div>
+        <div class="cell-content">資金調達コスト / AI審査モデル開発 / 金融ライセンス取得・維持 / 貸し倒れ引当金</div>
+      </div>
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Revenue Streams</div>
+        <div class="cell-content">ファクタリング手数料（額面の1〜3%) / 為替スプレッド / 越境決済手数料（0.3〜0.8%）</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 4. 輸出先開拓 ===== -->
+<div class="canvas-wrap c4" id="c4">
+  <div class="canvas-label">
+    <div class="canvas-num">④</div>
+    <div>
+      <div class="canvas-title">輸出先開拓 ─ ExportPricer / ランコスAI</div>
+      <div class="canvas-sub">ギャップ：ランディングコスト計算に2〜3週間 → 5分で全コスト算出・シナリオ比較</div>
+    </div>
+  </div>
+  <div class="lc">
+    <div class="lc-cell">
+      <div class="cell-label">Problem</div>
+      <div class="cell-content"><ul>
+        <li>ランディングコスト計算に2〜3週間かかり商談機会を逃す</li>
+        <li>HS Code特定に専門家依存（5〜30万円/件）</li>
+        <li>フォワーダー見積もりがブラックボックスで比較不能</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell" style="display:grid;grid-template-rows:1fr 1fr;padding:0">
+      <div style="padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.1)">
+        <div class="cell-label">Solution</div>
+        <div class="cell-content"><ul>
+          <li>製品情報→AI-HS Code自動判定</li>
+          <li>海運・航空運賃API統合で即時取得</li>
+          <li>逆算P&Lシミュレーター（着地価格→逆算）</li>
+        </ul></div>
+      </div>
+      <div style="padding:12px 14px">
+        <div class="cell-label">Key Metrics</div>
+        <div class="cell-content"><ul>
+          <li>コスト計算所要時間（目標5分）</li>
+          <li>HS Code判定精度</li>
+          <li>見積もり後の商談化率</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="lc-cell uvp" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="cell-label">Unique Value Proposition</div>
+      <div class="uvp-text">「製品情報を入れたら<br>5分で世界中の着地価格がわかる」<br><br><span style="font-size:11px;font-weight:400;color:#64748b">フォワーダーのブラックボックスを解体し輸出価格戦略を経営判断レベルへ</span></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Unfair Advantage</div>
+      <div class="cell-content"><ul>
+        <li>商社機能で実際の輸送コストデータを保有</li>
+        <li>OCR×SIで顧客ERP内の製品データに直接アクセス</li>
+        <li>全国中小企業ネットワークで導入先確保</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Customer Segments</div>
+      <div class="cell-content">
+        <strong>主：</strong>初めて輸出に取り組む・既存輸出を拡大したい中小製造業30万社<br><br>
+        <strong>早期採用者：</strong>JETRO展示会から帰国後に見積もり作成で迷子になる輸出担当者
+      </div>
+    </div>
+    <div class="lc-bottom">
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Cost Structure</div>
+        <div class="cell-content">運賃API統合・維持費 / 税関DBライセンス / HS Codeモデル学習・維持費</div>
+      </div>
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Revenue Streams</div>
+        <div class="cell-content">月額SaaS（3〜10万円/社）/ フォワーダー成約手数料（成約額0.3〜0.8%）/ HS判定API従量課金</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 5. SCリスク ===== -->
+<div class="canvas-wrap c5" id="c5">
+  <div class="canvas-label">
+    <div class="canvas-num">⑤</div>
+    <div>
+      <div class="canvas-title">サプライチェーンリスク ─ ギグ型サプライヤー監査員マッチング</div>
+      <div class="canvas-sub">ギャップ：代替調達先スイッチングに6〜18ヶ月 → 2〜4週間に圧縮</div>
+    </div>
+  </div>
+  <div class="lc">
+    <div class="lc-cell">
+      <div class="cell-label">Problem</div>
+      <div class="cell-content"><ul>
+        <li>代替サプライヤーへの切り替えに6〜18ヶ月</li>
+        <li>工場監査に専門員の現地派遣で数週間・高コスト</li>
+        <li>業界横断のサプライヤーインテリジェンスDBが存在しない</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell" style="display:grid;grid-template-rows:1fr 1fr;padding:0">
+      <div style="padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.1)">
+        <div class="cell-label">Solution</div>
+        <div class="cell-content"><ul>
+          <li>資格保持者をギグ登録→翌日派遣（タイミー型）</li>
+          <li>AI画像解析でリモート工場監査</li>
+          <li>標準スコアカード×電子署名で即時契約</li>
+        </ul></div>
+      </div>
+      <div style="padding:12px 14px">
+        <div class="cell-label">Key Metrics</div>
+        <div class="cell-content"><ul>
+          <li>切り替え完了日数（目標2〜4週間）</li>
+          <li>監査員の派遣リードタイム</li>
+          <li>サプライヤーDB登録数</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="lc-cell uvp" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="cell-label">Unique Value Proposition</div>
+      <div class="uvp-text">「有事の調達切り替えを<br>6ヶ月から2週間に」<br><br><span style="font-size:11px;font-weight:400;color:#64748b">タイミー型ギグ監査員×AIリモート工場検査で供給断絶ダメージを最小化</span></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Unfair Advantage</div>
+      <div class="cell-content"><ul>
+        <li>カメラ×映像AI基盤でリモート監査を即実装</li>
+        <li>全国保守ネットワークが監査員プールに転用可能</li>
+        <li>SIビジネスで顧客SCMシステムと統合</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell">
+      <div class="cell-label">Customer Segments</div>
+      <div class="cell-content">
+        <strong>主：</strong>海外調達依存度が高い中堅〜大手製造業の調達部門<br><br>
+        <strong>早期採用者：</strong>コロナ・半導体不足で調達断絶を経験したSCM担当者
+      </div>
+    </div>
+    <div class="lc-bottom">
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Cost Structure</div>
+        <div class="cell-content">監査員採用・認定コスト / サプライヤーDB構築 / AIリモート監査システム開発</div>
+      </div>
+      <div class="lc-bottom-cell">
+        <div class="cell-label">Revenue Streams</div>
+        <div class="cell-content">SaaS年間契約（SCM部門向け120万〜）/ 監査員派遣手数料（1件5〜15万円）/ DB閲覧サブスク</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 6. 両端BPaaS（推奨） ===== -->
+<div class="divider">── ★ 推奨事業：全視点を統合した最有力コンセプト ──</div>
+
+<div class="canvas-wrap c6" id="c6">
+  <div class="canvas-label">
+    <div class="canvas-num">⑥</div>
+    <div>
+      <div class="canvas-title">両端ハードウェア × BPaaS ─ サプライチェーン神経系プラットフォーム</div>
+      <div class="canvas-sub">MFP（買い手側）＋カメラ（売り手側）の両端を繋ぎ、監査をカーシェア化・書類処理をBPaaSとして業務ごと受託</div>
+    </div>
+  </div>
+
+  <!-- Why recommended -->
+  <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+    <span class="badge badge-rec">★ 最推奨</span>
+    <span class="badge badge-core">コアコンピタンス全活用</span>
+    <span class="badge badge-ma">M&A起点で構築可能</span>
+    <span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:#ea580c;color:#fff">視点①②③④⑤を包含</span>
+  </div>
+
+  <div class="lc" style="border-width:3px">
+    <div class="lc-cell" style="min-height:160px">
+      <div class="cell-label">Problem ─ 根本にある構造問題</div>
+      <div class="cell-content"><ul>
+        <li><strong>買い手側：</strong>MFPで書類をスキャンしても処理はすべて手作業で3〜5日ロス</li>
+        <li><strong>売り手側：</strong>同じ工場に複数バイヤーが年20回も個別監査を実施（重複コスト）</li>
+        <li><strong>両端の断絶：</strong>発注〜生産〜出荷〜通関の一気通貫データが誰も持っていない</li>
+        <li><strong>中小の壁：</strong>IT人材ゼロの中小企業が大企業並みのSCM管理を持てない</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell" style="display:grid;grid-template-rows:1fr 1fr;padding:0;min-height:160px">
+      <div style="padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.1)">
+        <div class="cell-label">Solution</div>
+        <div class="cell-content"><ul>
+          <li>MFP書類→AI-OCR→通関・規制・コスト計算を自動処理（BPaaS）</li>
+          <li>工場カメラを複数バイヤーで共有（監査カーシェア）</li>
+          <li>参加者データを匿名集計→通関予測精度向上（物流版Waze）</li>
+          <li>フォワーダーをAPI接続し比較・競争させるマーケットプレイス化</li>
+        </ul></div>
+      </div>
+      <div style="padding:12px 14px">
+        <div class="cell-label">Key Metrics</div>
+        <div class="cell-content"><ul>
+          <li>書類処理の自動化率（目標95%）</li>
+          <li>監査コスト削減率（目標70%以上）</li>
+          <li>参加拠点数（カメラ設置数）</li>
+          <li>プラットフォーム参加企業のリテンション率</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="lc-cell uvp" style="display:flex;flex-direction:column;justify-content:center;min-height:160px">
+      <div class="cell-label">Unique Value Proposition</div>
+      <div class="uvp-text" style="font-size:14px">「書類は届いた瞬間に処理され、<br>工場の異常は翌朝より先にわかり、<br>監査コストはみんなで割り勘する」<br><br><span style="font-size:11px;font-weight:400;color:#1e40af">中小輸出企業が月額数万円で<br>大企業並みのサプライチェーン管理を持てる世界</span></div>
+    </div>
+    <div class="lc-cell" style="min-height:160px">
+      <div class="cell-label">Unfair Advantage ─ 絶対に真似できない理由</div>
+      <div class="cell-content"><ul>
+        <li><strong>物理的参入障壁：</strong>MFP（買い手）＋カメラ（工場）の両端設置拠点をゼロから作れない</li>
+        <li><strong>BPO運用力：</strong>業務ごと請けられる現場実装力</li>
+        <li><strong>全国SMEネットワーク：</strong>既存顧客からクロスセルで顧客獲得コストが極小</li>
+        <li><strong>M&A財務余力：</strong>足りない技術をスタートアップ買収で即取り込み</li>
+        <li><strong>ネットワーク効果：</strong>参加企業増→データ増→予測精度増→解約不能</li>
+      </ul></div>
+    </div>
+    <div class="lc-cell" style="min-height:160px">
+      <div class="cell-label">Customer Segments</div>
+      <div class="cell-content">
+        <strong>Layer A（最初）：</strong><br>既存MFP顧客の中小輸出企業<br>（クロスセルで獲得コスト最小）<br><br>
+        <strong>Layer B（拡大）：</strong><br>中堅製造業の調達部門<br>（工場監視カーシェア）<br><br>
+        <strong>Layer C（将来）：</strong><br>フォワーダー・金融機関への<br>データAPIライセンス提供
+      </div>
+    </div>
+    <div class="lc-bottom">
+      <div class="lc-bottom-cell" style="min-height:90px">
+        <div class="cell-label">Cost Structure</div>
+        <div class="cell-content">
+          カメラ・IoT機器原価（国際調達で優位）/ AI-OCRエンジン開発・維持 / 全国設置・保守人件費 / M&A資本コスト（5〜30億円）/ AI画像解析モデル学習費
+        </div>
+      </div>
+      <div class="lc-bottom-cell" style="min-height:90px">
+        <div class="cell-label">Revenue Streams ─ 3レイヤーで100億円へ</div>
+        <div class="cell-content">
+          <strong>①ハードウェア：</strong>カメラ初期＋月額リース（解約率≒0%）<br>
+          <strong>②SaaSプラットフォーム：</strong>月額3〜15万円/社 × 1万社 = 96億円/年<br>
+          <strong>③BPaaS（最強）：</strong>月額10〜50万円/社 × 3千社 = 108億円/年<br>
+          <span style="font-size:10px;color:#64748b">※ Layer 2+3のどちらか一方でも100億円達成可能</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 比較サマリー -->
+<div style="background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);padding:24px 28px;margin-top:8px">
+  <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:16px;border-left:4px solid #1e3a8a;padding-left:12px">7視点 比較サマリー</div>
+  <table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead>
+      <tr style="background:#0f172a;color:#fff">
+        <th style="padding:8px 10px;text-align:left">視点</th>
+        <th style="padding:8px 10px;text-align:center">市場規模</th>
+        <th style="padding:8px 10px;text-align:center">コアコンピタンス<br>適合度</th>
+        <th style="padding:8px 10px;text-align:center">M&A難易度</th>
+        <th style="padding:8px 10px;text-align:center">独自性</th>
+        <th style="padding:8px 10px;text-align:center">総合</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #e8edf4">
+        <td style="padding:8px 10px">0. 越境ECラストマイル</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">△</td>
+        <td style="padding:8px 10px;text-align:center">易</td>
+        <td style="padding:8px 10px;text-align:center">△</td>
+        <td style="padding:8px 10px;text-align:center">★★★</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e8edf4">
+        <td style="padding:8px 10px">①書類×通関士マーケット</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">◎</td>
+        <td style="padding:8px 10px;text-align:center">易</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">★★★★</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e8edf4">
+        <td style="padding:8px 10px">②輸出規制RegTech</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">易〜中</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">★★★★</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e8edf4">
+        <td style="padding:8px 10px">③貿易金融フィンテック</td>
+        <td style="padding:8px 10px;text-align:center">◎</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">中</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">★★★★</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e8edf4">
+        <td style="padding:8px 10px">④輸出先開拓×ランコスAI</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">易</td>
+        <td style="padding:8px 10px;text-align:center">○</td>
+        <td style="padding:8px 10px;text-align:center">★★★</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e8edf4">
+        <td style="padding:8px 10px">⑤SCリスク×ギグ監査員</td>
+        <td style="padding:8px 10px;text-align:center">◎</td>
+        <td style="padding:8px 10px;text-align:center">◎</td>
+        <td style="padding:8px 10px;text-align:center">易〜中</td>
+        <td style="padding:8px 10px;text-align:center">◎</td>
+        <td style="padding:8px 10px;text-align:center">★★★★★</td>
+      </tr>
+      <tr style="background:#eff6ff;font-weight:700">
+        <td style="padding:8px 10px">⑥両端BPaaS（統合）★推奨</td>
+        <td style="padding:8px 10px;text-align:center">◎◎</td>
+        <td style="padding:8px 10px;text-align:center">◎◎</td>
+        <td style="padding:8px 10px;text-align:center">易（M&A起点）</td>
+        <td style="padding:8px 10px;text-align:center">◎◎</td>
+        <td style="padding:8px 10px;text-align:center">★★★★★★</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:11px;color:#64748b;margin-top:10px">※ ⑥は①〜⑤の要素を包含するプラットフォーム。段階的に機能を追加することで、個別視点の事業を吸収・統合できる設計。</p>
+</div>
+
+</div>
+<footer style="text-align:center;padding:24px;color:#94a3b8;font-size:12px">リーンキャンバス 7視点まとめ ─ 国際物流ビジネス開発プロジェクト</footer>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>視点②：通関規制・運賃透明性 課題分析</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-serif; background:#f0f2f5; color:#333; font-size:13px; line-height:1.6; }
+.report-header { background:#1a3a6b; color:white; padding:36px 48px 28px; }
+.report-header h1 { font-size:24px; font-weight:700; letter-spacing:.04em; }
+.report-header .subtitle { font-size:13px; opacity:.75; margin-top:6px; }
+.report-header .meta { font-size:11px; opacity:.6; margin-top:14px; }
+.section { background:white; margin:20px 32px; padding:28px 32px; border-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,.08); }
+.section-title { font-size:16px; font-weight:700; color:#1a3a6b; border-left:4px solid #1a5faa; padding-left:12px; margin-bottom:22px; }
+.asis-tobe-wrap { display:grid; grid-template-columns:1fr 72px 1fr; align-items:stretch; }
+.tobe-col { background:#1a5faa; color:white; padding:20px 22px; border-radius:6px 0 0 6px; }
+.asis-col { background:#e87722; color:white; padding:20px 22px; border-radius:0 6px 6px 0; }
+.gap-center { display:flex; flex-direction:column; align-items:center; justify-content:center; background:#f8f9fa; border-top:1px solid #e0e0e0; border-bottom:1px solid #e0e0e0; }
+.gap-arrow-icon { font-size:28px; color:#555; }
+.col-heading { font-size:13px; font-weight:700; margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,.35); }
+.col-item { display:flex; gap:8px; margin-bottom:9px; font-size:12px; line-height:1.5; }
+.col-item .lbl { font-weight:700; min-width:18px; opacity:.75; }
+.gap-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; }
+.gap-card { border:1.5px solid #c5d5ea; border-radius:5px; padding:14px; background:#fafdff; position:relative; }
+.gap-card.selected { border-color:#f59e0b; background:#fffbeb; box-shadow:0 0 0 2px #fde68a; }
+.gap-card-num { font-size:11px; font-weight:700; color:#1a5faa; margin-bottom:4px; }
+.gap-card.selected .gap-card-num { color:#92400e; }
+.gap-card-title { font-weight:700; font-size:12px; color:#1a3a6b; margin-bottom:10px; line-height:1.4; }
+.gap-card.selected .gap-card-title { color:#78350f; }
+.gap-card dl dt { font-size:10px; font-weight:700; color:#888; margin-top:7px; }
+.gap-card dl dd { font-size:11px; color:#555; line-height:1.45; }
+.selected-badge { position:absolute; top:10px; right:10px; background:#f59e0b; color:white; font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px; }
+.rationale-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.rationale-item { background:#f0f6ff; border-left:3px solid #1a5faa; padding:12px 14px; border-radius:0 4px 4px 0; }
+.rationale-item .r-title { font-weight:700; font-size:11px; color:#1a3a6b; margin-bottom:5px; }
+.rationale-item .r-body { font-size:11px; color:#444; line-height:1.5; }
+.tag { display:inline-block; padding:2px 7px; border-radius:3px; font-size:10px; font-weight:700; white-space:nowrap; margin-left:4px; }
+.tag-s4 { background:#16a34a; color:white; } .tag-s3 { background:#84cc16; color:white; }
+.tag-s2 { background:#f59e0b; color:white; } .tag-s1 { background:#9ca3af; color:white; }
+.tag-ph { background:#ef4444; color:white; } .tag-pm { background:#f97316; color:white; } .tag-pl { background:#d1d5db; color:#555; }
+.tree-outer { overflow-x:auto; padding:8px 0 8px 8px; }
+.tree,.tree ul { list-style:none; padding:0; margin:0; }
+.tree li { position:relative; padding:3px 0 3px 26px; margin-bottom:2px; }
+.tree li::before { content:''; position:absolute; left:6px; top:0; bottom:0; border-left:2px solid #c8d6e8; }
+.tree li::after { content:''; position:absolute; left:6px; top:14px; width:14px; border-top:2px solid #c8d6e8; }
+.tree li:last-child::before { height:14px; bottom:auto; }
+.tree>li::before,.tree>li::after { display:none; }
+.tree ul { margin-top:4px; }
+.node { display:inline-flex; align-items:flex-start; flex-wrap:wrap; gap:5px; padding:5px 10px; border-radius:4px; font-size:11px; line-height:1.45; max-width:380px; vertical-align:top; }
+.node-text { flex:1; min-width:0; }
+.n-root { background:#1a3a6b; color:white; font-weight:700; font-size:13px; max-width:280px; }
+.n-w1 { background:#1a5faa; color:white; font-weight:700; max-width:320px; }
+.n-w2 { background:#2d80d4; color:white; max-width:320px; }
+.n-w3 { background:#93c5fd; color:#1e3a5f; max-width:340px; }
+.n-w4 { background:#dbeafe; color:#1e40af; border:1px solid #93c5fd; max-width:360px; }
+.n-w5 { background:#f0f9ff; color:#374151; border:1px solid #bae6fd; max-width:360px; }
+.n-highlight { border:2px solid #16a34a !important; background:#f0fdf4 !important; color:#14532d !important; }
+.legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; padding:12px 16px; background:#f8f9fa; border-radius:4px; font-size:11px; }
+.legend-item { display:flex; align-items:center; gap:5px; }
+.priority-table { width:100%; border-collapse:collapse; font-size:12px; }
+.priority-table th { background:#1a3a6b; color:white; padding:9px 12px; text-align:left; font-weight:700; }
+.priority-table td { padding:9px 12px; border-bottom:1px solid #e5e7eb; vertical-align:top; line-height:1.5; }
+.priority-table tr:nth-child(even) td { background:#f9fafb; }
+.priority-table tr:hover td { background:#eff6ff; }
+.num-cell { font-weight:700; color:#1a3a6b; } .direction-cell { color:#1a5faa; font-weight:700; }
+.arch-box { background:#1a3a6b; color:white; border-radius:6px; padding:20px 24px; margin-top:20px; font-size:12px; line-height:1.8; }
+.arch-box h3 { font-size:14px; font-weight:700; margin-bottom:10px; }
+</style>
+</head>
+<body>
+<div class="report-header">
+  <h1>視点②：通関規制・運賃透明性 課題分析レポート</h1>
+  <p class="subtitle">HS Code・FTA原産地判定・輸出規制該非 × 運賃情報の非対称性</p>
+  <p class="meta">作成日：2026年5月17日　｜　国際物流 課題発掘シリーズ #2</p>
+</div>
+
+<div class="section">
+  <div class="section-title">① As is / To be フレームワーク</div>
+  <div class="asis-tobe-wrap">
+    <div class="tobe-col">
+      <div class="col-heading">① To be（あるべき理想の姿）</div>
+      <div class="col-item"><span class="lbl">A)</span><span>HS Code分類が製品仕様・材質データの入力だけでAIが複数候補と確信度スコアを提示し、税関への事前教示申請まで一気通貫で完結する</span></div>
+      <div class="col-item"><span class="lbl">B)</span><span>部材BOMをシステムに取り込むだけでEPA/FTA適用可否と原産地証明書の自動ドラフトが生成され、協定改定時の影響シミュレーションが即時に可能になる</span></div>
+      <div class="col-item"><span class="lbl">C)</span><span>自社製品スペックを入力すれば外為法・EAR・EU Dual-Use等の規制DBと照合し、該非判定結果・根拠条文・更新履歴が記録として残る</span></div>
+      <div class="col-item"><span class="lbl">D)</span><span>関税率・運賃・付加関税・THC等の全コスト要素がリアルタイムで一覧化され、ルート・タイミング別の最適シミュレーションを誰でも実行できる</span></div>
+      <div class="col-item"><span class="lbl">E)</span><span>制裁リスト照合がAPI連携で自動化され、新規取引先登録時・定期スクリーニング時に即座にアラートが発出され、対応ログが監査証跡として保存される</span></div>
+      <div class="col-item"><span class="lbl">F)</span><span>AEO認証要件をシステムが常時モニタリングし、是正アクションをタスク管理で担当者に通知することで中小企業でも認証水準を維持できる</span></div>
+    </div>
+    <div class="gap-center"><div class="gap-arrow-icon">⇔</div></div>
+    <div class="asis-col">
+      <div class="col-heading">② As is（現在の状況）</div>
+      <div class="col-item"><span class="lbl">a.</span><span>HS Code分類は担当者が手動でジェトロ資料・WCO関税品目表を検索。分類ミスによる過払い関税・通関差し止めが年間数千件規模で発生している</span></div>
+      <div class="col-item"><span class="lbl">b.</span><span>EPA/FTA原産地判定は部材調達比率を手作業Excelで計算。誤判定による遡及追徴課税リスクが担当者個人のスキルに依存している</span></div>
+      <div class="col-item"><span class="lbl">c.</span><span>輸出規制該非判定は法務・輸出管理部門が個別確認。中小企業では専任担当者が不在のまま属人的判断で処理されている</span></div>
+      <div class="col-item"><span class="lbl">d.</span><span>関税率・付加関税の情報は各国税関ポータルが乱立し、最新改定を把握する仕組みがなく見積時点と通関時点でコスト乖離が生じている</span></div>
+      <div class="col-item"><span class="lbl">e.</span><span>制裁リスト照合（OFAC・EU・国連等）は担当者が複数リストをダウンロードし手動マッチング。リスト更新頻度（週数回）に追いつけないケースがある</span></div>
+      <div class="col-item"><span class="lbl">f.</span><span>AEO認証取得・維持は書類管理・内部監査の工数が重く、中小企業の認証率は大企業の1/10以下にとどまり通関優遇を受けられない</span></div>
+    </div>
+  </div>
+  <div class="gap-grid">
+    <div class="gap-card"><div class="gap-card-num">ギャップ①（A↔a）</div><div class="gap-card-title">HS Code分類の精度・スピード格差</div><dl><dt>本質</dt><dd>熟練通関士依存の手動分類。分類ミスの外部コストが可視化されておらず改善投資が進まない</dd></dl></div>
+    <div class="gap-card"><div class="gap-card-num">ギャップ②（B↔b）</div><div class="gap-card-title">FTA/EPA原産地判定の属人性と遡及リスク</div><dl><dt>本質</dt><dd>協定改定・調達先変更の都度、手作業再計算が発生。誤判定に気づくのが税関調査後になるケースが多い</dd></dl></div>
+    <div class="gap-card selected">
+      <div class="selected-badge">★ 深堀対象</div>
+      <div class="gap-card-num">ギャップ③（C↔c）</div>
+      <div class="gap-card-title">中小企業の輸出規制該非判定の空白地帯</div>
+      <dl><dt>本質</dt><dd>専任担当者を持てない中小企業は該非判定を実質スキップか丸投げ。規制強化の波が直撃するタイミングが近い</dd></dl>
+    </div>
+    <div class="gap-card"><div class="gap-card-num">ギャップ④（D↔d）</div><div class="gap-card-title">関税率・運賃コストの情報非対称性による見積精度の低さ</div><dl><dt>本質</dt><dd>受注後のコスト超過が慢性化。中小輸出者は情報収集コストが高く大手フォワーダーへの依存が下がらない</dd></dl></div>
+    <div class="gap-card"><div class="gap-card-num">ギャップ⑤（E↔e）</div><div class="gap-card-title">制裁リスト照合の更新頻度・網羅性の限界</div><dl><dt>本質</dt><dd>手動ダウンロード・マッチングでは週複数回のリスト更新に追いつけず、照合漏れによるコンプライアンス違反リスクが存在</dd></dl></div>
+    <div class="gap-card"><div class="gap-card-num">ギャップ⑥（F↔f）</div><div class="gap-card-title">中小企業のAEO認証取得・維持コストの非対称性</div><dl><dt>本質</dt><dd>認証維持の内部管理体制構築を中小企業が自力で行うのは工数・コスト的に非現実的</dd></dl></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">② 選定理由：ギャップ③「中小企業の輸出規制該非判定の空白地帯」</div>
+  <div class="rationale-grid">
+    <div class="rationale-item"><div class="r-title">遅延関連課題</div><div class="r-body">該非判定未完了による輸出許可申請遅延→船積み遅延が直結。判定フロー整備がボトルネック</div></div>
+    <div class="rationale-item"><div class="r-title">非表層的な構造問題</div><div class="r-body">「判定漏れ」は平時に顕在化しないため、リスクが可視化されておらず従来ソリューションが刺さっていない深層課題</div></div>
+    <div class="rationale-item"><div class="r-title">タイミー的ユニークさ</div><div class="r-body">案件単位・スポット型の該非判定支援＋専門家マッチング。顧問契約でも社内整備でもない第三の選択肢</div></div>
+    <div class="rationale-item"><div class="r-title">市場規模100億円以上</div><div class="r-body">輸出管理コンサル市場＋SaaS型コンプライアンス市場の国内だけで500億円超推定。半導体規制強化で急拡大中</div></div>
+    <div class="rationale-item"><div class="r-title">技術的実現可能性</div><div class="r-body">規制DBの構造化・LLMによる条文解釈補助・類似製品判例参照はいずれも既存技術で実現可能</div></div>
+    <div class="rationale-item"><div class="r-title">投資家訴求力</div><div class="r-body">RegTech×安全保障×輸出規制という政策追い風。米中デカップリング・輸出管理強化は長期トレンドでExit倍率が高いセクター</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">③ 「なぜ思考」ロジックツリー ── 中小企業の輸出規制該非判定の空白地帯（Why × 4〜5層）</div>
+  <div class="legend">
+    <strong>技術解決可能性：</strong>
+    <div class="legend-item"><span class="tag tag-s4">◎</span>明確に解決可能</div>
+    <div class="legend-item"><span class="tag tag-s3">○</span>可能性が高い</div>
+    <div class="legend-item"><span class="tag tag-s2">△</span>技術だけでは難しい</div>
+    <div class="legend-item"><span class="tag tag-s1">✗</span>解決困難</div>
+    <strong style="margin-left:12px;">優先度：</strong>
+    <div class="legend-item"><span class="tag tag-ph">高</span></div><div class="legend-item"><span class="tag tag-pm">中</span></div><div class="legend-item"><span class="tag tag-pl">低</span></div>
+    <div class="legend-item" style="margin-left:12px;"><span style="display:inline-block;width:12px;height:12px;border:2px solid #16a34a;background:#f0fdf4;border-radius:2px;"></span>有望ノード</div>
+  </div>
+  <div class="tree-outer">
+    <ul class="tree">
+      <li><span class="node n-root"><span class="node-text">中心課題：中小企業が輸出規制該非判定を適切に実施できない</span></span>
+        <ul>
+          <li><span class="node n-w1"><span class="node-text">【Why1-A】 該非判定の専門知識・人材が社内にいない</span></span>
+            <ul>
+              <li><span class="node n-w2"><span class="node-text">【Why2-A1】 外為法・EAR・EU Dual-Useは法令体系が複雑で習得コストが高い</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-A1a】 規制品目リスト（ECCN・貨物等省令）が英語・専門用語で書かれており解読に法的素養が必要</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A1a-i】 翻訳・解釈を標準化したガイドラインが中小企業向けに存在しない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-A1b】 規制は頻繁改定（半導体・軍民両用品目）されており継続学習コストが事実上無限</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A1b-i】 改定アラートを自社製品スペックと紐づける仕組みが市場に存在しない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+              <li><span class="node n-w2"><span class="node-text">【Why2-A2】 専門家への依頼コストが高く単発案件に合わない</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-A2a】 顧問契約単位の料金体系しかなく年数件の輸出案件には費用対効果が合わない</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A2a-i】 案件単位のスポット判定サービスマーケットが未成熟</span><span class="tag tag-s3">○</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-A2b】 専門家の稼働リソースが大手顧客に集中し中小案件は後回しにされる</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A2b-i】 需給マッチングプラットフォームが存在せずアクセス経路が不透明</span><span class="tag tag-s3">○</span><span class="tag tag-pm">中</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><span class="node n-w1"><span class="node-text">【Why1-B】 該非判定プロセス自体が標準化されていない</span></span>
+            <ul>
+              <li><span class="node n-w2"><span class="node-text">【Why2-B1】 判定フローが企業ごとにバラバラで判定根拠の記録・保存ルールがない</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-B1a】 監査証跡として機能する判定ログの保存義務が中小には実質未徹底</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-B1a-i】 簡易に使えるコンプライアンス記録SaaSが中小価格帯で存在しない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-B1b】 製品スペック変更時の再判定トリガーが定義されていない</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-B1b-i】 PLM/BOM変更と輸出管理システムが連携していない</span><span class="tag tag-s3">○</span><span class="tag tag-pm">中</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><span class="node n-w1"><span class="node-text">【Why1-C】 規制情報へのアクセスが困難・コスト高</span></span>
+            <ul>
+              <li><span class="node n-w2"><span class="node-text">【Why2-C1】 各国の規制データが分散・多言語・非構造化状態で一元参照できない</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-C1a】 ECCN・外為令別表・EU Dual-Use等が統一APIで提供されていない</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-C1a-i】 規制当局がデータ標準化・オープンAPI化に消極的で民間が個別スクレイピングを強いられる</span><span class="tag tag-s3">○</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-C1b】 製品×仕向地×用途によって適用規制が異なる多次元マトリクスが整理されていない</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-C1b-i】 製品×仕向地×用途の三次元判定マトリクスを自動生成するツールが存在しない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+              <li><span class="node n-w2"><span class="node-text">【Why2-C2】 規制改定情報のリアルタイムキャッチアップ体制がない</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-C2a】 改定はFederal Register・官報・EU Official Journalに散在し自動収集が困難</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-C2a-i】 改定情報を自社SKUに紐づけてプッシュ通知するサービスが存在しない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-C2b】 業界団体・商工会議所の情報伝達が遅く中小まで届くのに数ヶ月かかる</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-C2b-i】 一次情報源から中小企業まで直接リーチするデジタルチャネルが欠如</span><span class="tag tag-s3">○</span><span class="tag tag-pm">中</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">④ 有望ノードリスト（技術解決◎○ × 優先度 高・中）</div>
+  <table class="priority-table">
+    <thead><tr><th>#</th><th>ノードID</th><th>根本原因</th><th>解決性</th><th>優先度</th><th>ソリューション方向性</th></tr></thead>
+    <tbody>
+      <tr><td class="num-cell">1</td><td>Why4-A1a-i</td><td>規制条文の中小向け標準解釈ガイドが存在しない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">LLMベース規制条文解釈エンジン（製品スペック入力→ECCN/貨物等省令の該当条文を自動照合・平易な日本語で出力）</td></tr>
+      <tr><td class="num-cell">2</td><td>Why4-A1b-i</td><td>規制改定を自社製品スペックに紐づけるアラート機能がない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">「規制改定×自社SKU自動マッチング」モジュール（連邦官報・経産省通知をNLP解析し自社登録SKUへの影響を即時プッシュ）</td></tr>
+      <tr><td class="num-cell">3</td><td>Why4-A2a-i</td><td>案件単位スポット判定サービスマーケットが未成熟</td><td><span class="tag tag-s3">○</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">輸出管理専門家のオンデマンドマッチング（タイミー型）。AIによる事前スクリーニングで専門家工数を最小化し単価を1/3に</td></tr>
+      <tr><td class="num-cell">4</td><td>Why4-B1a-i</td><td>中小価格帯のコンプライアンス記録SaaSが存在しない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">判定ログ・根拠書類・担当者署名を自動保存するコンプライアンス台帳SaaS（月額3〜5万円・初期設定ゼロ）</td></tr>
+      <tr><td class="num-cell">5</td><td>Why4-C1a-i</td><td>規制当局APIが未整備で民間が個別スクレイピングを強いられる</td><td><span class="tag tag-s3">○</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">規制データ統合レイヤー（ECCN・外為令別表・EU Dual-Use・UN制裁リストを統一スキーマで正規化・APIで提供するミドルウェア）</td></tr>
+      <tr><td class="num-cell">6</td><td>Why4-C1b-i</td><td>製品×仕向地×用途の三次元判定マトリクス自動生成ツールがない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">「三次元規制マップ」生成エンジン（製品カテゴリ・輸出先国・エンドユーザー類型を入力→適用規制・必要許可証をビジュアルマトリクスで表示）</td></tr>
+      <tr><td class="num-cell">7</td><td>Why4-C2a-i</td><td>規制改定情報を自社SKUに紐づけてプッシュ通知するサービスがない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">改定インテリジェンスフィード（FR・EU Official Journal・経産省告示をリアルタイムクロール→NLP分類→影響SKU特定→Slack通知）</td></tr>
+      <tr><td class="num-cell">8</td><td>Why4-A2b-i</td><td>専門家へのアクセス経路が不透明・需給マッチング未整備</td><td><span class="tag tag-s3">○</span></td><td><span class="tag tag-pm">中</span></td><td class="direction-cell">専門家プロファイル可視化マーケットプレイス（取り扱い規制分野・過去判定件数・応答速度・レビュー制度・エスクロー決済）</td></tr>
+      <tr><td class="num-cell">9</td><td>Why4-B1b-i</td><td>PLM/BOM変更と輸出管理システムが連携していない</td><td><span class="tag tag-s3">○</span></td><td><span class="tag tag-pm">中</span></td><td class="direction-cell">PLM・ERPとのWebhook連携モジュール（部品変更イベントを検知→自動再判定フローをトリガー→差分レポートを担当者にアサイン）</td></tr>
+      <tr><td class="num-cell">10</td><td>Why4-C2b-i</td><td>一次情報源から中小企業への直接デジタルリーチチャネルが欠如</td><td><span class="tag tag-s3">○</span></td><td><span class="tag tag-pm">中</span></td><td class="direction-cell">業種別・製品カテゴリ別の規制ニュースレター＋LINEオフィシャルアカウント（フリーミアムでリード獲得→SaaSアップセル）</td></tr>
+    </tbody>
+  </table>
+  <div class="arch-box">
+    <h3>統合アーキテクチャ：判定→記録→監視→更新→専門家エスカレーションの一気通貫プラットフォーム</h3>
+    INPUT：製品スペック・BOM・取引先情報の登録 → SCREENING：AI三次元規制マップ＋LLM条文解釈 → JUDGMENT：仮判定＋低確信案件はスポット専門家へ → RECORD：判定根拠・担当者・日時の自動台帳化 → MONITOR：規制改定自動検知→影響SKU特定→アラート → FINANCE：コンプライアンススコアを金融機関へAPI提供<br><br>
+    マネタイズ：SaaS月額（記録・モニタリング）＋判定マーケットプレイス手数料（スポット専門家）＋データAPI販売（B向け規制データ連携）の三層収益構造
+  </div>
+</div>
+<div style="text-align:center;padding:20px;font-size:11px;color:#999;">視点②：通関規制・運賃透明性 課題分析レポート　|　作成日：2026年5月17日</div>
+</body></html>

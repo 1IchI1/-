@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市場機会 × M&A戦略 評価レポート</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;background:#f4f6fb;color:#1e293b;font-size:14px;line-height:1.6}
+header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:28px 40px}
+header h1{font-size:22px;font-weight:700;letter-spacing:.04em}
+header p{font-size:13px;opacity:.8;margin-top:4px}
+.container{max-width:1200px;margin:0 auto;padding:32px 24px}
+.section{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);padding:28px 32px;margin-bottom:28px}
+.section-title{font-size:16px;font-weight:700;color:#1e3a8a;border-left:4px solid #1e3a8a;padding-left:12px;margin-bottom:20px}
+
+/* Matrix */
+.matrix-wrap{position:relative;width:100%;overflow-x:auto}
+.matrix{display:grid;grid-template-columns:80px repeat(3,1fr);grid-template-rows:40px repeat(3,1fr);gap:3px;min-width:600px}
+.m-label{background:#334155;color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;padding:6px;text-align:center}
+.m-cell{border-radius:8px;padding:14px 12px;min-height:120px;position:relative}
+.m-low{background:#fef2f2;border:1px solid #fca5a5}
+.m-mid{background:#fefce8;border:1px solid #fde047}
+.m-high{background:#f0fdf4;border:1px solid #86efac}
+.m-star{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #16a34a}
+.bubble{display:inline-flex;flex-direction:column;background:#fff;border:1.5px solid #cbd5e1;border-radius:8px;padding:6px 8px;margin:3px;font-size:10px;font-weight:600;cursor:default;transition:transform .15s}
+.bubble:hover{transform:scale(1.05)}
+.bubble.winner{border-color:#16a34a;background:#f0fdf4;color:#14532d}
+.bubble.good{border-color:#3b82f6;background:#eff6ff;color:#1e40af}
+.bubble.caution{border-color:#f59e0b;background:#fefce8;color:#92400e}
+.bubble .bname{font-size:11px}
+.bubble .bmeta{font-size:9px;color:#64748b;font-weight:400;margin-top:1px}
+
+/* Axis labels */
+.ax-title{font-size:11px;color:#64748b;text-align:center;margin-bottom:6px}
+
+/* Candidate cards */
+.cand-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.cand-card{border-radius:10px;padding:20px;border:2px solid #e2e8f0}
+.cand-card.rank1{border-color:#16a34a;background:linear-gradient(135deg,#f0fdf4,#fff)}
+.cand-card.rank2{border-color:#3b82f6;background:linear-gradient(135deg,#eff6ff,#fff)}
+.cand-card.rank3{border-color:#f59e0b;background:linear-gradient(135deg,#fefce8,#fff)}
+.cand-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
+.cand-card .subtitle{font-size:12px;color:#64748b;margin-bottom:12px}
+.kpi-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.kpi{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:4px 10px;font-size:11px}
+.kpi strong{display:block;font-size:10px;color:#64748b;font-weight:600}
+.kpi span{font-weight:700;color:#1e293b}
+.section-sub{font-size:12px;font-weight:700;color:#475569;margin-top:12px;margin-bottom:4px;border-bottom:1px solid #e8edf4;padding-bottom:3px}
+.point-list{list-style:none;padding:0}
+.point-list li{font-size:12px;padding:3px 0;padding-left:16px;position:relative;color:#334155}
+.point-list li::before{content:'▸';position:absolute;left:0;color:#94a3b8}
+.point-list li.good::before{content:'✓';color:#16a34a;font-weight:700}
+.point-list li.warn::before{content:'△';color:#f59e0b}
+.point-list li.bad::before{content:'✗';color:#ef4444}
+
+/* Competence fit */
+.fit-table{width:100%;border-collapse:collapse;margin-top:8px}
+.fit-table th{background:#1e3a8a;color:#fff;padding:8px 10px;font-size:11px;text-align:left}
+.fit-table td{padding:8px 10px;border-bottom:1px solid #e8edf4;font-size:12px}
+.fit-table tr:last-child td{border-bottom:none}
+.dot5{color:#16a34a;font-size:14px}
+.dot3{color:#f59e0b;font-size:14px}
+.dot1{color:#e2e8f0;font-size:14px}
+
+/* M&A profile */
+.ma-box{background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:14px 16px;margin-top:10px}
+.ma-box h4{font-size:12px;font-weight:700;color:#1e3a8a;margin-bottom:6px}
+.ma-row{display:flex;gap:16px;flex-wrap:wrap}
+.ma-item{flex:1;min-width:120px}
+.ma-item .ma-label{font-size:10px;color:#64748b;font-weight:600}
+.ma-item .ma-val{font-size:13px;font-weight:700;color:#0f172a}
+
+/* Recommendation */
+.rec-box{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:12px;padding:22px 26px;margin-top:8px}
+.rec-box h3{font-size:16px;font-weight:700;margin-bottom:10px}
+.rec-box p{font-size:13px;opacity:.9;line-height:1.7}
+.rec-step{display:flex;gap:12px;margin-top:12px;align-items:flex-start}
+.step-num{background:#3b82f6;color:#fff;border-radius:50%;width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:2px}
+.step-text{font-size:12px;opacity:.9}
+
+/* Tags */
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;margin-right:3px}
+.tag-green{background:#16a34a}
+.tag-blue{background:#2563eb}
+.tag-orange{background:#ea580c}
+.tag-red{background:#dc2626}
+.tag-gray{background:#94a3b8}
+
+footer{text-align:center;padding:20px;color:#94a3b8;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>市場機会 × M&A戦略 評価レポート</h1>
+  <p>コアコンピタンス適合度 ｜ 市場成熟度 ｜ 買収難易度の三軸評価</p>
+</header>
+<div class="container">
+
+<!-- ① マトリクス -->
+<div class="section">
+  <div class="section-title">① 市場成熟度 × M&A難易度 ポジショニングマップ</div>
+  <p style="font-size:12px;color:#64748b;margin-bottom:16px">縦軸：市場成熟度（低＝まだ荒野、高＝競争激化）／横軸：M&A難易度（左＝買いやすい、右＝高すぎ・不可）</p>
+
+  <div style="display:flex;gap:8px;margin-bottom:4px;padding-left:80px">
+    <div style="flex:1;text-align:center;font-size:11px;color:#64748b;font-weight:600">M&A しやすい<br><span style="font-size:10px">（Seed〜SeriesA）</span></div>
+    <div style="flex:1;text-align:center;font-size:11px;color:#64748b;font-weight:600">中程度<br><span style="font-size:10px">（SeriesB前後）</span></div>
+    <div style="flex:1;text-align:center;font-size:11px;color:#64748b;font-weight:600">M&A 困難<br><span style="font-size:10px">（大型・上場）</span></div>
+  </div>
+
+  <div class="matrix">
+    <!-- row headers -->
+    <div class="m-label" style="grid-row:2">市場<br>未成熟</div>
+    <div class="m-label" style="grid-row:3">市場<br>成長中</div>
+    <div class="m-label" style="grid-row:4">市場<br>成熟</div>
+    <!-- col headers -->
+    <div class="m-label" style="grid-column:2;grid-row:1"></div>
+    <div class="m-label" style="grid-column:3;grid-row:1"></div>
+    <div class="m-label" style="grid-column:4;grid-row:1"></div>
+
+    <!-- Row1: 未成熟 -->
+    <div class="m-cell m-high" style="grid-column:2;grid-row:2">
+      <div class="bubble winner"><span class="bname">⑥ AIカメラ<br>サプライヤー監視</span><span class="bmeta">★最有力</span></div>
+      <div class="bubble good"><span class="bname">CBAM<br>排出量追跡</span><span class="bmeta">規制義務化待ち</span></div>
+    </div>
+    <div class="m-cell m-mid" style="grid-column:3;grid-row:2">
+      <div class="bubble good"><span class="bname">農産物輸出<br>電子検疫</span><span class="bmeta">政策主導</span></div>
+    </div>
+    <div class="m-cell m-low" style="grid-column:4;grid-row:2">
+      <!-- empty -->
+    </div>
+
+    <!-- Row2: 成長中 -->
+    <div class="m-cell m-high" style="grid-column:2;grid-row:3">
+      <div class="bubble winner"><span class="bname">② 輸出規制<br>RegTech</span><span class="bmeta">日本ではまだ空白</span></div>
+      <div class="bubble winner"><span class="bname">① 通関士<br>マーケット</span><span class="bmeta">ギグ型</span></div>
+    </div>
+    <div class="m-cell m-mid" style="grid-column:3;grid-row:3">
+      <div class="bubble good"><span class="bname">③ 貿易金融<br>フィンテック</span><span class="bmeta">日本特化余地</span></div>
+      <div class="bubble good"><span class="bname">⑤ SC<br>リスク管理</span><span class="bmeta">ギグ監査員</span></div>
+    </div>
+    <div class="m-cell m-low" style="grid-column:4;grid-row:3">
+      <div class="bubble caution"><span class="bname">④ ランディング<br>コスト計算</span><span class="bmeta">Flexport等が席巻</span></div>
+    </div>
+
+    <!-- Row3: 成熟 -->
+    <div class="m-cell m-mid" style="grid-column:2;grid-row:4"></div>
+    <div class="m-cell m-low" style="grid-column:3;grid-row:4">
+      <div class="bubble caution"><span class="bname">越境EC<br>物流可視化</span><span class="bmeta">競争激化</span></div>
+    </div>
+    <div class="m-cell m-low" style="grid-column:4;grid-row:4">
+      <div class="bubble caution"><span class="bname">越境EC<br>配送</span><span class="bmeta">ShipBob等</span></div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:6px;font-size:11px"><div style="width:14px;height:14px;background:#f0fdf4;border:2px solid #86efac;border-radius:3px"></div>狙い目ゾーン（未成熟×買いやすい）</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:11px"><div style="width:14px;height:14px;background:#fefce8;border:2px solid #fde047;border-radius:3px"></div>要検討ゾーン</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:11px"><div style="width:14px;height:14px;background:#fef2f2;border:2px solid #fca5a5;border-radius:3px"></div>避けるゾーン</div>
+  </div>
+</div>
+
+<!-- ② 有力候補3選 -->
+<div class="section">
+  <div class="section-title">② 有力候補 詳細評価</div>
+  <div class="cand-grid">
+
+    <!-- Rank 1 -->
+    <div class="cand-card rank1" style="grid-column:1 / -1">
+      <h3>🥇 第1位：AIカメラ×サプライヤー工場監視プラットフォーム</h3>
+      <div class="subtitle">コアコンピタンス適合度が最高。カメラ×現場×SI×リカーリングの全資産が活きる</div>
+      <div class="kpi-row">
+        <div class="kpi"><strong>市場成熟度</strong><span>★☆☆ 未成熟</span></div>
+        <div class="kpi"><strong>M&A難易度</strong><span>低〜中（5〜30億円）</span></div>
+        <div class="kpi"><strong>売上100億円</strong><span>◎ 1万社×月10万円</span></div>
+        <div class="kpi"><strong>政策追い風</strong><span>サプライチェーン強靭化法</span></div>
+      </div>
+
+      <div class="section-sub">なぜ今がタイミングか</div>
+      <ul class="point-list">
+        <li class="good">Apple・Nikeが先行採用し「工場の見える化」市場が正当化されたが、日本の中堅製造業向けプレイヤーはほぼゼロ</li>
+        <li class="good">グローバルでは Inspectorio（数百億円規模）が先行するが日本語対応・国内現場対応が弱く、買収よりも日本特化で攻める余地大</li>
+        <li class="good">カメラ設置という物理的参入障壁が後発ソフトウェアプレイヤーの追随を防ぐ</li>
+        <li class="good">2024年の経済安保サプライチェーン強靭化法で、大企業が調達先を可視化する「義務感」が醸成中</li>
+      </ul>
+
+      <div class="section-sub">M&A ターゲットプロファイル（買収対象像）</div>
+      <div class="ma-box">
+        <h4>理想的な買収先の条件</h4>
+        <div class="ma-row">
+          <div class="ma-item"><div class="ma-label">調達先</div><div class="ma-val">国内 or 東南アジア</div></div>
+          <div class="ma-item"><div class="ma-label">ステージ</div><div class="ma-val">Seed〜Series A</div></div>
+          <div class="ma-item"><div class="ma-label">推定買収額</div><div class="ma-val">5〜30億円</div></div>
+          <div class="ma-item"><div class="ma-label">必要技術</div><div class="ma-val">AI画像解析 / 工場監査SaaS</div></div>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:#334155">
+          <strong>探すべき会社像：</strong>製造業向けに品質管理・工場監査をSaaS化しているが、ハードウェア（カメラ）と現場展開力が不足しているスタートアップ。ソフトウェアは出来ているが「設置・運用」ができず顧客獲得に苦しんでいる会社が最高の買収対象。
+        </div>
+      </div>
+
+      <div class="section-sub">コアコンピタンス適合マトリクス</div>
+      <table class="fit-table">
+        <thead><tr><th>コアコンピタンス</th><th>活用方法</th><th>適合度</th></tr></thead>
+        <tbody>
+          <tr><td>カメラ製品</td><td>工場監視カメラをハードウェアとして提供。AI解析エンジンと統合</td><td><span class="dot5">●●●●●</span></td></tr>
+          <tr><td>現場接点×IT運用</td><td>調達先工場へのカメラ設置・保守を自社フィールドエンジニアが担当</td><td><span class="dot5">●●●●●</span></td></tr>
+          <tr><td>リカーリングモデル</td><td>カメラ×AI監視サービスを月額課金。設置後の解約率が極めて低い</td><td><span class="dot5">●●●●●</span></td></tr>
+          <tr><td>商社×国際調達</td><td>カメラ・IoTセンサーを原価で仕入れ、ハードウェアマージンを確保</td><td><span class="dot5">●●●●●</span></td></tr>
+          <tr><td>SIビジネス</td><td>顧客のSCM/ERPとAPI連携し、監視データを購買判断に組み込む</td><td><span class="dot5">●●●●●</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Rank 2 -->
+    <div class="cand-card rank2">
+      <h3>🥈 第2位：CBAM×輸出CO2排出量追跡SaaS</h3>
+      <div class="subtitle">規制義務化による強制需要。2026年が参入ラストチャンス</div>
+      <div class="kpi-row">
+        <div class="kpi"><strong>市場成熟度</strong><span>★☆☆ 黎明期</span></div>
+        <div class="kpi"><strong>M&A難易度</strong><span>非常に低（1〜10億円）</span></div>
+        <div class="kpi"><strong>売上100億円</strong><span>○ EU輸出企業×義務化</span></div>
+      </div>
+
+      <div class="section-sub">なぜ今がタイミングか</div>
+      <ul class="point-list">
+        <li class="good">EU CBAMが2026年本格稼働。EU向け輸出企業は鉄鋼・セメント・電力等でCO2証明書の提出が義務化</li>
+        <li class="good">日本のEU輸出企業（自動車・電機・素材等）数万社が対応ツールを必要としているが、専門SaaSはほぼ存在しない</li>
+        <li class="good">英国のPledge・Lune等は物流カーボン計算SaaSとして立ち上がり中だが調達額は数億円規模。日本語対応なし</li>
+        <li class="warn">カメラ・現場力の活用は限定的（サプライヤー①ほど強みが活きない）</li>
+      </ul>
+
+      <div class="section-sub">M&A ターゲットプロファイル</div>
+      <div class="ma-box">
+        <h4>理想的な買収先の条件</h4>
+        <div class="ma-row">
+          <div class="ma-item"><div class="ma-label">調達先</div><div class="ma-val">国内 or 欧州スタートアップ</div></div>
+          <div class="ma-item"><div class="ma-label">ステージ</div><div class="ma-val">Seed（非常に早期）</div></div>
+          <div class="ma-item"><div class="ma-label">推定買収額</div><div class="ma-val">1〜10億円</div></div>
+          <div class="ma-item"><div class="ma-label">必要技術</div><div class="ma-val">LCA計算エンジン / CBAM申告自動化</div></div>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:#334155">
+          <strong>探すべき会社像：</strong>炭素排出量計算・サプライチェーンスコープ3計算をSaaS化しているが、物流・貿易ドメインの顧客獲得に苦しんでいる国内スタートアップ。商社機能の取引ネットワークで顧客導入を爆速化できる。
+        </div>
+      </div>
+
+      <table class="fit-table">
+        <thead><tr><th>コアコンピタンス</th><th>活用方法</th><th>適合度</th></tr></thead>
+        <tbody>
+          <tr><td>商社×国際調達</td><td>自社の輸出取引データがサービスの実証・改善に直結</td><td><span class="dot5">●●●●</span><span class="dot1">●</span></td></tr>
+          <tr><td>SIビジネス</td><td>顧客ERP×輸出DBとの連携でデータ自動取得</td><td><span class="dot5">●●●●</span><span class="dot1">●</span></td></tr>
+          <tr><td>リカーリングモデル</td><td>年次申告義務×月額SaaSで解約率が構造的に低い</td><td><span class="dot5">●●●●</span><span class="dot1">●</span></td></tr>
+          <tr><td>カメラ製品</td><td>工場内カメラ×エネルギー監視センサーで排出データ自動収集（オプション）</td><td><span class="dot5">●●</span><span class="dot1">●●●</span></td></tr>
+          <tr><td>現場接点×IT運用</td><td>顧客工場でのセンサー設置・データ設定支援に活用可能</td><td><span class="dot5">●●●</span><span class="dot1">●●</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Rank 3 -->
+    <div class="cand-card rank3">
+      <h3>🥉 第3位：輸出規制 RegTech（該非判定AI）</h3>
+      <div class="subtitle">防衛省・経産省マネーが流入中。B2G×B2Bのハイブリッド市場</div>
+      <div class="kpi-row">
+        <div class="kpi"><strong>市場成熟度</strong><span>★★☆ 成長期</span></div>
+        <div class="kpi"><strong>M&A難易度</strong><span>低〜中（5〜20億円）</span></div>
+        <div class="kpi"><strong>売上100億円</strong><span>○ 輸出管理義務企業</span></div>
+      </div>
+
+      <div class="section-sub">なぜ今がタイミングか</div>
+      <ul class="point-list">
+        <li class="good">外為法強化・経済安保推進法で輸出管理の義務が中小企業にも拡大。対応ツールの需要が急拡大中</li>
+        <li class="good">米国ではSayari・Visual Complianceが先行したが日本語×日本法規制に対応したプレイヤーは皆無に近い</li>
+        <li class="good">防衛関連・半導体・素材を扱う企業が規制対応ツールに予算を割き始めている</li>
+        <li class="warn">カメラ製品との直接連携が薄い。SIとの連携はある程度可能</li>
+        <li class="warn">規制変化が速く、法律エンジンのメンテナンスコストが高い</li>
+      </ul>
+
+      <div class="section-sub">M&A ターゲットプロファイル</div>
+      <div class="ma-box">
+        <h4>理想的な買収先の条件</h4>
+        <div class="ma-row">
+          <div class="ma-item"><div class="ma-label">調達先</div><div class="ma-val">国内法律×AI系スタートアップ</div></div>
+          <div class="ma-item"><div class="ma-label">ステージ</div><div class="ma-val">Seed〜Series A</div></div>
+          <div class="ma-item"><div class="ma-label">推定買収額</div><div class="ma-val">5〜20億円</div></div>
+          <div class="ma-item"><div class="ma-label">必要技術</div><div class="ma-val">規制DB×AI判定エンジン</div></div>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:#334155">
+          <strong>探すべき会社像：</strong>外為法・安全保障貿易管理をAIで自動判定するSaaSを開発中だが、製造業・商社への営業チャネルが弱いスタートアップ。商社としての業界ネットワークで顧客獲得を一気に加速できる。
+        </div>
+      </div>
+
+      <table class="fit-table">
+        <thead><tr><th>コアコンピタンス</th><th>活用方法</th><th>適合度</th></tr></thead>
+        <tbody>
+          <tr><td>商社×国際調達</td><td>自社が最初の顧客になり実証できる。業界人脈で顧客紹介が容易</td><td><span class="dot5">●●●●</span><span class="dot1">●</span></td></tr>
+          <tr><td>SIビジネス</td><td>顧客の貿易管理システム・ERPとの統合案件として受注可能</td><td><span class="dot5">●●●●</span><span class="dot1">●</span></td></tr>
+          <tr><td>リカーリングモデル</td><td>法規制対応は解約できないSaaS。規制DB更新で継続課金が正当化</td><td><span class="dot5">●●●●●</span></td></tr>
+          <tr><td>カメラ製品</td><td>直接の活用は限定的</td><td><span class="dot1">●●●●●</span></td></tr>
+          <tr><td>現場接点×IT運用</td><td>顧客の輸出管理部門へのオンサイト支援・導入支援</td><td><span class="dot5">●●●</span><span class="dot1">●●</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ③ 戦略シナリオ -->
+<div class="section">
+  <div class="section-title">③ 推奨 M&A×事業開発シナリオ</div>
+
+  <div class="rec-box">
+    <h3>第1位を軸に、第2位を後から組み込む「2段階戦略」</h3>
+    <p>コアコンピタンスが最も活きる「AIカメラ×サプライヤー監視」を先に立ち上げ、顧客基盤（製造業の調達部門）を獲得した後、同じ顧客に「CBAM排出量追跡」を追加販売する構造が最も効率的。同一顧客に2つのサービスをバンドルすることでLTV（顧客生涯価値）を2〜3倍に引き上げられる。</p>
+
+    <div class="rec-step">
+      <div class="step-num">1</div>
+      <div class="step-text"><strong>M&A対象スカウト開始（〜3ヶ月）</strong>：工場品質監査SaaS・カーボン計算SaaSのSeed〜Series Aスタートアップをリストアップ。IVS・B Dash等のVC経由でソーシング。LOI（意向表明書）を複数社に打診。</div>
+    </div>
+    <div class="rec-step">
+      <div class="step-num">2</div>
+      <div class="step-text"><strong>自社PoC並行実施（〜6ヶ月）</strong>：既存顧客の海外調達先工場1〜2社にカメラを試験設置。自社で運用しながらサービス仕様を確定させ、M&A後の統合シナリオを具体化。</div>
+    </div>
+    <div class="rec-step">
+      <div class="step-num">3</div>
+      <div class="step-text"><strong>買収・統合（〜12ヶ月）</strong>：ターゲット企業を5〜30億円で取得。技術チームを獲得しつつ、自社の現場力・商社ネットワーク・リカーリング運用でスケールを加速。</div>
+    </div>
+    <div class="rec-step">
+      <div class="step-num">4</div>
+      <div class="step-text"><strong>クロスセル展開（12〜24ヶ月）</strong>：工場監視顧客にCBAM追跡SaaSを追加販売。カメラから取得したエネルギーデータを排出量計算に自動連携し、「監視×コンプライアンス×ESG」の統合プラットフォーム化。</div>
+    </div>
+  </div>
+</div>
+
+</div>
+<footer>市場機会 × M&A戦略 評価レポート ─ 国際物流ビジネス開発プロジェクト</footer>
+</body>
+</html>

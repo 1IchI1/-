@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>視点③：貿易金融・フィンテック 課題分析</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Hiragino Sans','Yu Gothic','Noto Sans JP',sans-serif; background:#f0f2f5; color:#333; font-size:13px; line-height:1.6; }
+.report-header { background:#1a3a6b; color:white; padding:36px 48px 28px; }
+.report-header h1 { font-size:24px; font-weight:700; letter-spacing:.04em; }
+.report-header .subtitle { font-size:13px; opacity:.75; margin-top:6px; }
+.report-header .meta { font-size:11px; opacity:.6; margin-top:14px; }
+.section { background:white; margin:20px 32px; padding:28px 32px; border-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,.08); }
+.section-title { font-size:16px; font-weight:700; color:#1a3a6b; border-left:4px solid #1a5faa; padding-left:12px; margin-bottom:22px; }
+.asis-tobe-wrap { display:grid; grid-template-columns:1fr 72px 1fr; align-items:stretch; }
+.tobe-col { background:#1a5faa; color:white; padding:20px 22px; border-radius:6px 0 0 6px; }
+.asis-col { background:#e87722; color:white; padding:20px 22px; border-radius:0 6px 6px 0; }
+.gap-center { display:flex; flex-direction:column; align-items:center; justify-content:center; background:#f8f9fa; border-top:1px solid #e0e0e0; border-bottom:1px solid #e0e0e0; }
+.gap-arrow-icon { font-size:28px; color:#555; }
+.col-heading { font-size:13px; font-weight:700; margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,.35); }
+.col-item { display:flex; gap:8px; margin-bottom:9px; font-size:12px; line-height:1.5; }
+.col-item .lbl { font-weight:700; min-width:18px; opacity:.75; }
+.gap-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; }
+.gap-card { border:1.5px solid #c5d5ea; border-radius:5px; padding:14px; background:#fafdff; position:relative; }
+.gap-card.selected { border-color:#f59e0b; background:#fffbeb; box-shadow:0 0 0 2px #fde68a; }
+.gap-card-num { font-size:11px; font-weight:700; color:#1a5faa; margin-bottom:4px; }
+.gap-card.selected .gap-card-num { color:#92400e; }
+.gap-card-title { font-weight:700; font-size:12px; color:#1a3a6b; margin-bottom:10px; line-height:1.4; }
+.gap-card.selected .gap-card-title { color:#78350f; }
+.gap-card dl dt { font-size:10px; font-weight:700; color:#888; margin-top:7px; }
+.gap-card dl dd { font-size:11px; color:#555; line-height:1.45; }
+.selected-badge { position:absolute; top:10px; right:10px; background:#f59e0b; color:white; font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px; }
+.rationale-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.rationale-item { background:#f0f6ff; border-left:3px solid #1a5faa; padding:12px 14px; border-radius:0 4px 4px 0; }
+.rationale-item .r-title { font-weight:700; font-size:11px; color:#1a3a6b; margin-bottom:5px; }
+.rationale-item .r-body { font-size:11px; color:#444; line-height:1.5; }
+.tag { display:inline-block; padding:2px 7px; border-radius:3px; font-size:10px; font-weight:700; white-space:nowrap; margin-left:4px; }
+.tag-s4 { background:#16a34a; color:white; } .tag-s3 { background:#84cc16; color:white; }
+.tag-s2 { background:#f59e0b; color:white; } .tag-s1 { background:#9ca3af; color:white; }
+.tag-ph { background:#ef4444; color:white; } .tag-pm { background:#f97316; color:white; } .tag-pl { background:#d1d5db; color:#555; }
+.tree-outer { overflow-x:auto; padding:8px 0 8px 8px; }
+.tree,.tree ul { list-style:none; padding:0; margin:0; }
+.tree li { position:relative; padding:3px 0 3px 26px; margin-bottom:2px; }
+.tree li::before { content:''; position:absolute; left:6px; top:0; bottom:0; border-left:2px solid #c8d6e8; }
+.tree li::after { content:''; position:absolute; left:6px; top:14px; width:14px; border-top:2px solid #c8d6e8; }
+.tree li:last-child::before { height:14px; bottom:auto; }
+.tree>li::before,.tree>li::after { display:none; }
+.tree ul { margin-top:4px; }
+.node { display:inline-flex; align-items:flex-start; flex-wrap:wrap; gap:5px; padding:5px 10px; border-radius:4px; font-size:11px; line-height:1.45; max-width:380px; vertical-align:top; }
+.node-text { flex:1; min-width:0; }
+.n-root { background:#1a3a6b; color:white; font-weight:700; font-size:13px; max-width:300px; }
+.n-w1 { background:#1a5faa; color:white; font-weight:700; max-width:320px; }
+.n-w2 { background:#2d80d4; color:white; max-width:320px; }
+.n-w3 { background:#93c5fd; color:#1e3a5f; max-width:340px; }
+.n-w4 { background:#dbeafe; color:#1e40af; border:1px solid #93c5fd; max-width:360px; }
+.n-w5 { background:#f0f9ff; color:#374151; border:1px solid #bae6fd; max-width:360px; }
+.n-highlight { border:2px solid #16a34a !important; background:#f0fdf4 !important; color:#14532d !important; }
+.legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; padding:12px 16px; background:#f8f9fa; border-radius:4px; font-size:11px; }
+.legend-item { display:flex; align-items:center; gap:5px; }
+.priority-table { width:100%; border-collapse:collapse; font-size:12px; }
+.priority-table th { background:#1a3a6b; color:white; padding:9px 12px; text-align:left; font-weight:700; }
+.priority-table td { padding:9px 12px; border-bottom:1px solid #e5e7eb; vertical-align:top; line-height:1.5; }
+.priority-table tr:nth-child(even) td { background:#f9fafb; }
+.priority-table tr:hover td { background:#eff6ff; }
+.num-cell { font-weight:700; color:#1a3a6b; } .direction-cell { color:#1a5faa; font-weight:700; }
+.layer-box { border-radius:6px; overflow:hidden; margin-top:20px; }
+.layer-item { padding:14px 20px; border-bottom:1px solid rgba(255,255,255,.2); }
+.layer-item:last-child { border-bottom:none; }
+.layer-l1 { background:#1a3a6b; color:white; }
+.layer-l2 { background:#1a5faa; color:white; }
+.layer-l3 { background:#2d80d4; color:white; }
+.layer-title { font-weight:700; font-size:13px; margin-bottom:4px; }
+.layer-desc { font-size:11px; opacity:.85; }
+</style>
+</head>
+<body>
+<div class="report-header">
+  <h1>視点③：貿易金融・フィンテック 課題分析レポート</h1>
+  <p class="subtitle">LC・輸出保険・為替・トランザクションレンディング × 中小輸出企業の資金ギャップ</p>
+  <p class="meta">作成日：2026年5月17日　｜　国際物流 課題発掘シリーズ #3</p>
+</div>
+
+<div class="section">
+  <div class="section-title">① As is / To be フレームワーク</div>
+  <div class="asis-tobe-wrap">
+    <div class="tobe-col">
+      <div class="col-heading">① To be（あるべき理想の姿）</div>
+      <div class="col-item"><span class="lbl">A)</span><span>AI・OCR・ブロックチェーン等を活用し書類照合を自動化。LC決済のリードタイムを3〜5日以内に短縮。差戻し率を10%以下に低減し中小企業でも安全に利用できる水準を実現する</span></div>
+      <div class="col-item"><span class="lbl">B)</span><span>デジタル申請・オルタナティブデータ活用により輸出保険審査を1〜2週間に短縮。少額・短期保険をスポット単位で提供しSMEの実質的なアクセス率を30%以上に引き上げる</span></div>
+      <div class="col-item"><span class="lbl">C)</span><span>輸出関連書類（BL・LC・インボイス）をデジタル担保として自動審査し、船積後24〜48時間以内に資金化を完了。手数料を年率換算3〜5%まで圧縮する</span></div>
+      <div class="col-item"><span class="lbl">D)</span><span>輸出入データと連動した自動ヘッジ提案をAPIで提供。取引通貨・金額・決済期日に応じてオプション・先物を小口から利用可能にし、SMEのヘッジ実施率を60%以上に引き上げる</span></div>
+      <div class="col-item"><span class="lbl">E)</span><span>オルタナティブデータ（税関データ・貿易統計・決済履歴・衛星データ）を統合したリアルタイム信用スコアリングを提供。1社あたり数千円・即日で中小バイヤーまでカバー</span></div>
+      <div class="col-item"><span class="lbl">F)</span><span>輸出者のERPやWMSとAPI連携し船積情報から書類を自動生成・自動照合。eUCPに準拠した電子書類で銀行提出を即日完結。LC決済全体のリードタイムを5営業日以内に短縮する</span></div>
+    </div>
+    <div class="gap-center"><div class="gap-arrow-icon">⇔</div></div>
+    <div class="asis-col">
+      <div class="col-heading">② As is（現在の状況）</div>
+      <div class="col-item"><span class="lbl">a.</span><span>LC開設から決済まで平均14〜21日。書類不備による差戻しが全体の70%超に発生。銀行審査担当者が手作業でUCP600照合を行い1案件あたり2〜4時間を消費</span></div>
+      <div class="col-item"><span class="lbl">b.</span><span>NEXIなど公的保険は申請書類が膨大で審査に4〜8週間。中小企業の利用率は輸出額ベースで推定5〜10%にとどまる</span></div>
+      <div class="col-item"><span class="lbl">c.</span><span>輸出者が船積後から代金回収まで平均60〜120日の資金ギャップを自己資金で負担。フィンテックファクタリングも手数料10〜15%と高コスト</span></div>
+      <div class="col-item"><span class="lbl">d.</span><span>中小輸出者の約60%が為替ヘッジを行わずにドル建て・ユーロ建てで取引。先物予約は銀行と個別交渉が必要で最低取引額・審査が障壁</span></div>
+      <div class="col-item"><span class="lbl">e.</span><span>海外バイヤーの信用調査は大手調査会社のレポート購入が主流。1社あたり2〜10万円・納期1〜3週間。新興国・中小バイヤーはデータ自体が存在しないケースが30〜50%</span></div>
+      <div class="col-item"><span class="lbl">f.</span><span>輸出者側のLC書類作成が紙ベース・手作業で平均3〜5日。書類間の金額・数量・品番の不一致が頻発。銀行の書類確認後に訂正対応でさらに2〜5日のロスが発生</span></div>
+    </div>
+  </div>
+  <div class="gap-grid">
+    <div class="gap-card"><div class="gap-card-num">ギャップG1（A↔a）</div><div class="gap-card-title">LC書類差戻し・遅延ギャップ</div><dl><dt>本質</dt><dd>書類不備70%超、手動照合2〜4h/件。決済遅延が資金繰り・コンテナスペースに直結</dd></dl></div>
+    <div class="gap-card"><div class="gap-card-num">ギャップG2（B↔b）</div><div class="gap-card-title">SME輸出保険アクセス不全ギャップ</div><dl><dt>本質</dt><dd>利用率5〜10%、審査4〜8週間。未保険での代金未回収が廃業リスクに直結</dd></dl></div>
+    <div class="gap-card selected">
+      <div class="selected-badge">★ 深堀対象</div>
+      <div class="gap-card-num">ギャップG3（C↔c）</div>
+      <div class="gap-card-title">船積後資金ギャップ（60〜120日）</div>
+      <dl><dt>本質</dt><dd>デジタル化されていない貿易書類を担保として認識できる金融機関が存在しない。担保評価・書類真正性確認・リスク分離という3層の課題が絡み合う</dd></dl>
+    </div>
+    <div class="gap-card"><div class="gap-card-num">ギャップG4（D↔d）</div><div class="gap-card-title">SME為替ヘッジ未実施ギャップ</div><dl><dt>本質</dt><dd>ヘッジ実施率約40%。収益ボラティリティ大だが顕在ニーズ認識が低い</dd></dl></div>
+    <div class="gap-card"><div class="gap-card-num">ギャップG5（E↔e）</div><div class="gap-card-title">海外バイヤー信用情報空白ギャップ</div><dl><dt>本質</dt><dd>新興国で30〜50%がデータ未整備、調査1〜3週間。詐欺・不払いリスクの根本</dd></dl></div>
+    <div class="gap-card"><div class="gap-card-num">ギャップG6（F↔f）</div><div class="gap-card-title">LC書類作成デジタル化遅延ギャップ</div><dl><dt>本質</dt><dd>紙・手作業3〜5日、訂正対応+2〜5日。G1の上流原因</dd></dl></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">② 選定理由：G3「船積後資金ギャップ（60〜120日）」</div>
+  <div class="rationale-grid">
+    <div class="rationale-item"><div class="r-title">遅延との直接関連性</div><div class="r-body">船積から代金入金まで平均60〜120日という「時間的ギャップ」そのものが課題の核心。この遅延が次の仕入・製造・人件費を圧迫し輸出拡大を構造的に阻害する</div></div>
+    <div class="rationale-item"><div class="r-title">非表層的な根本課題</div><div class="r-body">「お金がない」の背後に「デジタル化されていない貿易書類を担保として認識できる金融機関が存在しない」という構造的問題がある</div></div>
+    <div class="rationale-item"><div class="r-title">タイミー的ユニークさ</div><div class="r-body">特定の船積案件・特定のLC番号に紐づく資金調達をスポット単位で提供するモデル。「企業信用」ではなく「取引信用」を見る点で根本的に異なる</div></div>
+    <div class="rationale-item"><div class="r-title">市場規模100億円以上</div><div class="r-body">中小企業の輸出額約12兆円。対象運転資金需要を保守的に見積もっても1,500億円の市場。手数料率1.5〜2%でTAM150〜300億円</div></div>
+    <div class="rationale-item"><div class="r-title">技術的実現可能性</div><div class="r-body">OCR＋AIによるBL・LC・インボイスのデータ抽出は実用レベル。eBLの国際標準化（MLETR採択国増加）により担保電子化が前進中</div></div>
+    <div class="rationale-item"><div class="r-title">投資家訴求力</div><div class="r-body">Taulia・Stenn・C2FO等が数百億〜数千億円規模の評価を獲得。日本では未開拓でファーストムーバー優位が高い。SaaS＋ファイナンスの複合モデルで高LTV・低チャーン</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">③ 「なぜ思考」ロジックツリー ── 船積後60〜120日の資金ギャップ（Why × 4〜5層）</div>
+  <div class="legend">
+    <strong>技術解決可能性：</strong>
+    <div class="legend-item"><span class="tag tag-s4">◎</span>明確に解決可能</div>
+    <div class="legend-item"><span class="tag tag-s3">○</span>可能性が高い</div>
+    <div class="legend-item"><span class="tag tag-s2">△</span>技術だけでは難しい</div>
+    <div class="legend-item"><span class="tag tag-s1">✗</span>解決困難</div>
+    <strong style="margin-left:12px;">優先度：</strong>
+    <div class="legend-item"><span class="tag tag-ph">高</span></div><div class="legend-item"><span class="tag tag-pm">中</span></div><div class="legend-item"><span class="tag tag-pl">低</span></div>
+    <div class="legend-item" style="margin-left:12px;"><span style="display:inline-block;width:12px;height:12px;border:2px solid #16a34a;background:#f0fdf4;border-radius:2px;"></span>有望ノード</div>
+  </div>
+  <div class="tree-outer">
+    <ul class="tree">
+      <li><span class="node n-root"><span class="node-text">中心課題：日本の中小輸出企業が船積後60〜120日間、代金を回収できず資金ギャップに苦しむ</span></span>
+        <ul>
+          <li><span class="node n-w1"><span class="node-text">【Why1-A】 既存金融機関が輸出手形割引・ファクタリングを中小企業に提供できていない</span></span>
+            <ul>
+              <li><span class="node n-w2"><span class="node-text">【Why2-A1】 銀行が「企業信用」ベースで審査するため財務基盤の弱いSMEが弾かれる</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-A1a】 取引単位のリスク評価モデルが存在しない（LCや輸出契約の信用度を独立評価できない）</span></span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A1a-i】 貿易書類のデジタルデータが銀行に連携されていない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li>
+                      <li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A1a-ii】 バイヤー（輸入者）の信用データが日本の金融機関に蓄積されていない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li>
+                    </ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-A1b】 審査プロセスが完全に人手で行われコスト高・判断スピードが遅い</span></span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A1b-i】 与信判断のルール・モデルがデジタル化・自動化されていない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li>
+                      <li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A1b-ii】 書類の真正性確認に物理的検証が必要</span><span class="tag tag-s3">○</span><span class="tag tag-ph">高</span></span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li><span class="node n-w2"><span class="node-text">【Why2-A2】 ノンバンク・フィンテックの手数料が高すぎて利用できない（年率10〜15%）</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-A2a】 調達コスト（資金の出し手）が高い</span></span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A2a-i】 機関投資家・年金等が貿易債権に直接投資するインフラが存在しない</span><span class="tag tag-s3">○</span><span class="tag tag-pm">中</span></span></li>
+                      <li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A2a-ii】 貿易債権のリスク定量化ができないため流動性プレミアムが乗る</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li>
+                    </ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-A2b】 審査コストが1件あたり高い（人件費中心）</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-A2b-i】 案件ごとの審査が自動化されておらず規模の経済が働かない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><span class="node n-w1"><span class="node-text">【Why1-B】 輸出者が資金調達手段を知らない・申請できない</span></span>
+            <ul>
+              <li><span class="node n-w2"><span class="node-text">【Why2-B1】 利用可能な制度・商品の情報が散在しており発見できない</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-B1a】 支援制度（JBIC・NEXI・商工中金等）が縦割りで統合されていない</span></span>
+                    <ul><li><span class="node n-w4"><span class="node-text">【Why4-B1a-i】 ポータル統合は制度変更も必要</span><span class="tag tag-s2">△</span><span class="tag tag-pm">中</span></span></li></ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-B1b】 輸出者の状況に合わせた制度レコメンドがない</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-B1b-i】 利用可能制度をレコメンドするエンジンが存在しない</span><span class="tag tag-s3">○</span><span class="tag tag-pm">中</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+              <li><span class="node n-w2"><span class="node-text">【Why2-B2】 申請書類・手続きが複雑で完了できない</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-B2b】 必要書類（財務諸表・輸出書類等）のデジタル提出インフラがない</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-B2b-i】 書類ハブ（データルーム）が存在しない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><span class="node n-w1"><span class="node-text">【Why1-C】 貿易書類（BL・LC・インボイス）が担保・証拠として機能していない</span></span>
+            <ul>
+              <li><span class="node n-w2"><span class="node-text">【Why2-C1】 書類が紙ベースでデジタル資産として認識されない</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-C1a】 電子船荷証券（eBL）の法的認知が日本で未整備</span></span>
+                    <ul>
+                      <li><span class="node n-w4"><span class="node-text">【Why4-C1a-i】 電子記録債権法の貿易書類への適用が限定的</span><span class="tag tag-s1">✗</span><span class="tag tag-pl">低</span></span></li>
+                      <li><span class="node n-w4"><span class="node-text">【Why4-C1a-ii】 MLETR準拠の国内実装が遅れている</span><span class="tag tag-s2">△</span><span class="tag tag-pm">中</span></span></li>
+                    </ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-C1b】 書類の真正性をリアルタイムで検証する仕組みがない</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-C1b-i】 ブロックチェーン/デジタル署名による真正性証明が未実装</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+              <li><span class="node n-w2"><span class="node-text">【Why2-C2】 書類に記載された「売掛債権」の価値評価ができない</span></span>
+                <ul>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-C2a】 バイヤー（輸入者）の支払能力データが不足</span></span>
+                    <ul>
+                      <li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-C2a-i】 新興国バイヤーの財務情報が非公開・未整備</span><span class="tag tag-s3">○</span><span class="tag tag-ph">高</span></span></li>
+                      <li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-C2a-ii】 バイヤーの決済履歴が輸出者間で共有されていない</span><span class="tag tag-s4">◎</span><span class="tag tag-ph">高</span></span></li>
+                    </ul>
+                  </li>
+                  <li><span class="node n-w3"><span class="node-text">【Why3-C2b】 商品・仕向地・決済条件によるリスク分類モデルがない</span></span>
+                    <ul><li><span class="node n-w4 n-highlight"><span class="node-text">【Why4-C2b-i】 多変数リスクプライシングエンジンが存在しない</span><span class="tag tag-s4">◎</span><span class="tag tag-pm">中</span></span></li></ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">④ 有望ノードリスト（技術解決◎○ × 優先度 高・中）</div>
+  <table class="priority-table">
+    <thead><tr><th>#</th><th>ノードID</th><th>根本原因</th><th>解決性</th><th>優先度</th><th>ソリューション方向性</th></tr></thead>
+    <tbody>
+      <tr><td class="num-cell">1</td><td>Why4-A1a-i</td><td>貿易書類のデジタルデータが銀行に連携されていない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">貿易書類デジタル連携ハブ（ERP/WMSからBL・LC・インボイスをAPI取得→OCR+AI構造化→金融機関向けISO 20022準拠フォーマットで配信）</td></tr>
+      <tr><td class="num-cell">2</td><td>Why4-A1a-ii</td><td>バイヤーの信用データが日本金融機関に蓄積されていない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">グローバルバイヤー信用スコアリングAPI（貿易統計・税関データ・SWIFT決済履歴・衛星画像を統合したバイヤー信用スコアをAPI提供）</td></tr>
+      <tr><td class="num-cell">3</td><td>Why4-A1b-i</td><td>与信判断ルール・モデルがデジタル化されていない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">取引単位・自動与信エンジン（企業信用×取引信用×商品リスクの3次元スコアで創業年数・財務規模に依存しない融資判断を実現）</td></tr>
+      <tr><td class="num-cell">4</td><td>Why4-A1b-ii</td><td>書類真正性確認に物理的検証が必要</td><td><span class="tag tag-s3">○</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">貿易書類ブロックチェーン真正性証明（船会社・フォワーダー・輸出者・銀行が共有するPermissioned Blockchainに書類ハッシュを記録）</td></tr>
+      <tr><td class="num-cell">5</td><td>Why4-A2a-ii</td><td>貿易債権リスク定量化ができず流動性プレミアムが乗る</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">貿易債権リスク定量化モデル＋機関投資家向けマーケットプレイス（デフォルト率・回収率の実績データを蓄積し調達スプレッドを150〜200bp圧縮）</td></tr>
+      <tr><td class="num-cell">6</td><td>Why4-A2b-i</td><td>審査が自動化されておらず規模の経済が働かない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">STP型マイクロ・トレードファイナンス（書類アップロードから資金実行まで人手介在ゼロ・24時間以内。審査コストを1件1,000円以下に圧縮）</td></tr>
+      <tr><td class="num-cell">7</td><td>Why4-B2b-i</td><td>必要書類のデジタル提出インフラがない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">貿易書類デジタルデータルーム（BL・LC・インボイス・財務諸表を一元管理。金融機関・保険会社・バイヤーへの権限付きシェアをAPIで実現）</td></tr>
+      <tr><td class="num-cell">8</td><td>Why4-C1b-i</td><td>書類真正性をリアルタイム検証する仕組みがない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">ブロックチェーン署名基盤による書類真正性のリアルタイムAPI検証（発行者がデジタル署名を付与した瞬間から金融機関が検証可能）</td></tr>
+      <tr><td class="num-cell">9</td><td>Why4-C2a-i</td><td>新興国バイヤーの財務情報が非公開・未整備</td><td><span class="tag tag-s3">○</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">オルタナティブデータ活用バイヤー評価（貿易統計・物流追跡データ・ECプラットフォーム評価・SNS企業情報をMLで統合し信用スコアを生成）</td></tr>
+      <tr><td class="num-cell">10</td><td>Why4-C2a-ii</td><td>バイヤー決済履歴が輸出者間で共有されていない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-ph">高</span></td><td class="direction-cell">バイヤー決済履歴コンソーシアムDB（複数の輸出者・金融機関が決済実績データを供出し合うネットワーク型DB。参加者増加でデータ品質が向上）</td></tr>
+      <tr><td class="num-cell">11</td><td>Why4-C2b-i</td><td>商品・仕向地・決済条件によるリスク分類モデルがない</td><td><span class="tag tag-s4">◎</span></td><td><span class="tag tag-pm">中</span></td><td class="direction-cell">多変数リスクプライシングエンジン（HSコード×仕向地カントリーリスク×決済条件×バイヤースコアの4変数マトリックスで案件ごとのコストを自動算出）</td></tr>
+      <tr><td class="num-cell">12</td><td>Why4-B1b-i</td><td>輸出者状況に合わせた制度レコメンドがない</td><td><span class="tag tag-s3">○</span></td><td><span class="tag tag-pm">中</span></td><td class="direction-cell">貿易金融ナビゲーター（業種・仕向地・取引規模・決済条件を入力するとNEXI・JBIC・商工中金・民間ファクタリング等を横断して最適な資金調達手段をレコメンド）</td></tr>
+    </tbody>
+  </table>
+  <div class="layer-box">
+    <div class="layer-item layer-l1"><div class="layer-title">Layer 1 【データ基盤】</div><div class="layer-desc">書類デジタル連携ハブ＋データルーム / バイヤー信用スコアリングAPI / 決済履歴コンソーシアムDB / ブロックチェーン真正性証明</div></div>
+    <div class="layer-item layer-l2"><div class="layer-title">Layer 2 【インテリジェンス】</div><div class="layer-desc">取引単位・自動与信エンジン / 多変数リスクプライシングエンジン / 制度レコメンダー</div></div>
+    <div class="layer-item layer-l3"><div class="layer-title">Layer 3 【金融実行】</div><div class="layer-desc">STP型マイクロ・トレードファイナンス（24時間資金化）/ 貿易債権マーケットプレイス（機関投資家向け）</div></div>
+  </div>
+  <p style="font-size:11px;color:#888;margin-top:12px;">マネタイズ：データ基盤SaaS（月額固定）＋ファイナンス手数料（取引比例）＋データAPI販売（金融機関向け）の3軸収益。初期はSaaS収益で黒字化しつつファイナンス残高拡大でNIIM（純金利収益）が積み上がる複合型モデル。</p>
+</div>
+<div style="text-align:center;padding:20px;font-size:11px;color:#999;">視点③：貿易金融・フィンテック 課題分析レポート　|　作成日：2026年5月17日</div>
+</body></html>
