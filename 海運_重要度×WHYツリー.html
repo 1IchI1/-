@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>海運課題 重要度順 × WHYロジックツリー</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;background:#f0f4f8;color:#1e293b}
+header{background:linear-gradient(135deg,#0c1a3a,#0f4c8a);color:#fff;padding:30px 24px;text-align:center}
+header h1{font-size:21px;font-weight:700}
+header p{font-size:13px;opacity:.7;margin-top:6px}
+
+.stats-row{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.12);padding:8px 18px;border-radius:8px;text-align:center}
+.stat-n{font-size:22px;font-weight:800}
+.stat-l{font-size:10px;opacity:.7;margin-top:2px}
+
+.controls{background:#fff;padding:12px 20px;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.controls label{font-size:12px;font-weight:700;color:#64748b}
+select,input[type=text]{padding:5px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;background:#f8fafc}
+.btn-all{padding:5px 12px;border:none;border-radius:6px;background:#1e3a8a;color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+
+.container{max-width:960px;margin:0 auto;padding:20px 16px}
+
+/* issue card */
+.issue{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:12px;overflow:hidden;border-left:5px solid #e2e8f0}
+.issue-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;transition:background .15s}
+.issue-head:hover{background:#f8fafc}
+.rank{font-size:22px;font-weight:900;color:#1e3a8a;min-width:40px;text-align:center}
+.issue-meta{flex:1}
+.issue-title{font-size:14px;font-weight:800;line-height:1.4}
+.issue-sub{display:flex;gap:8px;margin-top:5px;flex-wrap:wrap;align-items:center}
+.stage-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:#e0f2fe;color:#0369a1}
+.imp-stars{font-size:13px;letter-spacing:1px}
+.str-badge{font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px}
+.str-s{background:#f3e8ff;color:#6d28d9}
+.str-a{background:#dcfce7;color:#15803d}
+.str-b{background:#f1f5f9;color:#475569}
+.impact-label{font-size:11px;color:#64748b;margin-top:4px;line-height:1.4}
+.chevron{font-size:18px;color:#94a3b8;transition:transform .25s;flex-shrink:0}
+.issue.open .chevron{transform:rotate(180deg)}
+
+/* why tree */
+.why-body{display:none;padding:0 18px 18px}
+.issue.open .why-body{display:block}
+
+.why-tree{margin-top:4px}
+.why-item{position:relative;margin-bottom:4px}
+.why-connector{text-align:center;font-size:18px;color:#94a3b8;line-height:1.2;margin:2px 0}
+
+.why-box{border-radius:8px;padding:11px 14px}
+.why-q{font-size:11px;font-weight:800;letter-spacing:.05em;margin-bottom:4px}
+.why-a{font-size:13px;line-height:1.55}
+
+.w1{background:#eff6ff;border-left:4px solid #93c5fd}
+.w1 .why-q{color:#1e40af}
+.w2{background:#e0f2fe;border-left:4px solid #38bdf8}
+.w2 .why-q{color:#075985}
+.w3{background:#f0f9ff;border-left:4px solid #0ea5e9}
+.w3 .why-q{color:#0c4a6e}
+.w4{background:#e8f5ff;border-left:4px solid #0369a1}
+.w4 .why-q{color:#1e3a8a}
+.w5{background:#1e3a8a;border-left:4px solid #f59e0b;color:#fff}
+.w5 .why-q{color:#fde68a}
+.w5 .why-a{color:#e2e8f0}
+
+.bottleneck{background:linear-gradient(135deg,#7f1d1d,#dc2626);color:#fff;border-radius:8px;padding:12px 16px;margin-top:6px}
+.bn-label{font-size:10px;font-weight:800;letter-spacing:.08em;color:#fca5a5;margin-bottom:4px}
+.bn-text{font-size:13px;font-weight:700;line-height:1.5}
+
+.solution{background:linear-gradient(135deg,#14532d,#16a34a);color:#fff;border-radius:8px;padding:12px 16px;margin-top:6px}
+.sol-label{font-size:10px;font-weight:800;letter-spacing:.08em;color:#86efac;margin-bottom:4px}
+.sol-text{font-size:13px;font-weight:600;line-height:1.5}
+
+.hidden{display:none}
+footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>海運課題 重要度順 × WHY×5 ロジックツリー</h1>
+  <p>荷主→荷受け主の全工程から抽出した最重要15課題。根本原因（ボトルネック）まで5回深掘り</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n">15</div><div class="stat-l">最重要課題</div></div>
+    <div class="stat"><div class="stat-n">5</div><div class="stat-l">WHY深度</div></div>
+    <div class="stat"><div class="stat-n">17</div><div class="stat-l">対象ステージ</div></div>
+  </div>
+</header>
+
+<div class="controls">
+  <label>重要度</label>
+  <select id="impFilter" onchange="applyFilter()">
+    <option value="">すべて</option>
+    <option value="5">★★★★★ 最重要</option>
+    <option value="4">★★★★☆ 重要</option>
+    <option value="3">★★★☆☆ 中</option>
+  </select>
+  <label>自社強み</label>
+  <select id="strFilter" onchange="applyFilter()">
+    <option value="">すべて</option>
+    <option value="S">◎ S 直結</option>
+    <option value="A">○ A 活用可</option>
+    <option value="B">△ B 参入可</option>
+  </select>
+  <label>キーワード</label>
+  <input type="text" id="kwFilter" placeholder="絞り込み..." oninput="applyFilter()">
+  <button class="btn-all" onclick="expandAll()">全展開</button>
+  <button class="btn-all" style="background:#475569" onclick="collapseAll()">全閉じる</button>
+</div>
+
+<div class="container" id="container"></div>
+<footer>国際物流 事業開発プロジェクト ─ Confidential ／ <a href="index.html" style="color:#94a3b8">← トップへ戻る</a></footer>
+
+<script>
+const STARS = n => '★'.repeat(n) + '☆'.repeat(5-n);
+const STR_CSS = {S:'str-s',A:'str-a',B:'str-b'};
+const STR_LBL = {S:'◎ S 直結',A:'○ A 活用可',B:'△ B 参入可'};
+const BORDER_COLOR = {5:'#dc2626',4:'#f59e0b',3:'#0891b2'};
+
+// [rank, stage, title, impact(1-5), impactLabel, str, whys[[q,a]×5], bottleneck, solution]
+const DATA = [
+{rank:1,stage:'⑩ 船積書類流通',title:'B/L Discrepancy ─ 信用状と書類の不一致で決済が差し戻される',imp:5,
+ impactLabel:'輸出代金が数週間〜数ヶ月停止。世界平均の不一致発生率70%以上。1件あたり手数料・修正・資金停止で数十〜数百万円',str:'A',
+ whys:[
+  ['なぜ輸出代金が決済されないのか？','船荷証券（B/L）などの書類が信用状（L/C）の条件と1文字でも違うと、銀行がルール上、代金の支払いを拒否するため'],
+  ['なぜB/Lと信用状の記載が食い違うのか？','インボイス・B/L・原産地証明書などを別々の担当者・会社が別々のタイミングで作成しており、信用状条件との整合性を全員が確認できる仕組みがないため'],
+  ['なぜ複数の担当者が別々に書類を作るのか？','信用状の条件確認・書類作成・輸送・通関がそれぞれ別の専門業者（荷主・フォワーダー・船会社・通関士）の担当で、情報を共有するシステムがないため'],
+  ['なぜ情報共有システムがないのか？','各プレイヤーが独自システムに長年投資してきており、業界全体での電子データ交換（EDI）標準化の合意形成が進まなかったため'],
+  ['なぜEDI標準化の合意が進まないのか？','銀行・船会社・荷主・通関業者など多数のプレイヤーが関与し、誰も全体を強制できる立場にない。既存フローからの移行コストが各社にとって割に合わないため']
+ ],
+ bottleneck:'信用状条件を機械可読データとして全関係者が共有できる仕組みが業界標準として存在しない',
+ solution:'AIが信用状PDFを自動解析して条件リストを抽出 → 書類作成時にリアルタイム照合チェック → 提出前に不一致をゼロにする'},
+
+{rank:2,stage:'②書類準備 / ⑦⑫通関',title:'通関書類の差し戻し ─ 転記ミス・記載不一致が最頻出の原因',imp:5,
+ impactLabel:'差し戻し1件あたり平均30万円超のコスト増。船便乗り遅れになると追加で100万円超',str:'S',
+ whys:[
+  ['なぜ通関書類が差し戻されるのか？','申告書・インボイス・パッキングリストの品名・数量・金額・HSコードが互いに一致していないため'],
+  ['なぜ複数の書類間で数字が食い違うのか？','受注時のデータを各書類に個別に手入力しており、何度も転記する過程でミスが発生するため'],
+  ['なぜ同じデータを何度も手入力するのか？','受注システム・書類作成ツール・通関申告システム（NACCS等）が連携しておらず、データが自動転送されないため'],
+  ['なぜシステムが連携していないのか？','中小フォワーダー・荷主が旧来システムを使い続けており、API連携の開発投資ができないため'],
+  ['なぜ旧来システムからの脱却が進まないのか？','貿易業務は少量・多品種・多書類で複雑なため汎用SaaSが対応しきれず、カスタム開発コストが中小企業には高すぎるため']
+ ],
+ bottleneck:'中小企業でも使える「受注→全書類自動生成」の貿易書類一元管理SaaSが存在しない',
+ solution:'受注データを一度入力するだけで全書類を自動生成・整合チェック。OCRで既存書類も取り込み可能な貿易データハブ'},
+
+{rank:3,stage:'② 輸出書類準備',title:'輸出規制の該非判定漏れ ─ 知らずに規制品を輸出する刑事罰リスク',imp:5,
+ impactLabel:'最大10年以下の懲役・事業停止。経済安保強化で規制品目は毎年追加されており確認コストが増大',str:'A',
+ whys:[
+  ['なぜ輸出規制の確認が漏れるのか？','規制対象かどうかの判断（該非判定）に法律知識と製品技術知識の両方が必要で、一般担当者が自力判断できないため'],
+  ['なぜ専門知識がないと判断できないのか？','外為法・輸出令・貨物等省令が複雑に連動し、規制品は「技術パラメータ（数値スペック）」で定義されるため、自社製品の数値と法令定義を突合する作業が必要なため'],
+  ['なぜ数値突合の作業が困難なのか？','自社製品の仕様データと規制定義数値を自動で照合するツールがなく、人が専門書を見ながら一つずつ確認する作業になっているため'],
+  ['なぜ照合ツールが存在しないのか？','規制品目の定義データを経済産業省がAPIで公開していないため、第三者がデジタルツールを開発するためのデータ基盤がないため'],
+  ['なぜ規制定義データが公開されないのか？','安全保障上の機密情報であり、詳細なデジタルデータを公開すると規制逃れ・悪用に使われるリスクがあるという政府方針があるため']
+ ],
+ bottleneck:'製品スペックと規制定義を自動照合するツールが、元データ（規制定義）の非公開性により作れない',
+ solution:'公開情報と業界蓄積実績からAIが規制要件を構造化。製品スペック入力 → 照合結果を即提示。グレーゾーンは専門家に自動エスカレーション'},
+
+{rank:4,stage:'③ 梱包・貨物準備',title:'危険物申告漏れ ─ リチウム電池等の申告忘れで積み込み拒否・火災リスク',imp:5,
+ impactLabel:'積み込み拒否・罰金に加え、最悪は船上火災（コンテナ船1隻で数百億円の被害）。申告ミスは刑事罰対象',str:'A',
+ whys:[
+  ['なぜ危険物の申告が漏れるのか？','自社製品にリチウム電池・引火性溶剤等の危険物に該当する部品が含まれていても、担当者がその判定基準を知らないため'],
+  ['なぜ判定基準を知らないのか？','危険物の分類はIMDG Code（国際海上危険物規則・数千ページ）に基づいており、中小企業の一般担当者が習得するには難易度が高すぎるため'],
+  ['なぜIMDG Codeの習得が困難なのか？','品目ごとの化学的性質・物性・濃度で細かく分類が変わり、自社製品のどの成分がどのクラスに該当するかの特定に専門知識が必要なため'],
+  ['なぜシステムで自動判定できないのか？','製品の化学成分データ（SDS：安全データシート）と危険物分類を照合するには製品SDSデータが標準化・デジタル化されている必要があるが、製造業全体でまだ進んでいないため'],
+  ['なぜSDSデータの標準化が進まないのか？','製造業者ごとにSDS作成フォーマットが異なり、「どの数値をどの精度で記載するか」の業界共通標準がなく、デジタル化してもシステム間で活用できない状態のため']
+ ],
+ bottleneck:'製品SDS（安全データシート）データの標準化・デジタル化が製造業全体で未達',
+ solution:'製品のSDS入力 → IMDG Codeと自動照合 → 危険物申告書類を自動生成。不明な場合は専門家に自動連携'},
+
+{rank:5,stage:'⑰ 決済・費用精算',title:'輸出代金の回収遅延・未回収 ─ 資金繰りの慢性的な悪化',imp:5,
+ impactLabel:'船積後60〜120日後払いが常態化。中小輸出企業の成長を妨げる最大の資金ボトルネック',str:'A',
+ whys:[
+  ['なぜ海外輸出の代金回収が遅れるのか？','海外取引では船積後60〜120日後払い（DA条件）が常態化しており、その間は自社で資金を立て替え続ける必要があるため'],
+  ['なぜ60〜120日後払いが常態化するのか？','海外バイヤー（特に新興国）が後払いを要求し、断ると受注を失うという力関係があり、荷主側が受け入れざるを得ないため'],
+  ['なぜ早期資金化（ファクタリング等）が使えないのか？','国内の銀行・ファクタリング会社は海外バイヤーの信用力評価が困難でリスクを取れないため、中小企業の輸出売掛金を買い取ってくれないため'],
+  ['なぜ海外バイヤーの信用評価が困難なのか？','海外企業の財務情報・支払い実績・法的情報が言語・国境をまたいで分散しており、一元的に収集・スコアリングするインフラが存在しないため'],
+  ['なぜ信用評価インフラが国際的に不在なのか？','各国で異なる会計基準・情報開示制度・言語が障壁となり、国際的な信用情報プラットフォームを構築した企業がまだ規模・精度で不十分なため']
+ ],
+ bottleneck:'海外バイヤーの信用スコアリングを可能にするデータが国際的に分散・非構造化',
+ solution:'グローバル取引データ×AIスコアリングで即日ファクタリング判断を実現。輸出書類提出と同時に当日資金化'},
+
+{rank:6,stage:'⑨ 航海中',title:'航海中の貨物追跡不能 ─ 船積みから到着まで完全なブラックボックス',imp:4,
+ impactLabel:'顧客への説明不能。問い合わせ対応コスト年間数百件規模。異常発生時の初動が遅れ被害が拡大',str:'S',
+ whys:[
+  ['なぜ航海中の貨物がリアルタイムで追跡できないのか？','コンテナに位置情報・状態監視デバイスが標準装備されておらず、船会社が提供する追跡情報も港単位で粗いため'],
+  ['なぜデバイスが標準装備されないのか？','コンテナを所有する船会社・リース会社がデバイス搭載コストを負担するインセンティブがなく、荷主が個別に搭載するには手続きが複雑なため'],
+  ['なぜ船会社がデバイス搭載のインセンティブを持たないのか？','追跡情報から生まれる価値（顧客満足・異常早期検知）は荷主が享受するが、船会社はその価値分を運賃に上乗せできていないため'],
+  ['なぜ追跡情報の価値が運賃に反映されないのか？','船会社間の価格競争が激しく、追跡サービスを付加価値として差別化・値付けする仕組みが業界慣行として確立していないため'],
+  ['なぜ業界慣行として確立しないのか？','大手船会社がプラットフォームを持ち始めているが、中小フォワーダー・荷主がそのシステムに接続するコスト・技術力がなく普及が遅いため']
+ ],
+ bottleneck:'コンテナ追跡の受益者（荷主）とコスト負担者（船会社）が乖離しており、全体最適化のインセンティブが働かない',
+ solution:'荷主が自前でIoTデバイスをコンテナに取り付け（月数百円レベル）、衛星通信でリアルタイム追跡。自社カメラ事業との親和性高'},
+
+{rank:7,stage:'⑬ コンテナ引き取り / ⑰ 精算',title:'デマレージ・フリータイム超過 ─ 気づかないうちに積み重なる延滞料',imp:4,
+ impactLabel:'中堅輸入企業で月間数十万〜数百万円。請求書が来て初めて気づく「隠れコスト」の代表格',str:'A',
+ whys:[
+  ['なぜデマレージが発生するのか？','コンテナの無料保管期間（フリータイム：通常3〜5日）を超えてもターミナルから引き取らないため'],
+  ['なぜフリータイム内に引き取れないのか？','輸入通関の完了・D/O手配・トラック手配・倉庫受入準備が連動して管理されておらず、どれか一つが遅れると全体が止まるため'],
+  ['なぜ各作業が連動して管理されないのか？','通関・物流・倉庫がそれぞれ別の会社・担当者で動いており、全体の進捗を一元管理するシステムがないため'],
+  ['なぜ一元管理システムがないのか？','輸入業務は複数の外部業者が関与するため、自社の基幹システムでは外部業者まで管理の網が届かないため'],
+  ['なぜ外部業者を含めた管理が難しいのか？','外部業者はそれぞれ独自システムで動いており、進捗情報をリアルタイムで荷主に共有する標準的な仕組みがないため']
+ ],
+ bottleneck:'輸入業務の複数外部業者をまたいだ進捗リアルタイム共有の仕組みが存在しない',
+ solution:'輸入物流ポータルで通関進捗・D/O・トラック・倉庫予約を一気通貫管理。フリータイムカウントダウン表示で延滞ゼロ'},
+
+{rank:8,stage:'⑧ 本船積み込み',title:'積み残し（ロールオーバー） ─ 予約していたのに船に積んでもらえない',imp:4,
+ impactLabel:'顧客への納期遅延が確定。次便まで1週間待ち。航空便切替で運賃5〜10倍に膨らむ',str:'A',
+ whys:[
+  ['なぜコンテナが積み残しになるのか？','船会社がスペースを「確約」せずに過剰予約（オーバーブッキング）を行っており、スペース不足時に後から予約した貨物が優先されないため'],
+  ['なぜ過剰予約が慣行になっているのか？','航空会社と同様、キャンセル・ノーショーを見込んだ過剰予約でスペース稼働率を最大化するビジネスモデルが船会社に定着しているため'],
+  ['なぜ荷主はこのリスクを受け入れているのか？','積み残しリスクを排除した「確約運賃」サービスが一般的に提供されておらず、荷主に選択肢がないため'],
+  ['なぜ確約運賃サービスが普及しないのか？','船会社にとって全荷主にスペースを確約することはオーバーブッキングによる収益最大化の機会を失うことになるため'],
+  ['なぜ荷主側から対抗手段を取れないのか？','リアルタイムの船腹空き状況を複数船会社にまたいで比較・モニタリングする手段が荷主にはなく、情報の非対称性が解消されないため']
+ ],
+ bottleneck:'船腹の空き状況リアルタイム情報が荷主側に開示されず、情報非対称性が解消されない',
+ solution:'複数船会社の空きスペースをリアルタイム把握し、積み残しリスクが高い場合に即座に代替便・代替ルートを自動提案'},
+
+{rank:9,stage:'② 書類準備 / ⑫ 輸入通関',title:'HSコード誤分類 ─ 間違った関税コードで追徴金・過払いが発生',imp:4,
+ impactLabel:'誤分類による関税追徴・過払いが年間数百万円規模。税関調査対象になると別途調査コストが加算',str:'A',
+ whys:[
+  ['なぜHSコードを誤分類するのか？','8〜10桁の品目分類コードを専門書と担当者の知識を照合しながら手作業で判断するため、人によって判断がバラつくため'],
+  ['なぜ手作業判断が必要なのか？','商品の素材・用途・技術スペックを理解した上で分類基準と照合する作業は汎用システムに任せられないと長年考えられてきたため'],
+  ['なぜ汎用システムに任せられないと考えられてきたのか？','HSコードの分類には「主観的解釈」が含まれ、同じ商品でも国によって分類が異なるケースがあるためAI自動判定への信頼感がなかったため'],
+  ['なぜ分類に主観的判断が含まれるのか？','HSコードの定義テキストが曖昧で、新商品・新技術への対応が遅く（改定は5〜6年ごと）、既存カテゴリへの当てはめで解釈が割れるため'],
+  ['なぜHSコード定義の更新が遅いのか？','WCO（世界税関機構）が196カ国の合意を取り付けて改定する必要があり、技術革新のスピードに多国間合意のプロセスが追いつかないため']
+ ],
+ bottleneck:'HS分類定義の曖昧さと多国間合意プロセスの遅さが、自動化の精度を制限している',
+ solution:'過去の審査決定事例・各国税関データ・業界実績をAI学習。商品説明・スペック・画像から高精度でコードを提案し、事前教示申請とセット提供'},
+
+{rank:10,stage:'④ 内陸輸送 / ⑨ 航海中',title:'温度管理貨物の冷凍事故 ─ 異常が現地到着後に発覚し全損',imp:4,
+ impactLabel:'食品・医薬品では1便で数百万〜数千万円の廃棄ロス。責任の所在確定が困難で長期紛争になる',str:'S',
+ whys:[
+  ['なぜ温度異常が輸送中に分からないのか？','温度ロガー（記録計）が積まれているが、確認できるのは到着後の記録ダウンロード時のみで、リアルタイム通信機能がないため'],
+  ['なぜ通信機能付きの監視デバイスが使われないのか？','リーファーコンテナ自体には内蔵監視機能があるが、内陸トラック輸送や小口混載（LCL）の個別品には接続できず、取り付け・管理が実質困難なため'],
+  ['なぜLCL貨物への個別取り付けが困難なのか？','混載された多数の荷物に個別デバイスを取り付け、管理・回収するコストが現状のデバイス価格（数万円/個）では採算が取れないため'],
+  ['なぜデバイス価格が高いのか？','過酷な輸送環境（振動・湿度・温度変化・塩害）への耐性を持ちながら低コストを実現する製品開発が難しく、規模の経済が十分に働いていないため'],
+  ['なぜ規模の経済が働かないのか？','コールドチェーン輸送の荷主が分散しており、業界全体で標準デバイスを大量採用する調達集約の仕組みが存在しないため']
+ ],
+ bottleneck:'小口・混載貨物向けの低コスト耐環境IoT監視デバイスが量産化されていない',
+ solution:'使い捨て型低コスト（数百円/個）IoT温度センサー×クラウド連携で内陸〜海上全区間をリアルタイム監視。自社IoTカメラ・センサー事業との直結'},
+
+{rank:11,stage:'⑤ コンテナ積み込み',title:'バンニング積載率の低さ ─ 経験と勘で積んで2〜3割スペースを無駄にしている',imp:4,
+ impactLabel:'積載率10%改善だけで年間輸送コストを数百万円削減可能。コンテナ1本余分に使うと数十万円の直接損失',str:'A',
+ whys:[
+  ['なぜコンテナの積載率が低いのか？','荷物の積み方が作業員の経験と勘に依存しており、3次元空間の最適利用が計算されていないため'],
+  ['なぜ経験と勘に依存するのか？','コンテナへの積み込みは多様な形状・重量の荷物を組み合わせる3D最適化問題であり、頭の中だけで最適解を計算するのが困難なため'],
+  ['なぜ計算ツールを使わないのか？','バンニング最適化ソフトは存在するが、使いこなせるほど直感的なUIでなく、また荷物の正確な寸法・重量データの事前入力が現場には負担なため'],
+  ['なぜ荷物データの入力が負担なのか？','梱包後の実寸・実重量を計測してデジタルデータとして記録するプロセスが、出荷前の作業フローに組み込まれていないため'],
+  ['なぜ計測プロセスが組み込まれていないのか？','計測作業を自動化する安価なスマートスケール・3D計測器が普及しておらず、手作業計測の工数を正当化できるほどの認識がなかったため']
+ ],
+ bottleneck:'荷物の3D計測データがバンニング計画に自動連携される仕組みがない',
+ solution:'3Dセンサー×スマートスケールで梱包後に自動計測 → AIが即座に最適積み付けパターンを3D表示 → 作業員が指示通りに積むだけ'},
+
+{rank:12,stage:'③ 梱包・貨物準備',title:'梱包不備による輸送中破損 ─ 現地到着後に初めて破損が発覚',imp:4,
+ impactLabel:'破損発覚が現地着後で手戻り期間が長い。保険請求でも全損カバーは難しく、自社負担になることが多い',str:'A',
+ whys:[
+  ['なぜ輸送中に荷物が破損するのか？','海上輸送中の揺れ・振動・積み重ね荷重・結露に耐えられない梱包で出荷しているため'],
+  ['なぜ耐性の低い梱包で出荷するのか？','どんな梱包が海上輸送に適切かの基準が社内で明確化されておらず、担当者の経験で梱包方法を決めているため'],
+  ['なぜ梱包基準が明確化されていないのか？','輸送中の環境条件（揺れの強度・温度変化・積み圧力）が数値として把握されておらず、「どの程度の強度が必要か」の根拠がないため'],
+  ['なぜ輸送環境条件が数値で把握されていないのか？','コンテナ内の環境データ（加速度・温湿度）を計測・記録するデータが荷主にフィードバックされないため'],
+  ['なぜ環境データが荷主にフィードバックされないのか？','輸送中の環境計測は船会社・フォワーダーの責任範囲外であり、データを収集しても荷主に提供する義務も仕組みもないため']
+ ],
+ bottleneck:'コンテナ内の輸送環境データが荷主に届かず、梱包基準の根拠が作れない',
+ solution:'IoTセンサーで輸送中の加速度・温湿度・積み圧力を記録 → 梱包基準の根拠データとして活用 → AI梱包基準を自動生成'},
+
+{rank:13,stage:'⑰ 決済・費用精算',title:'フォワーダー・船会社の請求書が不透明 ─ 後から費用が積み上がる構造',imp:4,
+ impactLabel:'輸送コストの15〜25%が不透明な付帯費用。確認作業で毎月多くの工数が消え、二重請求も見逃しやすい',str:'A',
+ whys:[
+  ['なぜ輸送費用の総額が事前に把握できないのか？','基本運賃の他に燃油サーチャージ・港湾費・書類費・繁忙期割増など多数の付帯費用が後から追加されるため'],
+  ['なぜ付帯費用が後から追加されるのか？','サーチャージ類は市況・季節・港湾混雑に連動して変動し、出荷時点では確定していないものが多いため'],
+  ['なぜ変動費用の予測ができないのか？','フォワーダー・船会社が付帯費用の算出根拠・変動ルールを非公開にしており、荷主側が独自計算するための情報がないため'],
+  ['なぜ算出根拠が非公開なのか？','サーチャージの設定は船会社・フォワーダーの裁量で行われており、価格情報の開示は競合他社への情報提供になるという業界慣行があるため'],
+  ['なぜ業界慣行として非公開が続くのか？','荷主側（特に中小企業）が複数社の費用を比較する手段を持たず、情報の非対称性が業者側に有利に機能しており、開示インセンティブが働かないため']
+ ],
+ bottleneck:'荷主と物流業者間の費用情報の非対称性が構造的に固定化されている',
+ solution:'全請求書をAIが自動解析 → 相場データ・前回比・市況指数と自動比較 → 割高な請求を即フラグアップ → 交渉根拠を自動生成'},
+
+{rank:14,stage:'⑮ 荷下ろし・検品',title:'検品時の証拠不足 ─ 破損・不足を発見しても補償を受けられない',imp:3,
+ impactLabel:'証拠不十分で保険請求が却下され、数十万〜数百万円を泣き寝入り。証拠撮影の方法を誰も教えていない',str:'S',
+ whys:[
+  ['なぜクレーム時に補償を受けられないのか？','破損・数量不足の証拠（写真・動画・書類）が保険会社・輸出者が要求する形式・タイミングで揃っていないため'],
+  ['なぜ適切な証拠が揃わないのか？','デバンニング時の検品手順・証拠撮影方法が標準化されておらず、担当者の判断で行われているため'],
+  ['なぜ標準化されていないのか？','検品は物理的な現場作業であり、「正しい証拠の取り方」を全担当者に教育・徹底させるコストが高く優先度が低いため'],
+  ['なぜ教育コストが高いのか？','保険会社・輸出者・裁判所が「有効な証拠」として認める要件が文書化・可視化されておらず、現場担当者が直感的に理解できる形になっていないため'],
+  ['なぜ要件が可視化されていないのか？','保険契約や貿易条件によって求められる証拠の形式・内容が異なり、汎用的な「正解」を作ることが難しいと考えられてきたため']
+ ],
+ bottleneck:'現場担当者が直感的に使える「証拠撮影ガイドシステム」が存在しない',
+ solution:'スマホアプリが撮影角度・タイミング・必要枚数をリアルタイムガイド。自動でタイムスタンプ・GPS付き証拠フォルダ生成。自社MFP・カメラとの連携余地あり'},
+
+{rank:15,stage:'⑪ 入港・荷下ろし',title:'輸入前事前届出（AFR）の提出漏れ ─ 貨物が港湾内で隔離される',imp:3,
+ impactLabel:'届出遅れで貨物が港湾内で隔離。罰金（1件数万〜数十万円）と引き取り遅延が重複発生',str:'A',
+ whys:[
+  ['なぜ輸入前届出が漏れるのか？','AFRの提出期限（船積み24時間前等）を、輸送スケジュールの中で担当者が管理しきれないため'],
+  ['なぜ期限管理が難しいのか？','輸出国側の船積み完了→書類確定→AFR提出可能、という複数ステップを経て初めて届出できるため、提出可能時期と期限の管理が複雑なため'],
+  ['なぜ提出可能時期の管理が複雑なのか？','輸出側・輸送側・輸入側それぞれの作業完了を確認してから届出を行う必要があるが、複数関係者の進捗を一元的に把握する手段がないため'],
+  ['なぜ複数関係者の進捗を把握できないのか？','荷主・フォワーダー・船会社・通関士が独自システムで動いており、進捗情報が自動集約されるプラットフォームがないため'],
+  ['なぜプラットフォームが存在しないのか？','貿易業務は多数の独立したプレイヤーが各工程を担う分業構造であり、共通の情報共有基盤を作るインセンティブを持つプレイヤーが現れていないため']
+ ],
+ bottleneck:'複数プレイヤーをまたいだ輸送進捗の自動連携プラットフォームが存在しない',
+ solution:'船積み情報が確定した瞬間にAFRを自動生成・自動提出。提出期限のカウントダウン表示で人的ミスをゼロに'},
+];
+
+function build(){
+  const c=document.getElementById('container');
+  DATA.forEach(d=>{
+    const el=document.createElement('div');
+    el.className='issue';
+    el.dataset.imp=d.imp;
+    el.dataset.str=d.str;
+    el.dataset.kw=(d.rank+d.stage+d.title+d.impactLabel).toLowerCase();
+    el.style.borderLeftColor=BORDER_COLOR[d.imp]||'#94a3b8';
+
+    // Why boxes HTML
+    const whyHtml=d.whys.map((w,i)=>`
+      ${i>0?'<div class="why-connector">↓</div>':''}
+      <div class="why-box w${i+1}">
+        <div class="why-q">WHY ${i+1}　${w[0]}</div>
+        <div class="why-a">${w[1]}</div>
+      </div>`).join('');
+
+    el.innerHTML=`
+      <div class="issue-head" onclick="toggle(this.parentElement)">
+        <div class="rank">${d.rank}</div>
+        <div class="issue-meta">
+          <div class="issue-title">${d.title}</div>
+          <div class="issue-sub">
+            <span class="stage-badge">${d.stage}</span>
+            <span class="imp-stars">${STARS(d.imp)}</span>
+            <span class="str-badge ${STR_CSS[d.str]}">${STR_LBL[d.str]}</span>
+          </div>
+          <div class="impact-label">📌 ${d.impactLabel}</div>
+        </div>
+        <div class="chevron">▼</div>
+      </div>
+      <div class="why-body">
+        <div class="why-tree">
+          ${whyHtml}
+          <div class="why-connector">↓</div>
+          <div class="bottleneck">
+            <div class="bn-label">🎯 ボトルネック（根本原因）</div>
+            <div class="bn-text">${d.bottleneck}</div>
+          </div>
+          <div class="solution">
+            <div class="sol-label">💡 解決の方向性</div>
+            <div class="sol-text">${d.solution}</div>
+          </div>
+        </div>
+      </div>`;
+    c.appendChild(el);
+  });
+}
+
+function toggle(el){el.classList.toggle('open')}
+function expandAll(){document.querySelectorAll('.issue').forEach(e=>e.classList.add('open'))}
+function collapseAll(){document.querySelectorAll('.issue').forEach(e=>e.classList.remove('open'))}
+
+function applyFilter(){
+  const imp=document.getElementById('impFilter').value;
+  const str=document.getElementById('strFilter').value;
+  const kw=document.getElementById('kwFilter').value.toLowerCase();
+  document.querySelectorAll('.issue').forEach(el=>{
+    const show=
+      (!imp||el.dataset.imp===imp)&&
+      (!str||el.dataset.str===str)&&
+      (!kw||el.dataset.kw.includes(kw));
+    el.classList.toggle('hidden',!show);
+  });
+}
+
+build();
+</script>
+</body>
+</html>
