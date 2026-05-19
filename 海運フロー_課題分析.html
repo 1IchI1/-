@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>海運フロー 課題分析</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;background:#f0f4f8;color:#1e293b}
+
+/* ヘッダー */
+header{background:linear-gradient(135deg,#0c1a3a,#0f4c8a);color:#fff;padding:32px 24px;text-align:center}
+header h1{font-size:22px;font-weight:700}
+header p{font-size:13px;opacity:.7;margin-top:6px}
+
+/* フロー図 */
+.flow-wrap{background:#fff;border-bottom:2px solid #e2e8f0;padding:24px 20px;overflow-x:auto}
+.flow-title{font-size:11px;font-weight:800;letter-spacing:.1em;color:#94a3b8;text-transform:uppercase;margin-bottom:16px;text-align:center}
+.flow{display:flex;align-items:center;gap:0;min-width:900px;justify-content:center}
+.flow-node{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:transform .15s}
+.flow-node:hover{transform:translateY(-2px)}
+.flow-icon{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.flow-label{font-size:9px;font-weight:700;text-align:center;color:#475569;max-width:70px;line-height:1.3}
+.flow-count{font-size:10px;font-weight:800;border-radius:10px;padding:1px 6px;color:#fff}
+.flow-arrow{color:#94a3b8;font-size:20px;margin:0 4px;flex-shrink:0;margin-bottom:16px}
+.flow-section{display:flex;flex-direction:column;align-items:center;gap:0}
+.section-label{font-size:9px;font-weight:800;letter-spacing:.08em;color:#fff;padding:3px 10px;border-radius:3px;margin-bottom:8px;text-align:center}
+
+/* 色定義 */
+.sl-exporter{background:#1e3a8a}
+.sl-inland-ex{background:#0369a1}
+.sl-port-ex{background:#0891b2}
+.sl-sea{background:#0f172a}
+.sl-port-im{background:#7c3aed}
+.sl-inland-im{background:#6d28d9}
+.sl-importer{background:#15803d}
+
+.fi-1{background:#dbeafe} .fi-2{background:#bfdbfe} .fi-3{background:#93c5fd}
+.fi-4{background:#bae6fd} .fi-5{background:#7dd3fc} .fi-6{background:#38bdf8}
+.fi-7{background:#164e63} .fi-8{background:#0e7490}
+.fi-9{background:#0f172a} .fi-10{background:#1e293b}
+.fi-11{background:#c4b5fd} .fi-12{background:#a78bfa} .fi-13{background:#8b5cf6}
+.fi-14{background:#7c3aed} .fi-15{background:#6d28d9}
+.fi-16{background:#bbf7d0} .fi-17{background:#86efac}
+.fc-1{color:#1e40af} .fc-2{color:#1d4ed8} .fc-3{color:#1e3a8a}
+.fc-4{color:#0369a1} .fc-5{color:#075985} .fc-6{color:#0c4a6e}
+.fc-7{color:#f0f9ff} .fc-8{color:#e0f2fe}
+.fc-9{color:#f8fafc} .fc-10{color:#f1f5f9}
+.fc-11{color:#4c1d95} .fc-12{color:#3b0764} .fc-13{color:#2e1065}
+.fc-14{color:#f5f3ff} .fc-15{color:#ede9fe}
+.fc-16{color:#14532d} .fc-17{color:#166534}
+
+.count-1{background:#1e40af} .count-2{background:#0369a1} .count-3{background:#0891b2}
+.count-4{background:#0369a1} .count-5{background:#0891b2} .count-6{background:#0369a1}
+.count-7{background:#164e63} .count-8{background:#0e7490}
+.count-9{background:#334155} .count-10{background:#475569}
+.count-11{background:#7c3aed} .count-12{background:#6d28d9} .count-13{background:#5b21b6}
+.count-14{background:#7c3aed} .count-15{background:#6d28d9}
+.count-16{background:#15803d} .count-17{background:#166534}
+
+/* コントロール */
+.controls{background:#fff;padding:14px 20px;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.controls label{font-size:12px;font-weight:700;color:#64748b}
+select,input{padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:13px;background:#f8fafc;color:#1e293b}
+.count-badge{margin-left:auto;font-size:13px;color:#64748b;font-weight:600}
+.count-badge span{color:#1e3a8a;font-size:18px;font-weight:800}
+
+/* メインコンテンツ */
+.container{max-width:1200px;margin:0 auto;padding:24px 16px}
+
+/* ステージヘッダー */
+.stage-header{display:flex;align-items:center;gap:12px;margin:32px 0 12px;padding:14px 18px;border-radius:10px;cursor:pointer}
+.stage-icon{font-size:28px}
+.stage-info{flex:1}
+.stage-name{font-size:16px;font-weight:800;color:#fff}
+.stage-sub{font-size:11px;color:rgba(255,255,255,.75);margin-top:2px}
+.stage-cnt{font-size:12px;font-weight:800;background:rgba(255,255,255,.2);color:#fff;padding:3px 10px;border-radius:12px}
+
+/* 課題カード */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;margin-bottom:8px}
+.card{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.07);padding:16px;border-left:4px solid #e2e8f0;transition:box-shadow .15s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.card-title{font-size:13.5px;font-weight:700;line-height:1.4;flex:1}
+.str-badge{font-size:11px;font-weight:800;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+.str-s{background:#f3e8ff;color:#6d28d9}
+.str-a{background:#e0f2fe;color:#0369a1}
+.str-b{background:#f1f5f9;color:#475569}
+
+.card-asis{font-size:12px;color:#64748b;margin-bottom:6px;line-height:1.5}
+.card-gap{background:#fffbeb;border-left:3px solid #f59e0b;padding:7px 10px;border-radius:0 5px 5px 0;margin-bottom:6px}
+.card-gap-label{font-size:9px;font-weight:800;color:#92400e;letter-spacing:.06em;margin-bottom:2px}
+.card-gap-text{font-size:12px;color:#78350f;line-height:1.5}
+.card-tobe{background:#f0fdf4;border-left:3px solid #16a34a;padding:7px 10px;border-radius:0 5px 5px 0}
+.card-tobe-label{font-size:9px;font-weight:800;color:#14532d;letter-spacing:.06em;margin-bottom:2px}
+.card-tobe-text{font-size:12px;color:#15803d;font-weight:600;line-height:1.5}
+.card-impact{font-size:10.5px;color:#92400e;font-weight:700;margin-top:6px}
+
+.hidden{display:none}
+footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>海運フロー 全工程 課題分析</h1>
+  <p>荷主 → 荷受け主 の17ステージ ／ 各工程の「今の問題」「なぜ困るか」「解決後」を整理</p>
+</header>
+
+<!-- フロー図 -->
+<div class="flow-wrap">
+  <div class="flow-title">全体フロー ─ クリックでそのステージに移動</div>
+  <div class="flow">
+
+    <div class="flow-section">
+      <div class="section-label sl-exporter">荷主側</div>
+      <div style="display:flex;align-items:center;gap:0">
+        <div class="flow-node" onclick="jumpTo(1)">
+          <div class="flow-icon fi-1"><span class="fc-1">📋</span></div>
+          <div class="flow-label">①受注・<br>条件確定</div>
+          <div class="flow-count count-1" id="cnt1">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(2)">
+          <div class="flow-icon fi-2"><span class="fc-2">📄</span></div>
+          <div class="flow-label">②輸出<br>書類準備</div>
+          <div class="flow-count count-2" id="cnt2">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(3)">
+          <div class="flow-icon fi-3"><span class="fc-3">📦</span></div>
+          <div class="flow-label">③梱包・<br>貨物準備</div>
+          <div class="flow-count count-3" id="cnt3">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow" style="margin-bottom:24px">→</div>
+
+    <div class="flow-section">
+      <div class="section-label sl-inland-ex">国内輸送（輸出側）</div>
+      <div style="display:flex;align-items:center;gap:0">
+        <div class="flow-node" onclick="jumpTo(4)">
+          <div class="flow-icon fi-4"><span class="fc-4">🚛</span></div>
+          <div class="flow-label">④工場→港<br>内陸輸送</div>
+          <div class="flow-count count-4" id="cnt4">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(5)">
+          <div class="flow-icon fi-5"><span class="fc-5">📫</span></div>
+          <div class="flow-label">⑤コンテナ<br>積み込み</div>
+          <div class="flow-count count-5" id="cnt5">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow" style="margin-bottom:24px">→</div>
+
+    <div class="flow-section">
+      <div class="section-label sl-port-ex">輸出港</div>
+      <div style="display:flex;align-items:center;gap:0">
+        <div class="flow-node" onclick="jumpTo(6)">
+          <div class="flow-icon fi-6"><span class="fc-6">🏗️</span></div>
+          <div class="flow-label">⑥CY搬入・<br>港湾手続き</div>
+          <div class="flow-count count-6" id="cnt6">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(7)">
+          <div class="flow-icon fi-7"><span class="fc-7">🛃</span></div>
+          <div class="flow-label">⑦輸出<br>通関</div>
+          <div class="flow-count count-7" id="cnt7">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(8)">
+          <div class="flow-icon fi-8"><span class="fc-8">🚢</span></div>
+          <div class="flow-label">⑧本船<br>積み込み</div>
+          <div class="flow-count count-8" id="cnt8">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow" style="margin-bottom:24px">→</div>
+
+    <div class="flow-section">
+      <div class="section-label sl-sea">海上輸送</div>
+      <div style="display:flex;align-items:center;gap:0">
+        <div class="flow-node" onclick="jumpTo(9)">
+          <div class="flow-icon fi-9"><span class="fc-9">🌊</span></div>
+          <div class="flow-label">⑨航海中</div>
+          <div class="flow-count count-9" id="cnt9">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(10)">
+          <div class="flow-icon fi-10"><span class="fc-10">📜</span></div>
+          <div class="flow-label">⑩船積<br>書類流通</div>
+          <div class="flow-count count-10" id="cnt10">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow" style="margin-bottom:24px">→</div>
+
+    <div class="flow-section">
+      <div class="section-label sl-port-im">輸入港</div>
+      <div style="display:flex;align-items:center;gap:0">
+        <div class="flow-node" onclick="jumpTo(11)">
+          <div class="flow-icon fi-11"><span class="fc-11">⚓</span></div>
+          <div class="flow-label">⑪入港・<br>荷下ろし</div>
+          <div class="flow-count count-11" id="cnt11">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(12)">
+          <div class="flow-icon fi-12"><span class="fc-12">🛃</span></div>
+          <div class="flow-label">⑫輸入<br>通関</div>
+          <div class="flow-count count-12" id="cnt12">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(13)">
+          <div class="flow-icon fi-13"><span class="fc-13">📤</span></div>
+          <div class="flow-label">⑬コンテナ<br>引き取り</div>
+          <div class="flow-count count-13" id="cnt13">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow" style="margin-bottom:24px">→</div>
+
+    <div class="flow-section">
+      <div class="section-label sl-inland-im">国内輸送（輸入側）</div>
+      <div style="display:flex;align-items:center;gap:0">
+        <div class="flow-node" onclick="jumpTo(14)">
+          <div class="flow-icon fi-14"><span class="fc-14">🚛</span></div>
+          <div class="flow-label">⑭港→<br>倉庫輸送</div>
+          <div class="flow-count count-14" id="cnt14">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(15)">
+          <div class="flow-icon fi-15"><span class="fc-15">🔍</span></div>
+          <div class="flow-label">⑮荷下ろし<br>・検品</div>
+          <div class="flow-count count-15" id="cnt15">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow" style="margin-bottom:24px">→</div>
+
+    <div class="flow-section">
+      <div class="section-label sl-importer">荷受け主側</div>
+      <div style="display:flex;align-items:center;gap:0">
+        <div class="flow-node" onclick="jumpTo(16)">
+          <div class="flow-icon fi-16"><span class="fc-16">✅</span></div>
+          <div class="flow-label">⑯荷受け・<br>入庫確認</div>
+          <div class="flow-count count-16" id="cnt16">-</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="jumpTo(17)">
+          <div class="flow-icon fi-17"><span class="fc-17">💴</span></div>
+          <div class="flow-label">⑰決済・<br>費用精算</div>
+          <div class="flow-count count-17" id="cnt17">-</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- フィルター -->
+<div class="controls">
+  <label>ステージ</label>
+  <select id="stageFilter" onchange="applyFilter()">
+    <option value="">すべて</option>
+    <option value="1">①受注・条件確定</option>
+    <option value="2">②輸出書類準備</option>
+    <option value="3">③梱包・貨物準備</option>
+    <option value="4">④工場→港 内陸輸送</option>
+    <option value="5">⑤コンテナ積み込み</option>
+    <option value="6">⑥CY搬入・港湾手続き</option>
+    <option value="7">⑦輸出通関</option>
+    <option value="8">⑧本船積み込み</option>
+    <option value="9">⑨航海中</option>
+    <option value="10">⑩船積書類流通</option>
+    <option value="11">⑪入港・荷下ろし</option>
+    <option value="12">⑫輸入通関</option>
+    <option value="13">⑬コンテナ引き取り</option>
+    <option value="14">⑭港→倉庫輸送</option>
+    <option value="15">⑮荷下ろし・検品</option>
+    <option value="16">⑯荷受け・入庫確認</option>
+    <option value="17">⑰決済・費用精算</option>
+  </select>
+  <label>自社強み</label>
+  <select id="strFilter" onchange="applyFilter()">
+    <option value="">すべて</option>
+    <option value="S">◎ S（直結）</option>
+    <option value="A">○ A（活用可）</option>
+    <option value="B">△ B（参入可）</option>
+  </select>
+  <label>キーワード</label>
+  <input type="text" id="kwFilter" placeholder="絞り込み..." oninput="applyFilter()" style="width:150px">
+  <div class="count-badge">表示 <span id="rowCount">0</span> 件</div>
+</div>
+
+<div class="container" id="mainContainer"></div>
+<footer>国際物流 事業開発プロジェクト ─ Confidential ／ <a href="index.html" style="color:#94a3b8">← トップへ戻る</a></footer>
+
+<script>
+// ステージ定義
+const STAGES = [
+  {id:1, label:"①受注・条件確定", sub:"荷主が輸出を決定してから輸送を依頼するまで", color:"#1e40af", icon:"📋"},
+  {id:2, label:"②輸出書類準備",   sub:"インボイス・パッキングリスト等の作成",          color:"#1d4ed8", icon:"📄"},
+  {id:3, label:"③梱包・貨物準備", sub:"製品の梱包・マーキング・危険物申告",             color:"#1e3a8a", icon:"📦"},
+  {id:4, label:"④工場→港 内陸輸送",sub:"トラックで工場からコンテナヤードまで運ぶ",     color:"#0369a1", icon:"🚛"},
+  {id:5, label:"⑤コンテナ積み込み",sub:"コンテナへの荷物積み込み（バンニング）",        color:"#075985", icon:"📫"},
+  {id:6, label:"⑥CY搬入・港湾手続き",sub:"コンテナターミナルへの搬入・本船待機",       color:"#0c4a6e", icon:"🏗️"},
+  {id:7, label:"⑦輸出通関",       sub:"税関への輸出申告・許可取得",                    color:"#164e63", icon:"🛃"},
+  {id:8, label:"⑧本船積み込み",   sub:"コンテナを船に積む作業",                        color:"#0e7490", icon:"🚢"},
+  {id:9, label:"⑨航海中",         sub:"出発港から目的港までの海上輸送",                color:"#0f172a", icon:"🌊"},
+  {id:10,label:"⑩船積書類流通",   sub:"船荷証券(B/L)の発行・郵送・授受",              color:"#1e293b", icon:"📜"},
+  {id:11,label:"⑪入港・荷下ろし", sub:"輸入港への入港・コンテナ陸揚げ",              color:"#5b21b6", icon:"⚓"},
+  {id:12,label:"⑫輸入通関",       sub:"税関への輸入申告・関税支払い・許可取得",        color:"#6d28d9", icon:"🛃"},
+  {id:13,label:"⑬コンテナ引き取り",sub:"ターミナルからコンテナを引き取る",             color:"#7c3aed", icon:"📤"},
+  {id:14,label:"⑭港→倉庫輸送",   sub:"コンテナを倉庫・工場まで内陸輸送",            color:"#6d28d9", icon:"🚛"},
+  {id:15,label:"⑮荷下ろし・検品", sub:"コンテナから商品を取り出して品質確認",         color:"#5b21b6", icon:"🔍"},
+  {id:16,label:"⑯荷受け・入庫確認",sub:"荷受け主が商品を受け取り入庫",               color:"#15803d", icon:"✅"},
+  {id:17,label:"⑰決済・費用精算", sub:"運賃・付帯費用の確認と代金の最終決済",         color:"#166534", icon:"💴"},
+];
+
+// [ステージID, タイトル, 今の状態（As-Is）, ギャップ（なぜ困るか）, インパクト, 解決後（To-Be）, 強み]
+const DATA = [
+// ===== ①受注・条件確定 =====
+[1,"インコタームズ（貿易条件）の選択ミスで損失が発生",
+ "FOB・CIF・DDP などの貿易条件の意味を正確に理解せず、不利な条件で合意してしまう",
+ "例えばDDPを選ぶと荷主が輸入国の関税・通関費用まで全負担。知らずに合意して数百万円の損失になるケースがある",
+ "想定外の費用負担が発覚するのは荷物が動いてから。キャンセルもできない",
+ "インコタームズ自動判定ツールが条件ごとの費用負担をシミュレーション。最適条件を提案","A"],
+
+[1,"運賃・スケジュールの事前確認ができず、条件確定後に「船がない」と判明",
+ "受注・契約を先に済ませてから船の空き状況を確認すると、希望の日程に船腹がなかったと発覚する",
+ "契約してしまった後では納期変更も困難。顧客との交渉が必要になり信頼を損なう",
+ "急ぎで高い航空便に切り替えると運賃が5〜10倍に膨らむ",
+ "船のスペース在庫をリアルタイム確認しながら受注できるプラットフォーム","A"],
+
+[1,"複数の輸送モード（船・空・鉄道）の比較なしに契約してしまう",
+ "コスト・納期・リスクを総合比較せず、いつも同じ方法で輸送している",
+ "海上より少し高くても鉄道の方が納期もコストも最適だったというケースが見落とされる",
+ "最適モード選択できていない企業は輸送コストを10〜20%余分に払っている",
+ "コスト・納期・CO2を同時比較して最適モードを自動提案するAI","A"],
+
+// ===== ②輸出書類準備 =====
+[2,"インボイス・パッキングリストの作成ミスが通関差し戻しの最大原因",
+ "品名・数量・単価・荷主情報などを手打ちで作成するため、転記ミス・記入漏れが頻発する",
+ "通関直前に差し戻されると書類修正→再提出に1〜3日。その間コンテナが港に止まる",
+ "差し戻し1件あたり港湾保管料・遅延損害で30万円超の損失が平均コスト",
+ "受注データから書類を自動生成。AIが整合チェックをして人は確認するだけ","S"],
+
+[2,"HSコード（関税分類コード）の誤分類で追徴金・過払いが発生",
+ "8〜10桁の商品分類コードを専門書を見ながら手作業で決定。判断が人によってバラつく",
+ "コードが違うと関税率が変わる。過少申告は追徴金、過大申告は余分な関税。両方で損をする",
+ "誤分類による追徴金の事例は年々増加中。税関の事後調査も強化傾向",
+ "商品名・画像・スペックからAIが正しいHSコードを数秒で提案","A"],
+
+[2,"輸出規制品かどうかの確認（該非判定）に時間とコストがかかる",
+ "自社製品が軍事転用できる規制品かどうか、専門家に確認しないと判断できない",
+ "確認しないで輸出すると刑事罰・事業停止リスク。確認すると1件数時間・数万円かかる",
+ "経済安全保障の強化で規制対象品目が毎年追加されており、確認作業は増加傾向",
+ "製品スペックを入力するだけでAIが規制対象かどうかを数分で判定","A"],
+
+[2,"原産地証明書の取得が遅く、FTA優遇関税を使い損なう",
+ "貿易協定の優遇関税を使うには原産地証明書が必要だが、取得に1〜2週間かかる",
+ "書類が間に合わないと通常関税を払うしかない。FTA活用率が低い原因の一つ",
+ "FTA優遇を活用できない場合、輸出金額の5〜25%相当の関税差額を損している",
+ "電子原産地証明で即日取得。FTA優遇を確実に活用","A"],
+
+[2,"書類フォーマットが国・輸送会社ごとにバラバラで毎回作り直している",
+ "同じ内容でも仕向け国・船会社・バイヤーごとに書類フォーマットが異なり、毎回一から作成",
+ "担当者が複数の書類を並行して管理し、最新版の管理も困難。間違ったバージョンを送るリスク",
+ "書類作成に費やす時間は担当者1人あたり週10時間以上という調査結果も",
+ "マスターデータを一度入力すれば全書類を自動生成・フォーマット変換","S"],
+
+// ===== ③梱包・貨物準備 =====
+[3,"輸送中の破損を防ぐ梱包ができておらず、到着時に損傷が発覚",
+ "梱包基準が担当者の経験頼りで標準化されていない。長距離海上輸送の揺れ・積み重ねに耐えられない",
+ "破損が到着後に発覚すると、損害認定・保険請求・賠償交渉で数ヶ月かかる",
+ "梱包不良による輸送中破損クレームは貨物保険請求の上位原因",
+ "品目別の梱包基準データベースとAIチェックで出荷前に梱包の妥当性を確認","A"],
+
+[3,"木材梱包材のくん蒸処理（害虫駆除）を忘れて現地で差し戻される",
+ "ほとんどの国が木材梱包材（パレット・木箱）に害虫駆除の証明を義務付けているが、見落とすケースがある",
+ "処理なしの木材梱包が現地港で発覚すると全ロットが廃棄・返送になる",
+ "返送コストはコンテナ1本あたり数十〜数百万円",
+ "出荷前チェックリストにくん蒸処理確認を必須化し、証明書を自動管理","A"],
+
+[3,"重量・容積の測定が不正確で、運賃計算のズレが後から発覚",
+ "梱包後の実重量・実容積を正確に計測せず、概算で申告している",
+ "実績と申告値が異なると追加運賃を請求される。過大申告では余分な運賃を払い続けている",
+ "重量過少申告の追加請求が突然来て資金繰りに影響するケースも",
+ "スマートスケールと3D計測で梱包後の正確な重量・容積を即算出","A"],
+
+[3,"危険物（リチウム電池・化学品等）の申告漏れで積み込み拒否・罰則リスク",
+ "リチウム電池を内蔵した製品など、危険物扱いになる商品の判断が難しい",
+ "申告なしで危険物を輸送すると積み込み拒否、罰金、最悪の場合は火災事故の原因に",
+ "危険物の誤申告による船会社からの積み込み拒否は毎年多数発生",
+ "商品情報を入力すると危険物区分を自動判定し、申告書を自動作成","A"],
+
+[3,"マーキング（荷印・宛先表示）のルールを知らず、現地で問題が発生",
+ "仕向け国ごとに荷物への表示方法（言語・サイズ・記載内容）に規制がある",
+ "不適切なマーキングで荷物が別の場所に届いたり、通関で止められたりする",
+ "マーキング不備による誤配・差し戻しは年間数百件規模で業界全体に存在",
+ "国別マーキング規則を自動チェックし、適切な表示内容を生成","A"],
+
+// ===== ④工場→港 内陸輸送 =====
+[4,"トラックの手配が直前になりやすく、繁忙期に車が確保できない",
+ "出荷が決まってからトラックを手配すると、繁忙期（年末・お盆等）に車が見つからない",
+ "トラックが確保できなければ船の期限（CYカット）に間に合わず積み残しになる",
+ "積み残しは次の便まで数日〜1週間待ちで、顧客への納期遅延が確定",
+ "出荷予定を早期登録し、AIが適切なタイミングでトラックを自動手配","A"],
+
+[4,"工場から港までのルート・所要時間の見積もりが不正確",
+ "渋滞・工事・天候を考慮せず楽観的な所要時間でスケジュールを組む",
+ "CYカット（搬入期限）直前に渋滞で間に合わなくなり、その便に乗り遅れる",
+ "船便乗り遅れ後の航空便切替で運賃が5〜10倍になるケースが多発",
+ "リアルタイム交通情報連動でCYカットに対して安全な出発時刻を自動計算","A"],
+
+[4,"コンテナの往復輸送（空コン回送）コストが二重にかかっている",
+ "工場にコンテナを持ち込んで荷物を積み、港まで輸送した後、空コンを回送している",
+ "工場がコンテナを取りに行く費用と回送費用が両方発生。近くに余った空コンがあっても情報がない",
+ "空コン回送コストは貿易実務コストの隠れた大きな負担",
+ "工場近くの空コンとマッチングして回送コストを削減","B"],
+
+[4,"温度管理が必要な貨物（冷蔵・冷凍）の内陸輸送で温度管理が属人的",
+ "冷蔵トラックの温度管理が運転手の確認頼りで、記録も紙のログのみ",
+ "内陸輸送中の温度逸脱が港着後に発覚し、すでに品質が損なわれている",
+ "温度逸脱発覚後のコールドチェーン貨物廃棄は1便で数百万円規模",
+ "IoTセンサーで内陸輸送中もリアルタイム温度監視・即時アラート","S"],
+
+// ===== ⑤コンテナ積み込み =====
+[5,"コンテナへの積み方が非効率で積載率が低い",
+ "荷物の積み方が作業員の経験頼りで、スペースを最大活用できていない",
+ "積載率が70〜80%にとどまり、本来1本で済む量を2本のコンテナに分けてしまう",
+ "コンテナ1本の海上運賃は数十万円。1本余分に使うとそのまま損失",
+ "3D積載シミュレーションAIで最適な積み方を事前に指示。積載率を最大化","A"],
+
+[5,"重量の偏りで輸送中にコンテナ内で荷崩れが起きる",
+ "重い荷物を片側に集めて積んだり、重心が高すぎる積み方をしてしまう",
+ "輸送中の揺れで荷崩れが発生し、商品が破損。扉を開けた瞬間に荷物が崩れ落ちる事故も",
+ "荷崩れによる商品破損は保険請求・賠償・顧客クレームの主要原因",
+ "重量配分シミュレーションで荷崩れしない積み方を事前にガイド","A"],
+
+[5,"バンニング（積み込み）作業員の手配が難しく作業品質にばらつき",
+ "専門の積み込み作業員の確保が難しく、経験の浅い作業員が担当することがある",
+ "経験不足による積み方ミス・商品の傷つけ・作業の遅れが発生",
+ "バンニングミスによる貨物破損クレームは積み込み時の責任問題に発展",
+ "オンデマンドで熟練バンニング作業員をマッチング。品質を担保","S"],
+
+// ===== ⑥CY搬入・港湾手続き =====
+[6,"CYカット（搬入期限）が直前でスケジュールに余裕がない",
+ "船のスケジュールの都合でCYカットが出荷決定から数日しかないことがある",
+ "準備・輸送・書類が全てCYカットに間に合わないといけないプレッシャーがある",
+ "CYカット直前に書類ミスや輸送遅延が重なると詰みの状態になる",
+ "CYカットを起点とした逆算スケジュールをAIが自動生成し、全工程に余裕を持たせる","A"],
+
+[6,"ターミナルへの搬入予約の方法が複雑で、ターミナルごとに手順が異なる",
+ "コンテナターミナルは会社・ターミナルごとに予約方法が違い、担当者が個別に覚える必要がある",
+ "予約を忘れたり手順を間違えると搬入拒否。やり直しで時間を大きくロス",
+ "ターミナル搬入手順ミスによる当日の対応コストは非常に大きい",
+ "ワンストップポータルで全ターミナルの予約を統一方法で完結","B"],
+
+[6,"港湾混雑の情報が取れず、トラックが長時間待機している",
+ "ターミナルの混み具合が事前に分からないためトラックが着いてから数時間待機することがある",
+ "ドライバーの拘束時間が伸びて人件費増。トラックの回転効率も悪化",
+ "待機時間コストは大手輸出企業で年間数億円規模に達する",
+ "リアルタイム港湾混雑情報で最適な搬入時間を事前に選択","B"],
+
+[6,"搬入時の書類（ドックレシート等）不備で搬入を拒否される",
+ "ターミナル搬入に必要な書類が揃っていないと門前払いになる",
+ "書類不備は準備段階のミスだが、発覚がターミナルゲートという最悪のタイミング",
+ "ターミナル拒否後の再手配・再搬入コストはCYカット超過リスクと直結",
+ "搬入前に必要書類チェックリストをAIが自動確認。不備を事前に検知","A"],
+
+// ===== ⑦輸出通関 =====
+[7,"輸出申告書の記入ミスで税関に差し戻される",
+ "申告書の品名・数量・金額・コードなどを手作業で記入。ミスがあると差し戻しで再提出が必要",
+ "差し戻し→修正→再提出のサイクルで半日〜1日ロス。船便に間に合わないリスクがある",
+ "輸出申告の差し戻し率は中小企業の場合5〜10%とも言われる",
+ "申告データを自動生成し提出前にAIチェック。差し戻しゼロを目指す","S"],
+
+[7,"税関の実機検査（コンテナを開けて中身を確認される）に当たると大幅遅延",
+ "税関がランダムまたは疑義のある貨物を抜き取りで実際に検査することがある",
+ "開梱・検査・再梱包に数時間〜半日かかり、船積みスケジュールが狂う",
+ "検査対象になると積み残しリスクが一気に高まる",
+ "信頼性の高い実績を積んでAEO認定を取得し、検査率を下げる","B"],
+
+[7,"深夜・休日の緊急通関に対応できる通関士がいない",
+ "船のスケジュールや緊急出荷の都合で深夜・休日の通関対応が必要なことがある",
+ "対応できる通関士が見つからず、次の営業日まで通関が止まる",
+ "緊急時の1日遅延で航空便切替など大きなコスト増が発生",
+ "オンデマンドで24時間対応できる通関士をマッチング","S"],
+
+[7,"輸出規制品のチェックが通関直前になる",
+ "該非判定（規制品かどうかの確認）を通関の直前まで後回しにしてしまう",
+ "通関時に規制品と判明すると輸出不可。製造・梱包・輸送コストが全て無駄になる",
+ "輸出不可が通関直前に発覚した場合の損失は数百万円規模",
+ "受注時点でAIが規制チェックを自動実施。通関前のサプライズをゼロに","A"],
+
+// ===== ⑧本船積み込み =====
+[8,"直前のスケジュール変更で積み残し（ロールオーバー）が発生",
+ "船会社の都合でスケジュール変更・欠便が発生し、予約していたコンテナが積み残しになる",
+ "次の船まで数日〜1週間待ちになり、顧客への納期遅延が確定する",
+ "積み残しの連絡が当日夜に来ることも多く、対応が後手になりがち",
+ "積み残しリスクをAIが事前予測し、代替便・ルートを即提案","A"],
+
+[8,"本船の出港情報がリアルタイムで取れず、荷主が状況を把握できない",
+ "コンテナが実際に船に積まれたかどうかを確認する手段がなく、出港後に書類で確認するだけ",
+ "出港していないのに出港したと思い込んで、数日後に積み残しが判明するケースも",
+ "積み残しの発見が遅いほど次の手配が難しくなる",
+ "本船積み込み完了をリアルタイムでスマホ通知","A"],
+
+[8,"コンテナの船内での積み場所（スタッフィングポジション）で品質リスクが変わる",
+ "冷凍コンテナは冷凍電源の近く、精密機器は衝撃の少ない位置に積む必要があるが指定できない",
+ "不適切な積み場所で温度管理が失敗したり、衝撃で精密機器が破損するリスクがある",
+ "積み場所の問題は事後に発覚するため責任の所在が曖昧になりがち",
+ "貨物種類に応じた積み場所指定をシステム化し、品質リスクを可視化","B"],
+
+// ===== ⑨航海中 =====
+[9,"航海中の貨物の所在が完全にブラックボックスになっている",
+ "コンテナが船に積まれてから目的港に着くまでの数週間、貨物の状態が全く分からない",
+ "顧客から「今どこにありますか？」と聞かれても「航海中です」以上の情報を提供できない",
+ "所在不明への問い合わせ対応コストが年間数百件規模で発生",
+ "衛星通信×IoTで航海中も位置・温度・傾斜をリアルタイム追跡","S"],
+
+[9,"悪天候・港湾混雑による遅延を事前に予測できない",
+ "台風・嵐・港湾ストライキなどで予定より1〜3週間遅れることがあるが、事前の情報がない",
+ "遅延が分かるのは船が遅れてから。顧客への説明が後手になり信頼を損なう",
+ "生産計画・販売計画への影響が遅延情報なしには対処できない",
+ "気象・港湾情報を統合したAIが遅延リスクを早期警告","A"],
+
+[9,"トランシップ（中継港での積み替え）時の貨物紛失・遅延リスク",
+ "目的港まで直行便がなく、中継港で別の船に積み替える必要がある場合がある",
+ "積み替えで別の船に乗せ損ねたり、コンテナの追跡情報が途切れることがある",
+ "トランシップが絡む場合の遅延確率は直行便の2〜3倍",
+ "トランシップ計画をAIが最適化し、積み替えリスクを最小化","A"],
+
+[9,"コンテナが船から落下する海難事故リスクへの備えがない",
+ "毎年世界で数千個のコンテナが悪天候により海中に落下している",
+ "落下したコンテナの貨物は全損。保険があっても請求・回収には数ヶ月かかる",
+ "コンテナ落下は年間世界で約3,000個と推計されている",
+ "積み付け計画の最適化と早期警戒システムで落下リスクを低減","B"],
+
+// ===== ⑩船積書類流通 =====
+[10,"船荷証券（B/L）の原本を郵便で送るため受け取りまで2〜5日かかる",
+ "B/Lの原本（紙）を持っていないと輸入国で荷物を引き取れないため、郵便で送る必要がある",
+ "原本が届くまで荷物は港に止まり、1日単位で保管料が発生",
+ "B/L郵送中に紛失すると再発行手続きに数週間かかる大問題になる",
+ "電子船荷証券（eBL）でメール送信→即日引き取り可能に","A"],
+
+[10,"B/Lの内容にミス（Discrepancy）があり信用状決済が差し戻される",
+ "B/Lの品名・数量・船積日などが信用状（L/C）の条件と1文字でも違うと銀行が決済を拒否",
+ "差し戻し→修正→再提出で決済が数週間遅れ、資金繰りに直接影響",
+ "L/C取引のDiscrepancy発生率は世界平均で70%以上という統計もある",
+ "AIがB/Lと信用状の内容を自動照合し、提出前に不一致をゼロにする","A"],
+
+[10,"信用状（L/C）の条件が複雑すぎて書類を完璧に揃えられない",
+ "L/Cには細かい書類条件が列挙されており、すべての条件を満たした書類を揃えるのが難しい",
+ "条件が揃わないと銀行が代金を支払ってくれない。輸出したのに代金が入らない",
+ "L/C条件の不充足が原因の代金未回収事例が毎年発生",
+ "L/C条件を読み込んでAIが必要書類リストと条件チェックを自動化","A"],
+
+[10,"サレンダーB/L（原本不要の手続き）の仕組みを活用できていない",
+ "目的地まで短距離の場合、荷物の方が書類より先に着くためB/L原本が間に合わない",
+ "B/L原本待ちで荷物が港に数日止まるが、サレンダーB/Lにすれば回避できることを知らない",
+ "書類待ちの保管料が蓄積していくが、知識があれば防げた損失",
+ "輸送ルート・日数に応じてサレンダーB/LとオリジナルB/Lを自動判定して推奨","B"],
+
+// ===== ⑪入港・荷下ろし =====
+[11,"輸入前の事前届出（AFR等）の提出漏れで荷物が止まる",
+ "多くの国で船が到着する前に貨物情報を税関に報告する義務があるが、期限を忘れることがある",
+ "提出漏れや遅れがあると荷物が港湾内で隔離される",
+ "AFR違反の罰金は1件数万〜数十万円。届出そのものも複雑",
+ "出港情報を取得した時点でAFRを自動生成・提出","A"],
+
+[11,"本船到着後のコンテナの所在（ヤード内位置）が分からない",
+ "コンテナターミナルの構内でコンテナがどの列・何段目に置かれているか追跡できない",
+ "引き取りに行ってもコンテナが見つからず、ターミナル担当者を呼んで探す時間が発生",
+ "ターミナル内でのコンテナ探しに1〜2時間かかることも珍しくない",
+ "ターミナル内コンテナ位置情報とリアルタイム連携し、引き取り前に場所を特定","B"],
+
+[11,"輸入港での荷下ろし混雑で想定外の遅延が発生する",
+ "船の集中入港や港湾労働者のストライキで荷下ろしが数日〜1週間遅れることがある",
+ "荷下ろし遅延を事前に察知できないため、製造計画・販売計画への影響が後手になる",
+ "輸入港の遅延情報は現地フォワーダーからのメールが主な情報源で遅い",
+ "世界主要港湾の混雑情報をAIがリアルタイム収集し、着港前に遅延リスクを警告","A"],
+
+// ===== ⑫輸入通関 =====
+[12,"輸入申告書の書類不備で通関が遅れる",
+ "インボイス・パッキングリスト・B/Lなどの内容に不一致があると税関に差し戻される",
+ "差し戻し→修正→再申告のサイクルで1〜3日ロス。その間は保管料が毎日発生",
+ "輸入通関の差し戻しは1件あたり平均10〜30万円のコスト増",
+ "AI書類チェックが差し戻しゼロを実現。保管料発生を防ぐ","S"],
+
+[12,"関税の正しい計算ができず、過払いまたは追徴のリスクがある",
+ "関税率の計算にはHSコード・原産地・FTA適用可否など複数要素が絡み、複雑",
+ "過払いは返金請求が困難。過少申告は税関調査→追徴金の対象になる",
+ "FTA活用漏れによる関税過払いは中堅輸入企業で年間数百万円に達することも",
+ "HSコードAI＋FTA自動判定で正確な関税額を計算し、過払い・追徴ゼロ","A"],
+
+[12,"輸入禁止品・規制品の確認が不十分でリスクがある",
+ "輸入しようとしている品目が現地規制に引っかかるかどうか、調べなければ分からない",
+ "規制品を輸入しようとすると全量没収・罰金の対象になる",
+ "特に食品・化粧品・電気製品は規制が細かく、確認漏れが頻発",
+ "品目・仕向け国を入力するだけで輸入規制を自動チェック","A"],
+
+[12,"食品・動植物の検疫に予想外の時間がかかる",
+ "食品・動植物を含む貨物は農林水産省・厚労省の検疫が別途必要で、日数が読めない",
+ "検疫中は荷物が動かせない。製造・販売計画に影響する遅延が発生",
+ "検疫の事前申請をしていない場合は待ち時間が数日〜1週間になることも",
+ "検疫申請を事前に自動化し、到着と同時に検疫が始まる体制を整備","B"],
+
+[12,"AEO認定（税関のお墨付き）がなく通関に時間がかかる",
+ "税関が信頼する認定輸入者（AEO）の資格がないと、書類審査が丁寧に行われ時間がかかる",
+ "AEO認定があれば通関が最短当日完了するが、認定取得プロセスが複雑",
+ "通関スピードの差はリードタイム競争力に直結する",
+ "AEO認定取得をサポートし、通関を最速化","B"],
+
+// ===== ⑬コンテナ引き取り =====
+[13,"D/O（貨物引渡指図書）の手配が遅れて引き取りができない",
+ "コンテナを引き取るにはD/Oという書類が必要だが、手配を忘れると当日引き取りができない",
+ "D/O手配忘れで当日引き取りを断念し、翌日以降に持ち越す事態が発生",
+ "コンテナ1本のデマレージ（延滞料）は1日1〜5万円",
+ "通関完了と同時にD/Oを自動手配するシステム連携","A"],
+
+[13,"フリータイム（無料保管期間）を過ぎてデマレージが発生する",
+ "ターミナルでコンテナを引き取らずにいると、無料期間（通常3〜5日）を超えた分から延滞料が発生",
+ "通関の遅れや引き取り先の都合でフリータイムを超えるケースが多い",
+ "デマレージは気づかないうちに積み重なり、後で多額の請求書が来て驚く",
+ "フリータイム残日数をカウントダウン表示し、期限前にアラート","A"],
+
+[13,"ターミナルの搬出予約が取れず引き取りが遅延する",
+ "コンテナ引き取りにはターミナルの搬出予約が必要だが、混雑時は希望日時に取れない",
+ "予約が取れないまま時間が経過し、フリータイムが過ぎてデマレージが発生",
+ "搬出予約システムはターミナルごとに異なり、担当者が個別に対応している",
+ "搬出予約を通関進捗に連動して自動取得","B"],
+
+// ===== ⑭港→倉庫輸送 =====
+[14,"コンテナの内陸輸送（ドレージ）コストが不透明で請求後に驚く",
+ "港から倉庫・工場までのコンテナ輸送費が事前見積りと実費で乖離していることが多い",
+ "燃油サーチャージ・待機料・深夜料金など付帯費用が後から積み上がる",
+ "ドレージコストは輸入総コストの5〜15%を占めるが、事前把握が困難",
+ "ドレージ全コストを事前に透明化。追加請求ゼロのサービス","A"],
+
+[14,"配送先の時間指定に対応できるトラックが見つからない",
+ "倉庫・工場の受入時間が限られており、その時間帯に対応できるドライバーが必要",
+ "時間指定に対応できず「いつになるか分からない」配送になり、受入体制の準備ができない",
+ "配送時間のミスマッチで倉庫の受入業務が止まるケースが発生",
+ "時間帯指定対応のドライバーをオンデマンドでマッチング","B"],
+
+[14,"コンテナ返却期限（デバン後の空コン返却）を忘れて延滞料が発生",
+ "荷物を出した後の空コンテナを決められた期限までに返却しないと延滞料が発生",
+ "デバンニング（荷物の取り出し）が終わっても返却を後回しにして期限超過",
+ "空コン延滞料は気づかないうちに積み重なる隠れコスト",
+ "空コン返却期限のカウントダウンアラートで延滞ゼロ","A"],
+
+// ===== ⑮荷下ろし・検品 =====
+[15,"コンテナから荷物を取り出す時の破損を見落としてしまう",
+ "デバンニング時に外箱に問題がなくても中身が破損していることがある",
+ "発見が遅れると「いつ破損したのか」が不明になり、保険・クレームが使えない",
+ "破損発見のタイミングが遅いほど責任の所在が曖昧になり、補償を受けにくくなる",
+ "デバン時の開梱・検品をカメラで動画記録し、破損発生タイミングを証明","S"],
+
+[15,"検品の基準が担当者によってバラバラで、見落としが発生する",
+ "検品チェックリストがなく、担当者の経験と目視に頼っている",
+ "担当者によって合格・不合格の判断が変わり、品質基準が不安定",
+ "基準の揺れが原因でクレームが後から発生するケースが多い",
+ "AIカメラによる自動外観検査で基準を統一・検品を高速化","S"],
+
+[15,"クレーム時に証拠（写真・動画）を適切に残せていない",
+ "破損・数量不足などを発見しても写真の撮り方が不十分で、クレーム申請が通らない",
+ "保険会社・輸出者への請求に必要な証拠が揃わず、損失を自社で吸収することになる",
+ "証拠不十分による保険請求却下で数十万〜数百万円の損失を泣き寝入り",
+ "検品アプリが証拠として認められる形式での写真・動画撮影をガイド","S"],
+
+[15,"数量の過不足（船積数量との差異）の確認が手作業で時間がかかる",
+ "コンテナから取り出した荷物を1個ずつ数えてインボイスと照合する作業が必要",
+ "大量の小口商品は数量確認だけで半日〜1日かかることも",
+ "数え間違いが発覚するのがさらに後で、そのタイミングではクレームが困難",
+ "バーコードスキャン×AIカメラで数量を自動カウント・照合","S"],
+
+// ===== ⑯荷受け・入庫確認 =====
+[16,"検品結果の記録・報告が紙・メールで管理されず、情報が散在",
+ "検品結果を紙に記録してから後でExcelに転記。問題があってもどこに報告したか追えない",
+ "過去のクレーム事例が蓄積されず、同じ問題が繰り返し発生",
+ "問題情報の共有遅れで、同じサプライヤーから不良品を繰り返し受け取るケースも",
+ "検品結果をデジタルで即時記録・共有し、問題パターンをAIが分析","S"],
+
+[16,"不良品が発生した時の処理フロー（返品・廃棄・再加工）が決まっていない",
+ "不良品が出るたびに都度判断・交渉が必要で、対応が属人的かつ時間がかかる",
+ "不良品の処理遅延が生産計画・販売計画に波及し、コストが膨らむ",
+ "不良品処理のルール不在が組織全体の効率を下げている",
+ "不良品フロー管理システムで処理手順を標準化・自動化","A"],
+
+[16,"荷受け後の在庫情報がリアルタイムで購買・販売部門に共有されない",
+ "荷物が届いてから在庫システムに登録するまでに時間差があり、その間は「在庫あり」か不明",
+ "在庫登録の遅れが原因で過剰発注や欠品が発生する",
+ "在庫情報の遅延が販売機会の損失につながっている",
+ "入庫と同時に在庫システムを自動更新。全社でリアルタイム共有","S"],
+
+// ===== ⑰決済・費用精算 =====
+[17,"輸送に関わる全費用（運賃・関税・付帯費用）の総額が把握できていない",
+ "輸入した商品の本当のコストが分かるのは全ての請求書が揃う2〜3ヶ月後",
+ "実際のコストが分からないと正確な利益計算ができず、採算の判断を誤る",
+ "コスト把握の遅れで赤字取引を続けてしまうリスクがある",
+ "全費用をリアルタイムで自動集計し、着地原価をいつでも即把握","S"],
+
+[17,"フォワーダー・船会社からの請求書の内容確認に時間がかかる",
+ "運賃の他にサーチャージ・付帯費用が多数あり、請求書が複雑で確認が難しい",
+ "確認が不十分だと二重請求・計算ミスを見落とす。チェックを省略するとリスクが残る",
+ "フォワーダーへの費用確認のやり取りに毎月多くの時間が消えている",
+ "AIが請求書を自動解析。前回比・相場比でおかしな請求を即フラグアップ","A"],
+
+[17,"輸出代金の回収が遅延し、資金繰りを圧迫している",
+ "海外バイヤーからの入金が予定日を過ぎても来ない。督促しにくく、長期化する",
+ "代金未回収が長引くと運転資金が不足し、次の仕入れができなくなる",
+ "海外取引での代金回収失敗は国際貿易リスクのトップ3に常にランクイン",
+ "入金予定日の自動管理とAI督促で回収率を向上。ファクタリングと連携","A"],
+
+[17,"デマレージ・ディテンション（延滞料）が気づかないうちに積み重なっている",
+ "コンテナの保管・返却の期限を超過した分の延滞料が、請求書が来て初めて分かる",
+ "小さな延滞が積み重なり、月単位で見ると数十万〜数百万円になっていたという事例が多い",
+ "延滞料は事前管理すれば完全に防げる「もったいない」コスト",
+ "フリータイム・返却期限を一元管理し、期限前の自動アラートで延滞ゼロ","A"],
+
+[17,"複数の取引の運賃・費用データが散在しコスト分析ができない",
+ "取引ごとに担当者が個別に管理しているため、全社的な物流コストの傾向が分からない",
+ "コスト削減のためにどこに手を打てばいいか、データがなくて判断できない",
+ "「なんとなく高い気がする」で終わり、具体的な改善策を打てない",
+ "全取引の費用データを自動集計し、AI分析でコスト削減ポイントを特定","S"],
+];
+
+const STR_CSS={S:"str-s",A:"str-a",B:"str-b"};
+const STR_LABEL={S:"◎ S 直結",A:"○ A 活用可",B:"△ B 参入可"};
+
+function buildContent(){
+  const container=document.getElementById('mainContainer');
+  const stageMap={};
+  DATA.forEach(item=>{
+    const sid=item[0];
+    if(!stageMap[sid])stageMap[sid]=[];
+    stageMap[sid].push(item);
+  });
+
+  STAGES.forEach(stage=>{
+    const items=stageMap[stage.id]||[];
+    const section=document.createElement('div');
+    section.id=`stage-${stage.id}`;
+    section.dataset.stage=stage.id;
+
+    const hdr=document.createElement('div');
+    hdr.className='stage-header';
+    hdr.style.background=stage.color;
+    hdr.innerHTML=`<div class="stage-icon">${stage.icon}</div><div class="stage-info"><div class="stage-name">${stage.label}</div><div class="stage-sub">${stage.sub}</div></div><div class="stage-cnt">${items.length}件</div>`;
+    section.appendChild(hdr);
+
+    const grid=document.createElement('div');
+    grid.className='cards-grid';
+    items.forEach(([sid,title,asis,gap,impact,tobe,str])=>{
+      const card=document.createElement('div');
+      card.className='card';
+      card.dataset.stage=sid;
+      card.dataset.str=str;
+      card.dataset.kw=(sid+title+asis+gap+tobe).toLowerCase();
+      card.style.borderLeftColor=stage.color;
+      card.innerHTML=`
+        <div class="card-top">
+          <div class="card-title">${title}</div>
+          <span class="str-badge ${STR_CSS[str]}">${STR_LABEL[str]}</span>
+        </div>
+        <div class="card-asis">${asis}</div>
+        <div class="card-gap">
+          <div class="card-gap-label">▶ なぜ困るか</div>
+          <div class="card-gap-text">${gap}</div>
+          <div class="card-impact">📌 ${impact}</div>
+        </div>
+        <div class="card-tobe">
+          <div class="card-tobe-label">→ 解決後の姿</div>
+          <div class="card-tobe-text">${tobe}</div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    section.appendChild(grid);
+    container.appendChild(section);
+  });
+  updateCount();
+  updateFlowCounts();
+}
+
+function updateFlowCounts(){
+  STAGES.forEach(stage=>{
+    const cnt=DATA.filter(d=>d[0]===stage.id).length;
+    const el=document.getElementById(`cnt${stage.id}`);
+    if(el)el.textContent=cnt+'件';
+  });
+}
+
+function applyFilter(){
+  const stage=document.getElementById('stageFilter').value;
+  const str=document.getElementById('strFilter').value;
+  const kw=document.getElementById('kwFilter').value.toLowerCase();
+  let vis=0;
+  document.querySelectorAll('.card').forEach(card=>{
+    const show=
+      (!stage||card.dataset.stage===stage)&&
+      (!str||card.dataset.str===str)&&
+      (!kw||card.dataset.kw.includes(kw));
+    card.classList.toggle('hidden',!show);
+    if(show)vis++;
+  });
+  // ステージヘッダーの表示制御
+  STAGES.forEach(stage=>{
+    const section=document.getElementById(`stage-${stage.id}`);
+    if(section){
+      const visibleCards=section.querySelectorAll('.card:not(.hidden)').length;
+      section.classList.toggle('hidden',visibleCards===0);
+    }
+  });
+  document.getElementById('rowCount').textContent=vis;
+}
+
+function updateCount(){
+  document.getElementById('rowCount').textContent=DATA.length;
+}
+
+function jumpTo(id){
+  const el=document.getElementById(`stage-${id}`);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+buildContent();
+</script>
+</body>
+</html>
