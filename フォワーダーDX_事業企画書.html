@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>フォワーダーDX 事業企画書</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;background:#f0f4f8;color:#1e293b;font-size:13px;line-height:1.6}
+header{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;padding:36px 40px}
+header h1{font-size:23px;font-weight:700;letter-spacing:.03em;line-height:1.3}
+header .sub{font-size:13px;opacity:.72;margin-top:8px;line-height:1.55}
+header .date{font-size:10px;opacity:.45;margin-top:4px;letter-spacing:.06em}
+.nav{display:flex;gap:5px;flex-wrap:wrap;margin-top:16px}
+.nav a{color:#93c5fd;font-size:10px;background:rgba(255,255,255,.1);padding:3px 9px;border-radius:20px;text-decoration:none;white-space:nowrap}
+.nav a:hover{background:rgba(255,255,255,.22)}
+.container{max-width:1100px;margin:0 auto;padding:28px 20px}
+.section{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);padding:24px 28px;margin-bottom:24px}
+.section-title{font-size:15px;font-weight:700;color:#1e3a8a;border-left:4px solid #1e3a8a;padding-left:12px;margin-bottom:16px}
+.section-num{font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.1em;margin-bottom:4px;text-transform:uppercase}
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;color:#fff;margin:1px}
+.verdict{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #16a34a;border-radius:10px;padding:14px 18px;margin-top:14px}
+.verdict h4{color:#15803d;font-size:12px;font-weight:700;margin-bottom:5px}
+.verdict p{font-size:11px;color:#166534;line-height:1.6}
+.warn-box{background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:11px;color:#713f12}
+.sep{height:1px;background:#e2e8f0;margin:20px 0}
+
+/* ── S1 CATCHPHRASES ── */
+.catch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.catch-card{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:12px;padding:22px 20px}
+.catch-num{font-size:9px;font-weight:700;opacity:.45;margin-bottom:8px;letter-spacing:.12em;text-transform:uppercase}
+.catch-title{font-size:16px;font-weight:700;line-height:1.4;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.15)}
+.catch-desc{font-size:11px;opacity:.82;line-height:1.65}
+
+/* ── S2 TRIANGLE ── */
+.triangle-wrap{display:flex;justify-content:center;padding:8px 0}
+
+/* ── S3 LEAN CANVAS ── */
+.lean-canvas{display:grid;grid-template-columns:1fr 1fr 1.1fr 1fr 1fr;grid-template-rows:1fr 1fr auto;border:2px solid #cbd5e1;border-radius:10px;overflow:hidden}
+.lc{padding:13px 14px;border:1px solid #e2e8f0}
+.lc-label{font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;color:#64748b}
+.lc ul{list-style:none;padding:0}
+.lc li{font-size:11px;line-height:1.55;color:#334155;padding:1px 0 1px 13px;position:relative;border-bottom:1px dotted #e2e8f0}
+.lc li:last-child{border-bottom:none}
+.lc li::before{content:'▸';position:absolute;left:0;color:#94a3b8;font-size:9px;top:3px}
+.lc-prob{grid-column:1;grid-row:1;background:#fff7ed}
+.lc-alt{grid-column:1;grid-row:2;background:#fff7ed}
+.lc-sol{grid-column:2;grid-row:1;background:#eff6ff}
+.lc-met{grid-column:2;grid-row:2;background:#eff6ff}
+.lc-uvp{grid-column:3;grid-row:1/3;background:linear-gradient(160deg,#1e3a8a,#3b82f6);color:#fff;display:flex;flex-direction:column;justify-content:center}
+.lc-uvp .lc-label{color:rgba(255,255,255,.55)}
+.lc-uvp li{color:rgba(255,255,255,.9);border-bottom-color:rgba(255,255,255,.15)}
+.lc-uvp li::before{color:rgba(255,255,255,.4)}
+.lc-adv{grid-column:4;grid-row:1;background:#f0fdf4}
+.lc-ch{grid-column:4;grid-row:2;background:#f0fdf4}
+.lc-seg{grid-column:5;grid-row:1/3;background:#f5f3ff}
+.lc-cost{grid-column:1/4;grid-row:3;background:#fef3c7}
+.lc-rev{grid-column:4/6;grid-row:3;background:#dcfce7}
+
+/* ── S4/S8 PERSONA ── */
+.persona-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.persona-card{border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.persona-head{padding:15px 18px;display:flex;align-items:center;gap:13px;color:#fff}
+.persona-head.blue{background:linear-gradient(135deg,#1e3a8a,#3b82f6)}
+.persona-head.teal{background:linear-gradient(135deg,#0f766e,#14b8a6)}
+.persona-head.amber{background:linear-gradient(135deg,#92400e,#d97706)}
+.persona-icon{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.persona-name{font-size:14px;font-weight:700}
+.persona-sub{font-size:10px;opacity:.8;margin-top:2px}
+.persona-body{padding:14px 18px;background:#f8fafc}
+.p-row{display:flex;gap:10px;margin-bottom:6px;font-size:11px;border-bottom:1px dotted #e2e8f0;padding-bottom:6px}
+.p-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.p-label{font-size:9px;font-weight:700;color:#64748b;min-width:72px;flex-shrink:0;padding-top:1px;text-transform:uppercase;letter-spacing:.04em}
+.p-val{color:#334155;line-height:1.5}
+
+/* ── S5 EMPATHY MAP ── */
+.empathy{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e2e8f0;border-radius:8px;overflow:hidden}
+.em{padding:13px 15px;background:#fff}
+.em h4{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}
+.em-think{grid-column:1/3;background:#eff6ff}
+.em-think h4{color:#1e40af}
+.em-see{background:#f0fdf4}
+.em-see h4{color:#15803d}
+.em-hear{background:#fffbeb}
+.em-hear h4{color:#b45309}
+.em-pain{background:#fff1f2}
+.em-pain h4{color:#dc2626}
+.em-gain{background:#f0fdf4}
+.em-gain h4{color:#16a34a}
+.em ul{list-style:none;padding:0}
+.em li{font-size:11px;color:#334155;padding:3px 0 3px 13px;position:relative;border-bottom:1px dotted #e2e8f0}
+.em li:last-child{border-bottom:none}
+.em li::before{content:'▸';position:absolute;left:0;color:#94a3b8;font-size:9px;top:4px}
+
+/* ── S6 CJM ── */
+.cjm-wrap{overflow-x:auto}
+.cjm{width:100%;border-collapse:collapse;min-width:860px}
+.cjm th{background:#0f172a;color:#fff;padding:8px 10px;font-size:10px;text-align:center;border-right:1px solid rgba(255,255,255,.15);white-space:nowrap}
+.cjm th.first{text-align:left;width:80px}
+.cjm td{padding:8px 10px;border:1px solid #e2e8f0;font-size:11px;vertical-align:top}
+.cjm .lc-cell{background:#1e3a8a;color:#fff;font-size:10px;font-weight:700;text-align:center;vertical-align:middle;white-space:nowrap}
+.cjm tr:nth-child(even) td:not(.lc-cell){background:#f8fafc}
+
+/* ── S7 TOUCHPOINT ── */
+.tp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tp-card{border-radius:8px;padding:14px 16px;border-left:4px solid}
+.tp-card h4{font-size:12px;font-weight:700;margin-bottom:8px}
+.tp-card ul{list-style:none;padding:0}
+.tp-card li{font-size:11px;padding:2px 0 2px 14px;position:relative;color:#334155}
+.tp-card li::before{content:'→';position:absolute;left:0;color:#94a3b8;font-size:10px}
+
+/* ── S9 AS-IS / TO-BE ── */
+.asis-tobe{display:grid;grid-template-columns:1fr 1fr;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0}
+.col-asis{background:#fff7ed}
+.col-tobe{background:#eff6ff}
+.col-header{padding:10px 16px;font-size:12px;font-weight:700;color:#fff;text-align:center}
+.col-header.a{background:#e87722}
+.col-header.b{background:#1a5faa}
+.at-item{padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.06);font-size:12px}
+.at-item:last-child{border-bottom:none}
+.at-item strong{display:block;font-size:9px;font-weight:700;color:#94a3b8;letter-spacing:.05em;margin-bottom:2px;text-transform:uppercase}
+
+/* ── S10 LOGIC TREE ── */
+.z2b-bar{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;background:linear-gradient(135deg,#1e293b,#1e3a8a);border-radius:10px;padding:16px 20px;color:#fff;margin-bottom:18px}
+.z2b-box{padding:10px 14px;border-radius:8px;font-size:11px}
+.z2b-z{background:rgba(239,68,68,.25);border:1px solid rgba(239,68,68,.4)}
+.z2b-b{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.35)}
+.z2b-box h4{font-size:12px;font-weight:700;margin-bottom:4px}
+.z2b-arrow{text-align:center;font-size:26px;opacity:.7}
+.tree,.tree ul{list-style:none;padding-left:0}
+.tree ul{padding-left:24px;position:relative}
+.tree li{position:relative;padding:3px 0 3px 14px}
+.tree ul li::before{content:'';position:absolute;left:0;top:0;bottom:0;border-left:2px solid #c8d6e8}
+.tree ul li::after{content:'';position:absolute;left:0;top:13px;width:10px;border-top:2px solid #c8d6e8}
+.tree ul li:last-child::before{height:13px;bottom:auto}
+.node{display:inline-flex;align-items:center;padding:5px 10px;border-radius:5px;font-size:11px;font-weight:600;line-height:1.4;max-width:600px;flex-wrap:wrap;gap:4px}
+.n-root{background:#0f172a;color:#fff;font-size:12px;padding:7px 14px}
+.n-w1a{background:#1e3a8a;color:#fff}
+.n-w1b{background:#b45309;color:#fff}
+.n-w1c{background:#7c3aed;color:#fff}
+.n-w1d{background:#0f766e;color:#fff}
+.n-w1e{background:#dc2626;color:#fff}
+.n-w2{background:#e2e8f0;color:#334155}
+.n-leaf{background:#fef9c3;color:#713f12;border:1px solid #fde047}
+.n-leaf-l{background:#fee2e2;color:#7f1d1d;border:1px solid #fca5a5}
+
+/* ── S11 6W3H ── */
+.sixw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sixw-card{border-radius:8px;padding:13px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-top:3px solid}
+.sixw-w{font-size:20px;font-weight:800;line-height:1;margin-bottom:2px}
+.sixw-label{font-size:9px;font-weight:700;color:#94a3b8;letter-spacing:.07em;margin-bottom:7px;text-transform:uppercase}
+.sixw-content{font-size:12px;color:#334155;line-height:1.55}
+
+/* ── S12 PRODUCT IDEA ── */
+.prod-wrap{border:2px solid #1e3a8a;border-radius:10px;overflow:hidden}
+.prod-main{background:#eff6ff;padding:18px 20px}
+.prod-main h3{font-size:15px;font-weight:700;color:#1e40af;margin-bottom:8px}
+.prod-main p{font-size:12px;color:#334155;line-height:1.6}
+.prod-benefit{background:#dcfce7;padding:13px 20px;border-top:1px solid #bfdbfe;border-bottom:1px solid #86efac}
+.prod-benefit h4{font-size:10px;font-weight:800;color:#15803d;margin-bottom:5px;letter-spacing:.07em;text-transform:uppercase}
+.prod-benefit p{font-size:12px;color:#166534;line-height:1.55}
+.prod-subs{display:grid;grid-template-columns:repeat(3,1fr)}
+.prod-sub{padding:14px 18px;border-right:1px solid #e2e8f0;background:#f8fafc}
+.prod-sub:last-child{border-right:none}
+.prod-sub .phase-tag{display:inline-block;font-size:8px;font-weight:700;padding:2px 7px;border-radius:4px;color:#fff;margin-bottom:7px;letter-spacing:.05em}
+.prod-sub h4{font-size:12px;font-weight:700;color:#1e293b;margin-bottom:6px}
+.prod-sub p{font-size:11px;color:#475569;line-height:1.55}
+
+/* ── S13 PLATFORM DIAGRAM ── */
+.platform-wrap{display:flex;justify-content:center;padding:10px 0;overflow-x:auto}
+
+/* ── S14 HISTORICAL ── */
+.hist-wrap{overflow-x:auto}
+.hist{width:100%;border-collapse:collapse;min-width:950px}
+.hist th{background:#0f172a;color:#fff;padding:8px 10px;font-size:10px;text-align:left;border-right:1px solid rgba(255,255,255,.12);white-space:nowrap}
+.hist td{padding:9px 10px;border-bottom:1px solid #e2e8f0;border-right:1px solid #e8edf4;font-size:11px;vertical-align:top}
+.hist tr:nth-child(even) td{background:#f8fafc}
+.era-cell{font-weight:700;font-size:11px;background:#f1f5f9!important;white-space:nowrap;color:#0f172a}
+.buzz{display:inline-block;background:#1e3a8a;color:#fff;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;margin:2px 2px 2px 0;white-space:nowrap}
+.buzz.hot{background:#f59e0b;color:#1e293b}
+.buzz.dead{background:#9ca3af}
+.buzz.now{background:#16a34a}
+.stag{display:inline-block;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600;margin:1px;white-space:nowrap}
+.stag.fail{background:#fff1f2;border-color:#fecaca;color:#dc2626}
+.stag.win{background:#f0fdf4;border-color:#86efac;color:#16a34a}
+.pattern-note{background:#faf5ff;border-left:3px solid #7c3aed;padding:10px 14px;font-size:11px;color:#4c1d95;margin-top:12px;border-radius:0 6px 6px 0;line-height:1.6}
+
+/* ── S15 POSITIONING MAPS ── */
+.maps-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.map-card{background:#f8fafc;border-radius:8px;padding:13px;border:1px solid #e2e8f0}
+.map-card h4{font-size:11px;font-weight:700;color:#1e3a8a;margin-bottom:8px;text-align:center}
+canvas.posmap{border-radius:4px;border:1px solid #e2e8f0;background:#fff;display:block;width:100%}
+.map-legend{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:3px;font-size:9px;color:#475569}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ── S16 STRATEGY ── */
+.strat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.strat-step{border-radius:10px;padding:16px 18px;color:#fff;position:relative;overflow:hidden}
+.strat-step .step-num{font-size:48px;font-weight:800;opacity:.08;position:absolute;bottom:-8px;right:10px;line-height:1}
+.strat-step .phase{font-size:9px;font-weight:700;opacity:.6;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.strat-step h4{font-size:13px;font-weight:700;margin-bottom:8px;line-height:1.3}
+.strat-step p{font-size:11px;opacity:.88;line-height:1.55}
+.strat-arrow{display:flex;align-items:center;justify-content:center;font-size:22px;color:#94a3b8;padding:10px 0}
+
+/* ── S17 COMPETITIVE ── */
+.adv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.adv-card{border-radius:10px;padding:18px;border-left:5px solid;background:#f8fafc}
+.adv-card h4{font-size:13px;font-weight:700;margin-bottom:10px}
+.adv-card ul{list-style:none;padding:0}
+.adv-card li{font-size:11px;padding:4px 0 4px 16px;position:relative;color:#334155;border-bottom:1px dotted #e2e8f0}
+.adv-card li:last-child{border-bottom:none}
+.adv-card li::before{content:'✓';position:absolute;left:0;color:#16a34a;font-weight:700}
+.vs-table{width:100%;border-collapse:collapse;margin-top:16px}
+.vs-table th{background:#1e3a8a;color:#fff;padding:8px 12px;font-size:11px;text-align:left}
+.vs-table td{padding:9px 12px;border-bottom:1px solid #e2e8f0;font-size:11px;vertical-align:top}
+.vs-table tr:nth-child(even){background:#f8fafc}
+.vs-win{color:#16a34a;font-weight:700}
+.vs-lose{color:#ef4444}
+.vs-draw{color:#f59e0b;font-weight:600}
+
+/* ── SUPPLEMENT ── */
+.hypo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hypo-card{border-radius:8px;padding:14px;border:1px solid #e2e8f0;background:#f8fafc}
+.hypo-num{font-size:20px;font-weight:800;color:#e2e8f0;line-height:1;margin-bottom:6px}
+.hypo-q{font-size:12px;font-weight:700;color:#1e293b;margin-bottom:6px;line-height:1.4}
+.hypo-why{font-size:11px;color:#64748b;line-height:1.5}
+.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.action-card{border-radius:8px;padding:14px;background:#fff;border-left:3px solid}
+.action-card .wk{font-size:9px;font-weight:700;letter-spacing:.07em;color:#94a3b8;text-transform:uppercase;margin-bottom:5px}
+.action-card h4{font-size:12px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.action-card p{font-size:11px;color:#475569;line-height:1.5}
+
+footer{text-align:center;padding:24px;color:#94a3b8;font-size:11px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>フォワーダーDX支援 事業企画書</h1>
+  <div class="sub">業務効率化ツールとして入り込み、データを蓄積し、デジタルフォワーダーとして業界標準を取る</div>
+  <div class="date">2026.05.20 ─ CONFIDENTIAL</div>
+  <div class="nav">
+    <a href="#s1">①キャッチコピー</a>
+    <a href="#s2">②三角形</a>
+    <a href="#s3">③リーンキャンバス</a>
+    <a href="#s4">④ターゲット</a>
+    <a href="#s5">⑤共感マップ</a>
+    <a href="#s6">⑥ジャーニーマップ</a>
+    <a href="#s7">⑦顧客接点</a>
+    <a href="#s8">⑧プロバイダー</a>
+    <a href="#s9">⑨As-Is/To-Be</a>
+    <a href="#s10">⑩ロジックツリー</a>
+    <a href="#s11">⑪6W3H</a>
+    <a href="#s12">⑫プロダクト</a>
+    <a href="#s13">⑬関係図</a>
+    <a href="#s14">⑭ヒストリカル</a>
+    <a href="#s15">⑮ポジショニング</a>
+    <a href="#s16">⑯戦略シナリオ</a>
+    <a href="#s17">⑰競合優位性</a>
+    <a href="#s18">⑱補足</a>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ═══ S1: 3つのキャッチフレーズ ═══ -->
+<div class="section" id="s1">
+  <div class="section-num">SECTION 1</div>
+  <div class="section-title">3つのキャッチフレーズ ─ この事業を一言で表す</div>
+  <div class="catch-grid">
+    <div class="catch-card">
+      <div class="catch-num">CATCH 01</div>
+      <div class="catch-title">「現場を変えずに、データだけを繋ぐ」</div>
+      <div class="catch-desc">フォワーダーの現場フローはそのまま。書類も電話もFAXもそのままでいい。ただし、その情報だけが自動的に全関係者へ伝わる。「変えろ」と言わないから、現場の抵抗がゼロになる。</div>
+    </div>
+    <div class="catch-card">
+      <div class="catch-num">CATCH 02</div>
+      <div class="catch-title">「使えば使うほど、やめられなくなる」</div>
+      <div class="catch-desc">データが蓄積されるほど通関判断の精度が上がり、スイッチングコストが跳ね上がる。3年後には「このシステムなしで仕事ができない」状態を作る。気づいたときには業界インフラになっている。</div>
+    </div>
+    <div class="catch-card">
+      <div class="catch-num">CATCH 03</div>
+      <div class="catch-title">「最終的に、NACCSが合わせてくる」</div>
+      <div class="catch-desc">デファクトスタンダードを取れば、政府側のシステムが私たちのフォーマットに合わせざるを得なくなる。荷主・フォワーダー・税関のデータが全部集まった者が、物流インフラそのものになる。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S2: ターゲット × プロダクト × ベネフィット ═══ -->
+<div class="section" id="s2">
+  <div class="section-num">SECTION 2</div>
+  <div class="section-title">ターゲット × プロダクト × ユーザーベネフィット ─ 三角形で接続する</div>
+  <div class="triangle-wrap">
+    <svg width="700" height="320" viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+      <!-- Triangle lines -->
+      <line x1="350" y1="30" x2="100" y2="270" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="100" y1="270" x2="600" y2="270" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="600" y1="270" x2="350" y2="30" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arr)"/>
+      <!-- Top: Product -->
+      <rect x="220" y="8" width="260" height="50" rx="10" fill="#1e3a8a"/>
+      <text x="350" y="28" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="sans-serif">プロダクト</text>
+      <text x="350" y="44" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="11" font-family="sans-serif">荷主↔フォワーダー データ連携ハブ</text>
+      <!-- Bottom-left: Target -->
+      <rect x="10" y="248" width="195" height="58" rx="10" fill="#0f766e"/>
+      <text x="107" y="267" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="sans-serif">ターゲット</text>
+      <text x="107" y="282" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10" font-family="sans-serif">アクティビスト圧力下の</text>
+      <text x="107" y="296" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10" font-family="sans-serif">中堅〜大手フォワーダー</text>
+      <!-- Bottom-right: Benefit -->
+      <rect x="490" y="248" width="205" height="58" rx="10" fill="#b45309"/>
+      <text x="592" y="267" text-anchor="middle" fill="white" font-size="10" font-weight="700" font-family="sans-serif">ユーザーベネフィット</text>
+      <text x="592" y="282" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10" font-family="sans-serif">DX実績を株主へ証明しつつ</text>
+      <text x="592" y="296" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10" font-family="sans-serif">業務コスト削減・データ資産構築</text>
+      <!-- Edge labels -->
+      <text x="200" y="150" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">「痛みに合った」</text>
+      <text x="200" y="163" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">プロダクト設計</text>
+      <text x="500" y="150" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">「使うほど価値が</text>
+      <text x="500" y="163" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">上がる」設計</text>
+      <text x="350" y="255" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">「株主に見せられる数字」を提供</text>
+    </svg>
+  </div>
+  <div class="verdict">
+    <h4>三角形が成立する条件</h4>
+    <p>ターゲット（アクティビスト圧力）× プロダクト（データ連携ハブ）× ベネフィット（DX実績＋コスト削減）の3つが同時に成立するとき、導入の意思決定が「やらない理由がない」状態になる。株主からの圧力が期限と予算を生み出し、私たちのプロダクトがその回答になる。</p>
+  </div>
+</div>
+
+<!-- ═══ S3: リーンキャンバス ═══ -->
+<div class="section" id="s3">
+  <div class="section-num">SECTION 3</div>
+  <div class="section-title">リーンキャンバス</div>
+  <div class="lean-canvas">
+    <div class="lc lc-prob">
+      <div class="lc-label">Problem</div>
+      <ul>
+        <li>DX化したくても初期コストが払えない（薄利多売）</li>
+        <li>過去の導入失敗で現場に拒否反応がある</li>
+        <li>NACCSと繋がるには認定コストが数千万円</li>
+        <li>どこから手を付けるか分からない</li>
+        <li>株主にDX実績を見せる期限がある</li>
+      </ul>
+    </div>
+    <div class="lc lc-sol">
+      <div class="lc-label">Solution</div>
+      <ul>
+        <li>現場フローを変えずに情報だけ繋ぐデータ連携ハブ</li>
+        <li>既存システムにAPIで被せる形で導入</li>
+        <li>初期費用ゼロ・月額SaaS（削減分から回収）</li>
+        <li>NACCS認定は自社が保有して開放</li>
+      </ul>
+    </div>
+    <div class="lc lc-uvp">
+      <div class="lc-label">Unique Value Proposition</div>
+      <ul>
+        <li style="font-size:13px;font-weight:700;padding:6px 0 6px 13px;border-bottom-color:rgba(255,255,255,.2)">「現場を変えずにデータが繋がる。使うほどやめられなくなる」</li>
+        <li>書類・電話・FAXはそのままでいい</li>
+        <li>情報だけが自動的に全関係者へ伝わる</li>
+        <li>蓄積データが通関判断を支援し始める</li>
+        <li>株主への「DX実績」として即提示できる</li>
+      </ul>
+    </div>
+    <div class="lc lc-adv">
+      <div class="lc-label">Unfair Advantage</div>
+      <ul>
+        <li>Shippioより圧倒的な資金力</li>
+        <li>上場企業としての信頼性・与信</li>
+        <li>既存顧客ネットワーク（荷主経由でFWに入れる）</li>
+        <li>NACCS認定の先行取得</li>
+      </ul>
+    </div>
+    <div class="lc lc-seg">
+      <div class="lc-label">Customer Segments</div>
+      <ul>
+        <li style="font-weight:700;padding:6px 0 6px 13px;border-bottom:1px dotted #d8b4fe">アクティビスト圧力下の中堅フォワーダー（社員100〜800名）</li>
+        <li>株主総会・IR説明に追われている企業</li>
+        <li>IT部門がなく外部に頼りたい</li>
+        <li>取締役会で予算が下りやすい状況</li>
+        <li style="margin-top:8px;font-weight:600;border-top:1px solid #d8b4fe;padding-top:8px">中期：大手製造業の調達部（荷主）</li>
+        <li>長期：保険会社・銀行（データAPI）</li>
+      </ul>
+    </div>
+    <div class="lc lc-alt">
+      <div class="lc-label">Existing Alternatives</div>
+      <ul>
+        <li>CargoWise（高すぎる・英語）</li>
+        <li>Shippio（資金力・信頼性で劣る）</li>
+        <li>国内SIerの独自開発（現場に合わない）</li>
+        <li>Excel・FAXのまま放置</li>
+      </ul>
+    </div>
+    <div class="lc lc-met">
+      <div class="lc-label">Key Metrics</div>
+      <ul>
+        <li>接続フォワーダー社数</li>
+        <li>月次データ連携件数</li>
+        <li>通関処理時間削減率（%）</li>
+        <li>書類差し戻し件数削減率</li>
+        <li>顧客継続率（Churn Rate）</li>
+      </ul>
+    </div>
+    <div class="lc lc-ch">
+      <div class="lc-label">Channels</div>
+      <ul>
+        <li>既存顧客（荷主）経由でFWへ紹介</li>
+        <li>業界団体・展示会</li>
+        <li>アクティビストIR情報から逆引き</li>
+        <li>直販営業（DX補助金タイミング）</li>
+      </ul>
+    </div>
+    <div class="lc lc-cost">
+      <div class="lc-label">Cost Structure</div>
+      <ul style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+        <li>開発費（API連携基盤・データハブ構築）</li>
+        <li>NACCS認定取得費（数千万円・一時的）</li>
+        <li>営業費・カスタマーサクセス人件費</li>
+        <li>クラウドインフラ・セキュリティ（SOC/MDR）</li>
+      </ul>
+    </div>
+    <div class="lc lc-rev">
+      <div class="lc-label">Revenue Streams</div>
+      <ul>
+        <li>SaaS月額（30〜100万円/社）× フォワーダー</li>
+        <li>BPaaS（業務代行）高単価モデル</li>
+        <li>データAPI年額ライセンス（銀行・保険向け）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S4: ターゲットプロフィールシート ═══ -->
+<div class="section" id="s4">
+  <div class="section-num">SECTION 4</div>
+  <div class="section-title">ターゲットプロフィールシート（ペルソナ）</div>
+  <div class="persona-wrap">
+    <div class="persona-card">
+      <div class="persona-head blue">
+        <div class="persona-icon">👔</div>
+        <div>
+          <div class="persona-name">田中 誠（仮）</div>
+          <div class="persona-sub">中堅フォワーダー ／ 業務統括部長 ／ 48歳</div>
+        </div>
+      </div>
+      <div class="persona-body">
+        <div class="p-row"><div class="p-label">会社規模</div><div class="p-val">社員280名、年商75億円。東証スタンダード上場</div></div>
+        <div class="p-row"><div class="p-label">状況</div><div class="p-val">アクティビスト投資家（持株比率8%）から「DX推進の具体的ロードマップを次の株主総会で提示せよ」と要求されている</div></div>
+        <div class="p-row"><div class="p-label">日常業務</div><div class="p-val">Excel・FAXで書類確認、船社3社へ個別電話、顧客へのメール報告。部下15名が同じ作業を繰り返している</div></div>
+        <div class="p-row"><div class="p-label">使用ツール</div><div class="p-val">自社レガシーシステム（2003年導入）＋Excel＋FAX。NACCSは古いターミナルから直接入力</div></div>
+        <div class="p-row"><div class="p-label">本音の痛み</div><div class="p-val">「何かやらないといけないが2回失敗した。怖い。IT部門がいないのにどう導入するか」「コンサルには頼んだが提案書だけで終わった」</div></div>
+        <div class="p-row"><div class="p-label">真の動機</div><div class="p-val">次の株主総会（6ヶ月後）で「DXの具体的成果」を見せたい。取締役会から予算承認は出そうだが、失敗できない</div></div>
+        <div class="p-row"><div class="p-label">購買決裁</div><div class="p-val">月100万円以下は自身が決裁可。それ以上は取締役会稟議（株主対応案件なので通りやすい）</div></div>
+      </div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-head teal">
+        <div class="persona-icon">👩‍💼</div>
+        <div>
+          <div class="persona-name">佐藤 真由子（仮）</div>
+          <div class="persona-sub">大手フォワーダー ／ DX推進室長 ／ 42歳</div>
+        </div>
+      </div>
+      <div class="persona-body">
+        <div class="p-row"><div class="p-label">会社規模</div><div class="p-val">社員1,200名、年商350億円。東証プライム上場</div></div>
+        <div class="p-row"><div class="p-label">状況</div><div class="p-val">社長直轄のDX推進室を今期新設。「3年でペーパーレス50%」を目標に設定したが、現場から「使いものにならない」と反発が来ている</div></div>
+        <div class="p-row"><div class="p-label">日常業務</div><div class="p-val">ベンダー選定・現場調整・経営報告の板挟み。週3回の経営会議でDX進捗を報告しなければならない</div></div>
+        <div class="p-row"><div class="p-label">使用ツール</div><div class="p-val">一部電子化（EDI対応）だが通関部門は今もNACCS直接入力が主流。部門間のデータ連携がない</div></div>
+        <div class="p-row"><div class="p-label">本音の痛み</div><div class="p-val">「現場を変えることへの抵抗が大きい。フローを変えないでDXできると言ってくれるベンダーが一社もいない」</div></div>
+        <div class="p-row"><div class="p-label">真の動機</div><div class="p-val">「私のキャリアをかけてDX推進室を立ち上げた。成功事例が必要。小さくてもいいので確実に動くものが欲しい」</div></div>
+        <div class="p-row"><div class="p-label">購買決裁</div><div class="p-val">PoC予算500万円は自身で決裁可。正式導入は取締役会稟議必須</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S5: 共感マップ ═══ -->
+<div class="section" id="s5">
+  <div class="section-num">SECTION 5</div>
+  <div class="section-title">共感マップ ─ ターゲット（田中部長）の内側を可視化する</div>
+  <div class="empathy">
+    <div class="em em-think">
+      <h4>Think &amp; Feel ─ 心の中で何を考え、何を感じているか</h4>
+      <ul>
+        <li>「DXをやらないと株主に詰められる。でも過去に2回失敗した。また失敗したら今度こそクビになる」</li>
+        <li>「IT会社は業務を分かっていない。カッコいいシステムを作るだけで、現場は結局使わない」</li>
+        <li>「うちの部下はFAXとExcelしか使えない。何を導入しても現場が拒否する」</li>
+        <li>「株主総会まで6ヶ月しかない。何か動いている実績が必要。完成していなくてもいい」</li>
+      </ul>
+    </div>
+    <div class="em em-see">
+      <h4>See ─ 環境で何が見えているか</h4>
+      <ul>
+        <li>競合フォワーダーが「DX推進中」とプレスリリースを出している</li>
+        <li>部下が毎日同じ書類を手で打ち込んでいる</li>
+        <li>Shippioのような新興デジタルFWが荷主から問い合わせを受け始めている</li>
+        <li>コンサルのパワポが棚に積み上がっている（全部実行されていない）</li>
+        <li>株主からの質問レターが届いている</li>
+      </ul>
+    </div>
+    <div class="em em-hear">
+      <h4>Hear ─ 周囲から何を聞いているか</h4>
+      <ul>
+        <li>株主「デジタル化で競争力を示せ」「他社は動いている」</li>
+        <li>部下「現場のフローを変えられたら仕事が回らなくなる」</li>
+        <li>IT会社「まずシステム全体を刷新しましょう」（数億円の提案）</li>
+        <li>業界仲間「NACCSと繋ぐのは認定だけで数千万かかる」</li>
+        <li>社長「今年中に何か見せろ」</li>
+      </ul>
+    </div>
+    <div class="em em-pain">
+      <h4>Pain ─ 痛み・恐れ・フラストレーション</h4>
+      <ul>
+        <li>失敗リスク（過去2回の失敗がトラウマ）</li>
+        <li>多額の初期投資と不明な費用対効果</li>
+        <li>現場の抵抗と自分への批判</li>
+        <li>株主総会という動かせない締め切り</li>
+        <li>IT知識がなく判断できない不安</li>
+      </ul>
+    </div>
+    <div class="em em-gain">
+      <h4>Gain ─ 求めている成果・希望</h4>
+      <ul>
+        <li>株主に「見せられる数字」（処理時間XX%削減など）</li>
+        <li>現場が実際に使えるシステム</li>
+        <li>小さく始めて確実に成功できる体験</li>
+        <li>信頼できる企業との長期パートナーシップ</li>
+        <li>「俺がDXを成功させた」という実績</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S6: カスタマージャーニーマップ ═══ -->
+<div class="section" id="s6">
+  <div class="section-num">SECTION 6</div>
+  <div class="section-title">カスタマージャーニーマップ ─ 田中部長が顧客になるまでの全フェーズ</div>
+  <div class="cjm-wrap">
+    <table class="cjm">
+      <thead>
+        <tr>
+          <th class="first">項目</th>
+          <th>① 認知<br><span style="font-weight:400;opacity:.7">問題を認識する</span></th>
+          <th>② 調査<br><span style="font-weight:400;opacity:.7">解決策を探す</span></th>
+          <th>③ 検討<br><span style="font-weight:400;opacity:.7">比較・評価する</span></th>
+          <th>④ 決定<br><span style="font-weight:400;opacity:.7">導入を決める</span></th>
+          <th>⑤ 導入<br><span style="font-weight:400;opacity:.7">実際に使い始める</span></th>
+          <th>⑥ 拡大<br><span style="font-weight:400;opacity:.7">他部門・他社へ</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lc-cell">タッチポイント</td>
+          <td>株主レター受取<br>業界ニュース<br>社長からの指示</td>
+          <td>展示会・セミナー<br>業界団体勉強会<br>荷主からの紹介</td>
+          <td>提案書受取<br>デモ実施<br>競合比較</td>
+          <td>PoC合意<br>稟議書作成<br>取締役会承認</td>
+          <td>社内説明会<br>トレーニング<br>初期データ投入</td>
+          <td>成果報告会<br>株主IR資料<br>他部門展開提案</td>
+        </tr>
+        <tr>
+          <td class="lc-cell">思考・感情</td>
+          <td>「やばい、何かしないと」<br>😰 焦り</td>
+          <td>「何から始めるべきか」<br>😕 困惑・模索</td>
+          <td>「これは本当に使えるのか」<br>🤔 懐疑・期待</td>
+          <td>「失敗できない」<br>😤 決意・緊張</td>
+          <td>「本当に動くのか」<br>😬 不安・確認</td>
+          <td>「これは使える」<br>😊 達成感・信頼</td>
+        </tr>
+        <tr>
+          <td class="lc-cell">行動</td>
+          <td>DXについて調べ始める。コンサルに相談</td>
+          <td>ベンダーに問い合わせ。展示会参加</td>
+          <td>3〜5社からデモを受ける。現場担当者に確認</td>
+          <td>PoC契約締結。稟議通過。スケジュール確定</td>
+          <td>パイロット部門で試験運用。データ入力開始</td>
+          <td>成果数値を株主総会資料に掲載。全部門展開検討</td>
+        </tr>
+        <tr>
+          <td class="lc-cell">課題・摩擦</td>
+          <td>何が本当の問題か分からない</td>
+          <td>選択肢が多すぎて比較できない</td>
+          <td>「現場フローを変えなくていい」と信じてもらえない</td>
+          <td>社内稟議の複雑さ。現場の合意取り付け</td>
+          <td>現場の抵抗。初期の使い勝手に不満</td>
+          <td>数字の出し方を株主向けに整理するのが大変</td>
+        </tr>
+        <tr>
+          <td class="lc-cell">私たちの機会</td>
+          <td>「アクティビスト対応の実績事例」でリーチ</td>
+          <td>荷主経由での紹介。信頼ある企業として認知</td>
+          <td>「フロー不変」「小さく始める」を強調したデモ</td>
+          <td>PoC成功を保証する伴走支援の提供</td>
+          <td>カスタマーサクセスによる現場定着支援</td>
+          <td>株主向けレポート作成を一緒に行う。追加提案</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ S7: 顧客接点発見フレームワーク ═══ -->
+<div class="section" id="s7">
+  <div class="section-num">SECTION 7</div>
+  <div class="section-title">顧客接点発見フレームワーク ─ どこでターゲットに会うか</div>
+  <div class="tp-grid">
+    <div class="tp-card" style="border-color:#1e3a8a;background:#eff6ff">
+      <h4 style="color:#1e3a8a">① アクティビスト逆引きアプローチ</h4>
+      <ul>
+        <li>IR情報・有価証券報告書から「株主構成が変化しているフォワーダー」を特定</li>
+        <li>アクティビスト投資先リスト（Dalton Investments・Oasis Management等）を定点観察</li>
+        <li>「DX推進委員会設置」「社外取締役追加」など変化の兆候をウォッチ</li>
+        <li>決裁者である取締役・部長への直接アプローチ（LinkedIn・業界団体名簿）</li>
+      </ul>
+    </div>
+    <div class="tp-card" style="border-color:#15803d;background:#f0fdf4">
+      <h4 style="color:#15803d">② 既存顧客（荷主）経由の紹介</h4>
+      <ul>
+        <li>既存の荷主顧客に「使っているフォワーダー」を紹介してもらう</li>
+        <li>「荷主側でも使えるデータ連携ハブ」として荷主から推奨してもらう設計</li>
+        <li>荷主が「このフォワーダーに使わせたい」と言うことで導入障壁が下がる</li>
+      </ul>
+    </div>
+    <div class="tp-card" style="border-color:#7c3aed;background:#f5f3ff">
+      <h4 style="color:#7c3aed">③ 業界団体・展示会</h4>
+      <ul>
+        <li>日本貨物運送取扱事業連合会（JIFFA）の勉強会・総会</li>
+        <li>国際物流総合展（隔年開催）での出展・講演</li>
+        <li>通関士会・日本通関業連合会のDX勉強会に登壇</li>
+        <li>日本貿易振興機構（JETRO）との共催セミナー</li>
+      </ul>
+    </div>
+    <div class="tp-card" style="border-color:#b45309;background:#fffbeb">
+      <h4 style="color:#b45309">④ デジタルチャネル・タイミング狙い</h4>
+      <ul>
+        <li>「DX補助金 物流」「フォワーダー DX」でSEO・広告</li>
+        <li>株主総会シーズン（3〜6月）の前後に集中投下</li>
+        <li>アクティビストから要求が届いた直後のタイミング（顕在化した痛み）</li>
+        <li>業界専門誌（月刊LOGISTICS）への寄稿・記事広告</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S8: プロバイダー版ターゲットプロフィールシート ═══ -->
+<div class="section" id="s8">
+  <div class="section-num">SECTION 8</div>
+  <div class="section-title">プロバイダー版ターゲットプロフィールシート ─ 荷主・船社サイドのペルソナ</div>
+  <div class="persona-wrap">
+    <div class="persona-card">
+      <div class="persona-head teal">
+        <div class="persona-icon">🏭</div>
+        <div>
+          <div class="persona-name">山田 花子（仮）</div>
+          <div class="persona-sub">大手製造業 ／ グローバル調達部 部長 ／ 44歳</div>
+        </div>
+      </div>
+      <div class="persona-body">
+        <div class="p-row"><div class="p-label">会社規模</div><div class="p-val">東証プライム上場、年商600億円の電子部品メーカー。年間輸出額約80億円</div></div>
+        <div class="p-row"><div class="p-label">フォワーダー</div><div class="p-val">3社を使い分け（価格・ルート・速度で使い分け）。各社からの情報フォーマットがバラバラ</div></div>
+        <div class="p-row"><div class="p-label">本音の痛み</div><div class="p-val">「3社使っているのに状況確認が一元化できない。フォワーダーごとに異なる書式でデータが来て、社内でまた打ち直す」</div></div>
+        <div class="p-row"><div class="p-label">真の需要</div><div class="p-val">「どのフォワーダーを使っても同じ画面で状況が見えれば、管理コストが半分以下になる」</div></div>
+        <div class="p-row"><div class="p-label">データ連携</div><div class="p-val">自社ERPはSAP。フォワーダーのデータをSAPに自動取り込みできれば工数が大幅削減できる</div></div>
+        <div class="p-row"><div class="p-label">影響力</div><div class="p-val">フォワーダーへの発注権限を持つ。「このシステムを使うフォワーダーに優先発注する」と言えばフォワーダー側は動く</div></div>
+      </div>
+    </div>
+    <div class="persona-card">
+      <div class="persona-head amber">
+        <div class="persona-icon">🚢</div>
+        <div>
+          <div class="persona-name">船社・キャリア側の構造</div>
+          <div class="persona-sub">（個人ペルソナではなく、組織・利害関係の整理）</div>
+        </div>
+      </div>
+      <div class="persona-body">
+        <div class="p-row"><div class="p-label">立場</div><div class="p-val">フォワーダーを通じた間接取引が全体の70〜80%。フォワーダーは大事なチャネル</div></div>
+        <div class="p-row"><div class="p-label">本音</div><div class="p-val">「フォワーダーを飛び越えられると困る。でも効率化ツールなら歓迎。データ連携で積み残しが減るなら協力したい」</div></div>
+        <div class="p-row"><div class="p-label">APIの壁</div><div class="p-val">スペース情報・運賃のAPIを公開するインセンティブがない。フォワーダー経由の取引を守りたい</div></div>
+        <div class="p-row"><div class="p-label">攻め方</div><div class="p-val">「APIを開放してほしい」ではなく、「データ連携ハブ経由で積み残し率が下がる」というオペレーション改善提案から入る</div></div>
+        <div class="p-row"><div class="p-label">長期関係</div><div class="p-val">データが蓄積されると「この港のこの週は混む」という予測精度が上がり、船社にとってもスペース最適化に使える</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S9: As-Is / To-Be ═══ -->
+<div class="section" id="s9">
+  <div class="section-num">SECTION 9</div>
+  <div class="section-title">As-Is / To-Be フレームワーク ─ 現状の痛みから理想への橋渡し</div>
+  <div class="asis-tobe">
+    <div class="col-asis">
+      <div class="col-header a">As-Is ─ 現状の痛み（フォワーダー目線）</div>
+      <div class="at-item"><strong>情報の断絶</strong>荷主・フォワーダー・通関・船社・倉庫がそれぞれ別システム。同じ貨物情報を各社が別々に入力し直している。入力ミスの連鎖で書類不備が頻発</div>
+      <div class="at-item"><strong>書類の非効率</strong>B/L・インボイス・パッキングリスト・原産地証明を手で作成。通関直前の差し戻しで荷物が止まる。1件の差し戻しで50〜200万円のコスト</div>
+      <div class="at-item"><strong>NACCSの壁</strong>通関申告はNACCS専用ターミナルから手入力。認定コストが数千万円で中小フォワーダーはAPI接続できない。10年更新サイクルで政府も動かない</div>
+      <div class="at-item"><strong>DX化できない構造</strong>過去の失敗経験・現場の抵抗・IT人材不在・初期コスト。「変えたくない」ではなく「変え方が分からない」が本質</div>
+      <div class="at-item"><strong>意思決定の非効率</strong>HS Code判定・輸出規制確認・通関書類チェックをすべて人間が一から判断。通関士が「承認機械」になっていない</div>
+      <div class="at-item"><strong>データが資産にならない</strong>膨大な通関データ・輸送実績がどこにも蓄積されない。次の判断に活きない</div>
+    </div>
+    <div class="col-tobe">
+      <div class="col-header b">To-Be ─ 私たちのプロダクトが実現する世界</div>
+      <div class="at-item"><strong>情報の自動伝達</strong>一度入力されたデータが全関係者に自動的に伝わる。フォワーダーの入力が荷主のERP・船社・通関システムに同時反映。入力ミスゼロ</div>
+      <div class="at-item"><strong>書類の半自動化</strong>荷主からのデータを受け取り、通関書類の整合性チェックを自動実行。差し戻しリスクを事前に検出。通関士は確認するだけでよい</div>
+      <div class="at-item"><strong>NACCSとのブリッジ</strong>自社がNACCS認定を保有し、中小フォワーダーへ開放。認定コストなしでNACS連携が実現。蓄積データでNACS側が合わせてくる状態へ</div>
+      <div class="at-item"><strong>フロー不変のDX化</strong>現場の手順・書類・電話はそのまま。情報だけが裏でデジタル化される。「変えろ」と言わない導入で現場抵抗ゼロ</div>
+      <div class="at-item"><strong>AIによる意思決定支援</strong>蓄積データを基にHS Code判定・リスクフラグ・通関判断をAIが補助。通関士は「AIが提案し、人間が承認するだけ」になる</div>
+      <div class="at-item"><strong>データが競争優位になる</strong>全フォワーダーの通関実績が集まり、「この品目はこのルートが最適」という予測が自動化。データを持つ者が市場を制する</div>
+    </div>
+  </div>
+  <div class="warn-box">
+    ⚠️ <strong>移行期のリスク：</strong>「フロー不変」を謳いながら実際には業務が変わる部分が必ず出る。カスタマーサクセスによる現場定着支援が導入成功の鍵。最初の3ヶ月が最重要。
+  </div>
+</div>
+
+
+<!-- ═══ S10: ロジックツリー ═══ -->
+<div class="section" id="s10">
+  <div class="section-num">SECTION 10</div>
+  <div class="section-title">なぜ思考フレームワーク（ロジックツリー）─ Z2Bギャップを起点に</div>
+  <div class="z2b-bar">
+    <div class="z2b-box z2b-z">
+      <h4>Z（Zero）─ 現状</h4>
+      データがバラバラ・手作業・DX化なし。フォワーダーの業務は2003年から変わっていない。情報は各社が別々に入力し、書類は紙かFAXで行き来する
+    </div>
+    <div class="z2b-arrow">→→→</div>
+    <div class="z2b-box z2b-b">
+      <h4>B（Best）─ 目指す姿</h4>
+      データが自動的に全関係者に伝わり、通関判断がAIに支援される。NACCSが私たちのフォーマットに合わせてくる。フォワーダーは「承認者」として高付加価値業務に集中
+    </div>
+  </div>
+  <div style="overflow-x:auto">
+    <ul class="tree">
+      <li><span class="node n-root">なぜZからBに進めないのか ─ DX化を阻む構造的障壁</span>
+        <ul>
+          <li><span class="node n-w1a">① 紙・FAX文化が根強く残っている</span>
+            <ul>
+              <li><span class="node n-w2">何十年も同じやり方でやってきた</span>
+                <ul>
+                  <li><span class="node n-leaf">書類は紙で渡すのが「責任の証拠」になっている</span></li>
+                  <li><span class="node n-leaf">デジタルで操作できないベテラン担当者が意思決定者</span></li>
+                  <li><span class="node n-leaf">書類のフォーマットが業者ごとに違いすぎる</span></li>
+                </ul>
+              </li>
+              <li><span class="node n-w2">同時に全員が変わらないと意味がない</span>
+                <ul>
+                  <li><span class="node n-leaf">うちだけ変えても取引先がFAXを送ってくる</span></li>
+                  <li><span class="node n-leaf">業界標準が存在しないので個別対応が続く</span></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><span class="node n-w1b">② 情報が分断されている（各社が別々に入力）</span>
+            <ul>
+              <li><span class="node n-w2">同じ貨物情報を荷主・FW・通関・船社が別々に入力</span>
+                <ul>
+                  <li><span class="node n-leaf">入力のたびにミスが生まれ、ミスが次のミスを生む連鎖</span></li>
+                  <li><span class="node n-leaf">データが「自分のシステム内の資産」として囲われている</span></li>
+                </ul>
+              </li>
+              <li><span class="node n-w2">情報を出すことが競争上の不利になると思っている</span>
+                <ul>
+                  <li><span class="node n-leaf">運賃・ルート情報は交渉力の源泉。出したくない</span></li>
+                  <li><span class="node n-leaf">「情報を渡すと代替されるかも」という恐れ</span></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><span class="node n-w1c">③ 初期コストが払えない・費用対効果が見えない</span>
+            <ul>
+              <li><span class="node n-w2">フォワーダーは薄利多売で余剰キャッシュがない</span>
+                <ul>
+                  <li><span class="node n-leaf">営業利益率2〜5%では大きな先行投資ができない</span></li>
+                  <li><span class="node n-leaf">BPO型（初期費用ゼロ）でないと動かない</span></li>
+                </ul>
+              </li>
+              <li><span class="node n-w2">ROIが計算できない・成功事例が少ない</span>
+                <ul>
+                  <li><span class="node n-leaf">「うちの業務に合うかどうか」を評価できる人がいない</span></li>
+                  <li><span class="node n-leaf">IT詳しい人材がいない（IT部門がない中小が多い）</span></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><span class="node n-w1d">④ 政府システム（NACCS）との壁</span>
+            <ul>
+              <li><span class="node n-w2">NACCS認定を取るのに数千万円かかる</span>
+                <ul>
+                  <li><span class="node n-leaf">10年に1度の更新サイクルで技術が古いまま</span></li>
+                  <li><span class="node n-leaf">政府は「既存システムを壊すリスク」を取れない</span></li>
+                </ul>
+              </li>
+              <li><span class="node n-w2">NACCSのインターフェースが古すぎる</span>
+                <ul>
+                  <li><span class="node n-leaf">現代のAPIと繋ぐには独自ブリッジが必要</span></li>
+                  <li><span class="node n-leaf">エラーの責任を誰が持つかが不明確</span></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><span class="node n-w1e">⑤ 過去の失敗経験・クラウドへの不安</span>
+            <ul>
+              <li><span class="node n-w2">現場フローに合わないシステムを導入して失敗した</span>
+                <ul>
+                  <li><span class="node n-leaf">IT会社が業務を理解せずに「きれいなシステム」を作った</span></li>
+                  <li><span class="node n-leaf">現場が「これは使えない」と判断して元に戻った</span></li>
+                </ul>
+              </li>
+              <li><span class="node n-w2">貿易データをクラウドに置くことへの不安</span>
+                <ul>
+                  <li><span class="node n-leaf">漏洩したら取引先に損害を与える。責任を取りたくない</span></li>
+                  <li><span class="node n-leaf">セキュリティの知見がなく、判断できない</span></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div class="verdict">
+    <h4>ロジックツリーから見えるビジネスの種</h4>
+    <p>5つの障壁のうち①②は「標準化・インフラ」で解決できる。③は「BPO型・成果報酬型」の料金設計で解決。④は「自社がNACCS認定を取って開放」で解決。⑤は「フロー不変の設計原則」と「カスタマーサクセスによる伴走」で解決。<strong>つまり5つの障壁すべてに対して、私たちだけが回答を持っている。</strong></p>
+  </div>
+</div>
+
+<!-- ═══ S11: 6W3H ═══ -->
+<div class="section" id="s11">
+  <div class="section-num">SECTION 11</div>
+  <div class="section-title">6W3H フレームワーク ─ 事業の骨格を整理する</div>
+  <div class="sixw-grid">
+    <div class="sixw-card" style="border-top-color:#1e3a8a">
+      <div class="sixw-w" style="color:#1e3a8a">Who</div>
+      <div class="sixw-label">誰に</div>
+      <div class="sixw-content">アクティビスト投資家に圧をかけられている（または圧をかけられそうな）中堅〜大手フォワーダー。社員100〜1,000名規模。東証スタンダード・プライム上場企業が優先ターゲット</div>
+    </div>
+    <div class="sixw-card" style="border-top-color:#0f766e">
+      <div class="sixw-w" style="color:#0f766e">What</div>
+      <div class="sixw-label">何を</div>
+      <div class="sixw-content">荷主↔フォワーダー データ連携ハブ。現場フローを変えずに情報だけを自動連携させるプラットフォーム。第一弾はコンプライアンスチェック機能、蓄積後に通関判断AIを追加</div>
+    </div>
+    <div class="sixw-card" style="border-top-color:#b45309">
+      <div class="sixw-w" style="color:#b45309">When</div>
+      <div class="sixw-label">いつ</div>
+      <div class="sixw-content">株主総会の3〜6ヶ月前（年度末・3月総会なら9〜12月）。アクティビストからの要求レターが届いた直後が最大の購買タイミング。DX補助金の申請時期（毎年4〜6月）も狙い目</div>
+    </div>
+    <div class="sixw-card" style="border-top-color:#7c3aed">
+      <div class="sixw-w" style="color:#7c3aed">Where</div>
+      <div class="sixw-label">どこで</div>
+      <div class="sixw-content">日本国内、まず首都圏・大阪のフォワーダー集積地から。展示会・業界団体・荷主経由紹介チャネルで接点を作る。将来は日本全国→東アジア（台湾・韓国）のフォワーダーへ</div>
+    </div>
+    <div class="sixw-card" style="border-top-color:#dc2626">
+      <div class="sixw-w" style="color:#dc2626">Why</div>
+      <div class="sixw-label">なぜ今</div>
+      <div class="sixw-content">デジタルフォワーダー（Flexport・Shippio）の台頭でフォワーダーの存在意義が問われている。日本はグローバル比5〜7年遅れており、空白地帯が残っている。アクティビスト投資の日本での増加が「今すぐ動く」動機を作っている</div>
+    </div>
+    <div class="sixw-card" style="border-top-color:#0369a1">
+      <div class="sixw-w" style="color:#0369a1">Which</div>
+      <div class="sixw-label">どの機能から</div>
+      <div class="sixw-content">まずデータ連携ハブ（書類ではなく情報の流れから）。書類OCRではなく「同じ情報を二度入力しなくていい」設計。次にコンプライアンスチェック、最後に通関判断AI</div>
+    </div>
+    <div class="sixw-card" style="border-top-color:#15803d">
+      <div class="sixw-w" style="color:#15803d">How</div>
+      <div class="sixw-label">どうやって</div>
+      <div class="sixw-content">既存システムにAPIで被せる形で導入。現場フローは変えない。NACCS認定を自社が保有し中小FWへ開放。フロー不変の設計原則＋カスタマーサクセスによる伴走で定着を支援</div>
+    </div>
+    <div class="sixw-card" style="border-top-color:#4f46e5">
+      <div class="sixw-w" style="color:#4f46e5">How much</div>
+      <div class="sixw-label">いくらで</div>
+      <div class="sixw-content">PoC期間：月額30〜50万円（3ヶ月）。正式導入：月額50〜150万円/社（規模に応じて）。BPaaS（業務代行型）：月額100〜300万円。データAPIライセンス（銀行・保険向け）：年額500〜3,000万円</div>
+    </div>
+    <div class="sixw-card" style="border-top-color:#ea580c">
+      <div class="sixw-w" style="color:#ea580c">How many</div>
+      <div class="sixw-label">どれだけ</div>
+      <div class="sixw-content">初年度：PoC10社→正式導入5社。Year2：累計30社。Year3：累計100社。フォワーダー全国3,000社のうちアクティビスト圧力下の中堅〜大手は推定200〜300社がターゲット層</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S12: プロダクトアイデア詳細 ═══ -->
+<div class="section" id="s12">
+  <div class="section-num">SECTION 12</div>
+  <div class="section-title">プロダクトアイデア詳細 ─ メイン＋サブ要素の全体像</div>
+  <div class="prod-wrap">
+    <div class="prod-main">
+      <h3>🎯 メインプロダクト：荷主↔フォワーダー データ連携ハブ</h3>
+      <p>荷主が発注した情報が自動的にフォワーダーへ流れ、フォワーダーの処理結果が荷主・通関・船社へ自動伝達される情報インフラ。「一度入力されたデータが全関係者に届く」設計。現場のフロー・書類・手順は一切変えない。既存システムにAPIレイヤーを被せるだけで稼働する。</p>
+    </div>
+    <div class="prod-benefit">
+      <h4>このプロダクトがターゲットにもたらすベネフィット</h4>
+      <p>①<strong> 株主への実績：</strong>「データ連携件数XX件・書類差し戻し率XX%削減」という数字が出る。IRでDX推進を証明できる。<br>
+      ②<strong> 業務コスト削減：</strong>二重入力がなくなり、書類ミスが減り、通関担当者の残業が減る。ROIが6〜12ヶ月で回収できる水準。<br>
+      ③<strong> データ資産構築：</strong>蓄積された通関データが「次の判断」を支援する資産になる。使えば使うほど価値が上がる。</p>
+    </div>
+    <div class="prod-subs">
+      <div class="prod-sub">
+        <div class="phase-tag" style="background:#0369a1">PHASE 1 ─ 入口</div>
+        <h4>コンプライアンスチェック機能</h4>
+        <p>輸出規制品・該非判定・ECCN分類の自動チェック。荷主が商品情報を入力するだけで「輸出可能かどうか」がリアルタイム判定。中小輸出企業にとって年々複雑化する安全保障貿易管理を民主化する。<br><br>データが集まりやすい機能であり、入口として最適。コンプライアンスリスクを減らしたいフォワーダーが「まずここから使う」動機を持てる。</p>
+      </div>
+      <div class="prod-sub">
+        <div class="phase-tag" style="background:#1e3a8a">PHASE 2 ─ コア</div>
+        <h4>データ連携ハブ（メイン）</h4>
+        <p>荷主のERPと接続し、受注情報→船積み情報→通関情報→着荷情報の流れを自動化。フォワーダーが入力したデータが荷主のシステムに自動反映。船社・倉庫・港湾への情報伝達も自動化。<br><br>「何度も同じことを打ち直す」作業をゼロにする。情報伝達のインフラを押さえることで、他のすべての機能の土台になる。</p>
+      </div>
+      <div class="prod-sub">
+        <div class="phase-tag" style="background:#15803d">PHASE 3 ─ 意思決定</div>
+        <h4>通関判断サポートAI</h4>
+        <p>データ連携ハブで蓄積した通関実績データを使い、HS Code判定・リスクフラグ・書類整合性チェックをAIが自動実行。通関士は「AIが提案→人間が承認」のワークフローになる。<br><br>通関業務はフォワーダーの独占業務（資格が必要）なのでここを押さえると「意思決定を乗っ取る」に相当する。NACCSも最終的にこのデータフォーマットに合わせざるを得なくなる。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S13: プラットフォーム関係図 ═══ -->
+<div class="section" id="s13">
+  <div class="section-num">SECTION 13</div>
+  <div class="section-title">プラットフォーム関係図 ─ データ連携ハブを中心としたエコシステム</div>
+  <div class="platform-wrap">
+    <svg width="900" height="560" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <defs>
+        <marker id="arrowB" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#1e3a8a"/>
+        </marker>
+        <marker id="arrowG" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#15803d"/>
+        </marker>
+        <marker id="arrowR" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/>
+        </marker>
+        <marker id="arrowA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="#b45309"/>
+        </marker>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.15)"/>
+        </filter>
+      </defs>
+
+      <!-- Center Hub -->
+      <ellipse cx="450" cy="280" rx="100" ry="70" fill="url(#hubGrad)" filter="url(#shadow)"/>
+      <defs>
+        <radialGradient id="hubGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1e40af"/>
+          <stop offset="100%" stop-color="#0f172a"/>
+        </radialGradient>
+      </defs>
+      <text x="450" y="266" text-anchor="middle" fill="white" font-size="13" font-weight="700" font-family="sans-serif">データ連携ハブ</text>
+      <text x="450" y="282" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10" font-family="sans-serif">（自社プロダクト）</text>
+      <text x="450" y="297" text-anchor="middle" fill="#93c5fd" font-size="9" font-family="sans-serif">Phase1→2→3</text>
+
+      <!-- Node: 荷主 (left) -->
+      <rect x="60" y="245" width="150" height="70" rx="12" fill="#fff7ed" stroke="#b45309" stroke-width="2" filter="url(#shadow)"/>
+      <text x="135" y="270" text-anchor="middle" fill="#92400e" font-size="12" font-weight="700" font-family="sans-serif">荷主（シッパー）</text>
+      <text x="135" y="286" text-anchor="middle" fill="#78350f" font-size="10" font-family="sans-serif">製造業・商社</text>
+      <text x="135" y="301" text-anchor="middle" fill="#78350f" font-size="9" font-family="sans-serif">SAP/ERP連携</text>
+
+      <!-- Node: フォワーダー (right) -->
+      <rect x="690" y="245" width="165" height="70" rx="12" fill="#eff6ff" stroke="#1e3a8a" stroke-width="2" filter="url(#shadow)"/>
+      <text x="772" y="270" text-anchor="middle" fill="#1e3a8a" font-size="12" font-weight="700" font-family="sans-serif">フォワーダー</text>
+      <text x="772" y="286" text-anchor="middle" fill="#1e40af" font-size="10" font-family="sans-serif">中堅〜大手 3,000社</text>
+      <text x="772" y="301" text-anchor="middle" fill="#1e40af" font-size="9" font-family="sans-serif">既存システムにAPI接続</text>
+
+      <!-- Node: NACCS/税関 (bottom-center) -->
+      <rect x="330" y="430" width="240" height="70" rx="12" fill="#fff1f2" stroke="#dc2626" stroke-width="2.5" filter="url(#shadow)"/>
+      <text x="450" y="456" text-anchor="middle" fill="#dc2626" font-size="12" font-weight="700" font-family="sans-serif">NACCS / 税関</text>
+      <text x="450" y="472" text-anchor="middle" fill="#991b1b" font-size="10" font-family="sans-serif">通関申告システム（政府）</text>
+      <text x="450" y="487" text-anchor="middle" fill="#991b1b" font-size="9" font-family="sans-serif">→ 最終的にこちらが合わせてくる</text>
+
+      <!-- Node: 船社（top-left）-->
+      <rect x="90" y="80" width="155" height="65" rx="12" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5" filter="url(#shadow)"/>
+      <text x="167" y="104" text-anchor="middle" fill="#15803d" font-size="12" font-weight="700" font-family="sans-serif">船社・航空会社</text>
+      <text x="167" y="120" text-anchor="middle" fill="#14532d" font-size="10" font-family="sans-serif">スペース情報・運航データ</text>
+      <text x="167" y="134" text-anchor="middle" fill="#14532d" font-size="9" font-family="sans-serif">積み残し率低下でWin-Win</text>
+
+      <!-- Node: 港湾・倉庫（top-right）-->
+      <rect x="650" y="80" width="160" height="65" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5" filter="url(#shadow)"/>
+      <text x="730" y="104" text-anchor="middle" fill="#7c3aed" font-size="12" font-weight="700" font-family="sans-serif">港湾・倉庫</text>
+      <text x="730" y="120" text-anchor="middle" fill="#4c1d95" font-size="10" font-family="sans-serif">搬入予定・混雑情報</text>
+      <text x="730" y="134" text-anchor="middle" fill="#4c1d95" font-size="9" font-family="sans-serif">搬入タイミング最適化</text>
+
+      <!-- Node: 銀行・保険（bottom-left）-->
+      <rect x="60" y="430" width="155" height="70" rx="12" fill="#fffbeb" stroke="#b45309" stroke-width="1.5" filter="url(#shadow)"/>
+      <text x="137" y="456" text-anchor="middle" fill="#92400e" font-size="12" font-weight="700" font-family="sans-serif">銀行・保険会社</text>
+      <text x="137" y="472" text-anchor="middle" fill="#78350f" font-size="10" font-family="sans-serif">データAPIライセンス</text>
+      <text x="137" y="487" text-anchor="middle" fill="#78350f" font-size="9" font-family="sans-serif">貿易金融・貨物保険引受</text>
+
+      <!-- Node: 通関士ネットワーク（bottom-right）-->
+      <rect x="680" y="430" width="175" height="70" rx="12" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5" filter="url(#shadow)"/>
+      <text x="767" y="456" text-anchor="middle" fill="#92400e" font-size="12" font-weight="700" font-family="sans-serif">通関士ネットワーク</text>
+      <text x="767" y="472" text-anchor="middle" fill="#78350f" font-size="10" font-family="sans-serif">オンデマンド通関判断</text>
+      <text x="767" y="487" text-anchor="middle" fill="#78350f" font-size="9" font-family="sans-serif">AIが提案→人間が承認</text>
+
+      <!-- ARROWS: 荷主 ↔ Hub -->
+      <line x1="210" y1="275" x2="348" y2="275" stroke="#b45309" stroke-width="2" marker-end="url(#arrowA)" stroke-dasharray="none"/>
+      <line x1="348" y1="290" x2="210" y2="290" stroke="#b45309" stroke-width="2" marker-end="url(#arrowA)"/>
+      <text x="278" y="268" text-anchor="middle" fill="#b45309" font-size="9" font-family="sans-serif">発注・貨物情報</text>
+      <text x="278" y="302" text-anchor="middle" fill="#b45309" font-size="9" font-family="sans-serif">追跡・書類状況</text>
+
+      <!-- ARROWS: Hub ↔ フォワーダー -->
+      <line x1="552" y1="270" x2="688" y2="270" stroke="#1e3a8a" stroke-width="2" marker-end="url(#arrowB)"/>
+      <line x1="688" y1="285" x2="552" y2="285" stroke="#1e3a8a" stroke-width="2" marker-end="url(#arrowB)"/>
+      <text x="620" y="263" text-anchor="middle" fill="#1e3a8a" font-size="9" font-family="sans-serif">業務指示・書類要求</text>
+      <text x="620" y="298" text-anchor="middle" fill="#1e3a8a" font-size="9" font-family="sans-serif">処理結果・ステータス</text>
+
+      <!-- ARROW: Hub ↔ NACCS -->
+      <line x1="450" y1="350" x2="450" y2="428" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrowR)"/>
+      <line x1="440" y1="428" x2="440" y2="350" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowR)" stroke-dasharray="5,3"/>
+      <text x="475" y="390" fill="#dc2626" font-size="9" font-family="sans-serif">通関申告</text>
+      <text x="415" y="408" text-anchor="end" fill="#dc2626" font-size="9" font-family="sans-serif" font-style="italic">（将来：NACCS側が合わせてくる）</text>
+
+      <!-- ARROW: 船社 → Hub -->
+      <line x1="245" y1="130" x2="380" y2="235" stroke="#15803d" stroke-width="1.5" marker-end="url(#arrowG)"/>
+      <line x1="370" y1="230" x2="235" y2="130" stroke="#15803d" stroke-width="1.5" marker-end="url(#arrowG)" stroke-dasharray="4,3"/>
+      <text x="290" y="175" text-anchor="middle" fill="#15803d" font-size="9" font-family="sans-serif">運航・スペース情報</text>
+
+      <!-- ARROW: 港湾・倉庫 → Hub -->
+      <line x1="650" y1="130" x2="530" y2="230" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrowB)"/>
+      <line x1="535" y1="225" x2="655" y2="125" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrowB)" stroke-dasharray="4,3"/>
+      <text x="608" y="175" text-anchor="middle" fill="#7c3aed" font-size="9" font-family="sans-serif">混雑・搬入情報</text>
+
+      <!-- ARROW: 銀行・保険 ← Hub (data API) -->
+      <line x1="348" y1="330" x2="215" y2="428" stroke="#b45309" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrowA)"/>
+      <text x="260" y="388" text-anchor="middle" fill="#b45309" font-size="9" font-family="sans-serif">データAPIライセンス</text>
+
+      <!-- ARROW: 通関士ネットワーク ↔ Hub -->
+      <line x1="552" y1="330" x2="680" y2="428" stroke="#ca8a04" stroke-width="1.5" marker-end="url(#arrowA)"/>
+      <line x1="675" y1="432" x2="547" y2="334" stroke="#ca8a04" stroke-width="1.5" marker-end="url(#arrowA)" stroke-dasharray="4,3"/>
+      <text x="636" y="388" text-anchor="middle" fill="#ca8a04" font-size="9" font-family="sans-serif">通関判断依頼</text>
+
+      <!-- Legend -->
+      <rect x="30" y="530" width="840" height="22" rx="4" fill="#f1f5f9"/>
+      <line x1="50" y1="541" x2="90" y2="541" stroke="#1e3a8a" stroke-width="2"/>
+      <text x="95" y="545" fill="#475569" font-size="10" font-family="sans-serif">双方向データ連携</text>
+      <line x1="220" y1="541" x2="260" y2="541" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/>
+      <text x="265" y="545" fill="#475569" font-size="10" font-family="sans-serif">将来的な連携（現在は手動）</text>
+      <line x1="430" y1="541" x2="470" y2="541" stroke="#b45309" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="475" y="545" fill="#475569" font-size="10" font-family="sans-serif">データAPIライセンス（課金）</text>
+      <circle cx="640" cy="541" r="6" fill="#1e3a8a"/>
+      <text x="650" y="545" fill="#475569" font-size="10" font-family="sans-serif">コアノード</text>
+      <circle cx="730" cy="541" r="6" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="740" y="545" fill="#475569" font-size="10" font-family="sans-serif">外部ノード</text>
+    </svg>
+  </div>
+  <div class="verdict">
+    <h4>プラットフォームの核心</h4>
+    <p>データ連携ハブが中心に鎮座し、荷主・フォワーダー・通関・船社・港湾・金融機関がすべてここを通じて情報を交換する。参加者が増えるほど価値が上がるネットワーク効果が働く。最終的にNACCS（政府）が「このフォーマットに合わせないと業務が回らない」状態を作ることが最終目標。</p>
+  </div>
+</div>
+
+<!-- ═══ S14: ヒストリカルレビュー ═══ -->
+<div class="section" id="s14">
+  <div class="section-num">SECTION 14</div>
+  <div class="section-title">ヒストリカルレビュー ─ デジタルフォワーダー登場以前からの業界変遷</div>
+  <div class="hist-wrap">
+    <table class="hist">
+      <thead>
+        <tr>
+          <th style="width:90px">時期</th>
+          <th style="width:160px">世界の主要動向</th>
+          <th style="width:220px">競合企業・代表サービス</th>
+          <th style="width:140px">技術・製品トレンド</th>
+          <th style="width:100px">流行キーワード</th>
+          <th>日本の状況</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="era-cell">〜2005年</td>
+          <td>大手フォワーダー寡占。海上運賃は電話交渉。EDIが大手間で普及し始める</td>
+          <td>
+            <span class="stag win">CargoWise</span> 創業（2003）：フォワーダー向けERPの草分け。書類管理・通関・会計を一体化<br>
+            <span class="stag">大手SIer</span>：個社ごとの独自システム開発が主流
+          </td>
+          <td>EDI（電子データ交換）、FAX、電話。標準化なし</td>
+          <td><span class="buzz dead">電子化</span></td>
+          <td>NACCS稼働（1992）。紙・FAX・電話が主流。中小フォワーダーはレガシーシステムか手作業</td>
+        </tr>
+        <tr>
+          <td class="era-cell">2006〜2012年</td>
+          <td>スマートフォン普及。AmazonがECを再定義。クラウドコンピューティング台頭</td>
+          <td>
+            <span class="stag">運賃比較サイト</span>が乱立するが実態はメールで問い合わせ。自動化なし<br>
+            <span class="stag win">CargoWise</span>：グローバル展開を加速。フォワーダーERPとして頭角を現す
+          </td>
+          <td>SaaS黎明期。API概念が広まり始める。Webフォーム化</td>
+          <td><span class="buzz dead">クラウド化</span></td>
+          <td>変化ほぼなし。大手フォワーダーが独自システムを構築するも現場では使われず。「電子化した」と言いながら実態はExcel＋FAX</td>
+        </tr>
+        <tr>
+          <td class="era-cell">2013〜2015年</td>
+          <td>Uberショック。シェアリングエコノミー全盛。VCがロジスティクスに注目し始める</td>
+          <td>
+            <span class="stag win">Flexport</span>（2013創業）：オンライン貨物ブッキング＋書類管理＋リアルタイム追跡。「フォワーダーを透明にする」を掲げる<br>
+            <span class="stag">Freightos</span>（2014〜）：運賃一括比較マーケットプレイス。航空券検索のように海上運賃を比較
+          </td>
+          <td>APIマーケットプレイス、リアルタイム追跡、書類デジタル化</td>
+          <td><span class="buzz hot">Uber for Freight</span></td>
+          <td>様子見。国内フォワーダーは「海外の話」と静観。荷主も「使いにくい」と感じる日本語対応不足</td>
+        </tr>
+        <tr>
+          <td class="era-cell">2016〜2018年</td>
+          <td>プラットフォーム経済全盛。ブロックチェーンブーム。大手船社がデジタル化を宣言</td>
+          <td>
+            <span class="stag">Forto</span>（旧freight.io、2016）：欧州発フルデジタルFW。見積〜追跡〜請求まで一気通貫<br>
+            <span class="stag win">Shippio</span>（2016創業）：日本市場特化デジタルFW。書類管理・通関サポートに特化<br>
+            <span class="stag fail">TradeLens</span>（IBM×Maersk、2018）：ブロックチェーン書類共有プラットフォーム ← 後に失敗<br>
+            <span class="stag">Twill by Maersk</span>（2018）：中小向け即時見積・ワンクリックブッキング
+          </td>
+          <td>ブロックチェーン、IoT追跡、API連携、デジタルFW</td>
+          <td><span class="buzz hot">可視化</span><span class="buzz dead">ブロックチェーン</span></td>
+          <td>NACCS更新議論が始まるも遅々として進まず。Shippioが静かに日本市場で実績を作り始める</td>
+        </tr>
+        <tr>
+          <td class="era-cell">2019〜2020年</td>
+          <td>SoftBank投資ブーム（WeWork後に冷却）→COVID勃発。物流費が3〜5倍に高騰</td>
+          <td>
+            <span class="stag win">Flexport</span>：SoftBank主導で10億ドル調達（評価額32億ドル）。ユニコーン確定。カーボントラッキング・通関代行を追加<br>
+            <span class="stag">Forto</span>：欧州でシリーズB。フルサービスデジタルFWとして確立<br>
+            COVID特需でフォワーダー各社が過去最高益。DXへの動機が消える
+          </td>
+          <td>サプライチェーン可視化、AI需要予測、リスク管理</td>
+          <td><span class="buzz hot">レジリエンス</span><span class="buzz hot">SCM強靭化</span></td>
+          <td>輸送費高騰でフォワーダーが最高益。「儲かっているのになぜDX？」状態。Shippioは着実に顧客獲得</td>
+        </tr>
+        <tr>
+          <td class="era-cell">2021〜2022年</td>
+          <td>COVID特需終了。金利上昇でVC投資冷却。ブロックチェーン幻想が崩壊</td>
+          <td>
+            <span class="stag fail">TradeLens</span>：2022年末に閉鎖★ 「参加者が増えなかった」。荷主・船社の利害対立で頓挫<br>
+            <span class="stag">Forto</span>：2.5億ユーロ調達。欧州デジタルFWの代表格<br>
+            <span class="stag win">Shippio</span>：シリーズB資金調達。日本市場でのプレゼンスを拡大<br>
+            <span class="stag">Maersk Go</span>（Twillを刷新）：SME向けデジタルFW機能を統合
+          </td>
+          <td>クラウドERP統合、API可視化、CO2追跡義務化</td>
+          <td><span class="buzz">DX必須</span><span class="buzz hot">デジタルFW</span></td>
+          <td>大手フォワーダーが「DX推進室」を設置し始める。アクティビスト投資家が日本の中堅FWを注目し始める</td>
+        </tr>
+        <tr>
+          <td class="era-cell">2023年</td>
+          <td>生成AI爆発。ChatGPT登場で全産業がAI応用を模索。資金調達難が続く</td>
+          <td>
+            <span class="stag fail">Flexport</span>：大規模人員削減（従業員の約20%）★。CEO交代。Shopify Logistics買収→失敗。評価額急落<br>
+            <span class="stag">Freightos</span>：SPAC上場。マーケットプレイスとして継続<br>
+            <span class="stag win">CargoWise</span>：AI書類処理・通関分類AIを追加。安定黒字成長継続
+          </td>
+          <td>LLM×書類処理、AI通関判断、HS Code自動分類</td>
+          <td><span class="buzz now">生成AI</span><span class="buzz now">書類自動化</span></td>
+          <td>経産省がDX補助金を拡充。日本のフォワーダーが初めて「本気でDXしないといけない」と感じ始める。ただし何をすべきか分からない状態</td>
+        </tr>
+        <tr>
+          <td class="era-cell">2024〜現在</td>
+          <td>デジタルFW淘汰・統合フェーズ。「荷主直接接続」モデルの限界が明確に</td>
+          <td>
+            <span class="stag fail">Flexport</span>：縮小継続。「フォワーダーを飛び越える」戦略の限界露呈★<br>
+            <span class="stag win">CargoWise</span>：フォワーダーSaaS一択で黒字維持。AI機能を着実に追加<br>
+            <span class="stag">Shippio</span>：日本市場を深掘り。通関AIを中心に機能強化<br>
+            AI自律エージェントが物流業界で試験導入開始
+          </td>
+          <td>AIエージェント、自律通関、プラットフォーム統合</td>
+          <td><span class="buzz now">Agentic AI</span><span class="buzz now">自律物流</span></td>
+          <td>日本に空白地帯が残る ← <strong>今ここ</strong>。グローバルから5〜7年遅れで「まさにこれから」が起きる</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pattern-note">
+    <strong>📊 ヒストリカルレビューから見える4つのパターン：</strong><br>
+    ①<strong> グローバル→日本ラグが5〜7年。</strong>今がちょうど日本版デジタルFWの黎明期に相当する。<br>
+    ②<strong> 「荷主直接接続」モデルは一貫して苦戦。</strong>TradeLens・Flexport・Maersk Goが揃って失敗または縮小。船社・フォワーダーの利害構造を無視したから。<br>
+    ③<strong> CargoWiseだけが安定して黒字成長。</strong>「フォワーダーをサポートするSaaS」モデルが正解。フォワーダーを敵にしない設計。<br>
+    ④<strong> ブロックチェーンは完全に死んだ。</strong>TradeLens失敗で証明済み。参加者の利害を統一できない技術は普及しない。AIは別の話。
+  </div>
+</div>
+
+<!-- ═══ S15: ポジショニングマップ × 10 ═══ -->
+<div class="section" id="s15">
+  <div class="section-num">SECTION 15</div>
+  <div class="section-title">ポジショニングマップ × 10 ─ 競合9社との位置関係を10軸で可視化</div>
+  <div class="map-legend" style="margin-bottom:14px">
+    <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>Shippio</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div>Flexport</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0891b2"></div>Freightos</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>Forto</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0369a1"></div>Twill/Maersk Go</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b45309"></div>CargoWise</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#15803d"></div>日本通運</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#047857"></div>近鉄エクスプレス</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#065f46"></div>郵船ロジスティクス</div>
+  </div>
+  <div class="maps-grid">
+    <div class="map-card"><h4>① 現場フローを変える度合い（低→高）× DXの深さ</h4><canvas class="posmap" id="map1" width="460" height="320"></canvas></div>
+    <div class="map-card"><h4>② 日本市場への特化度 × 機能フルスタック度</h4><canvas class="posmap" id="map2" width="460" height="320"></canvas></div>
+    <div class="map-card"><h4>③ 初期コスト（低→高）× 長期データ蓄積価値</h4><canvas class="posmap" id="map3" width="460" height="320"></canvas></div>
+    <div class="map-card"><h4>④ ターゲット規模（中小→大手フォワーダー）× 汎用→物流特化</h4><canvas class="posmap" id="map4" width="460" height="320"></canvas></div>
+    <div class="map-card"><h4>⑤ フォワーダーへのメリット × 荷主へのメリット</h4><canvas class="posmap" id="map5" width="460" height="320"></canvas></div>
+    <div class="map-card"><h4>⑥ 通関特化→全機能 × サポート→代替（フォワーダーを代替するか）</h4><canvas class="posmap" id="map6" width="460" height="320"></canvas></div>
+    <div class="map-card"><h4>⑦ 単機能→プラットフォーム × スイッチングコスト（低→高）</h4><canvas class="posmap" id="map7" width="460" height="320"></canvas></div>
+    <div class="map-card"><h4>⑧ ネットワーク効果の強さ × 標準化への貢献度</h4><canvas class="posmap" id="map8" width="460" height="320"></canvas></div>
+    <div class="map-card"><h4>⑨ 収益化スピード × 参入障壁の高さ</h4><canvas class="posmap" id="map9" width="460" height="320"></canvas></div>
+    <div class="map-card"><h4>⑩ 今すぐ解決できるペイン × 将来の戦略価値</h4><canvas class="posmap" id="map10" width="460" height="320"></canvas></div>
+  </div>
+  <div class="warn-box" style="margin-top:14px">
+    💡 <strong>ポジショニングの示唆：</strong>CargoWiseは「フォワーダーSaaS」として最強のポジションを持つが日本語対応が弱く価格も高い。Shippioは日本特化だが資金力・信頼性で見劣りする。「日本特化×フォワーダーSaaS×データ蓄積価値が高い」の空白地帯に入ることが戦略の核心。
+  </div>
+</div>
+
+<!-- ═══ S16: 全体戦略シナリオ ═══ -->
+<div class="section" id="s16">
+  <div class="section-num">SECTION 16</div>
+  <div class="section-title">全体戦略シナリオ ─ トロイの木馬からデファクトスタンダードへ</div>
+  <div class="strat-grid">
+    <div class="strat-step" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)">
+      <div class="step-num">1</div>
+      <div class="phase">PHASE 1 ─ Year 1〜2</div>
+      <h4>業務効率化ツールとして入り込む（トロイの木馬）</h4>
+      <p>アクティビスト圧力下のフォワーダーに「DX実績を作れる最小リスクのツール」として売る。現場フローを変えない。コンプライアンスチェックを入口に、データ連携ハブで定着させる。「使いやすい・失敗しない」体験を最優先</p>
+    </div>
+    <div class="strat-step" style="background:linear-gradient(135deg,#0f766e,#0891b2)">
+      <div class="step-num">2</div>
+      <div class="phase">PHASE 2 ─ Year 2〜4</div>
+      <h4>データを蓄積し、スイッチングコストを上げる</h4>
+      <p>接続フォワーダーが増えるほどデータが集まり、通関判断AIの精度が上がる。「やめると他社に劣後する」状態を作る。荷主からもデータが入り、フォワーダー↔荷主の双方向ネットワークが完成する</p>
+    </div>
+    <div class="strat-step" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+      <div class="step-num">3</div>
+      <div class="phase">PHASE 3 ─ Year 4〜6</div>
+      <h4>デジタルフォワーダーとして入れ替わる</h4>
+      <p>通関判断AIが自立し、通関士が「承認するだけ」になる。実質的な通関意思決定が私たちのAIに移る。荷主から見ると「フォワーダー経由だがデータはプラットフォームを通じている」状態。フォワーダーが「承認者」に変わる</p>
+    </div>
+    <div class="strat-step" style="background:linear-gradient(135deg,#15803d,#16a34a)">
+      <div class="step-num">4</div>
+      <div class="phase">PHASE 4 ─ Year 6+</div>
+      <h4>NACCSが合わせてくる（デファクトスタンダード確立）</h4>
+      <p>日本の輸出入データの大部分が私たちのプラットフォームを通過するとき、NACCSはこちらのフォーマットに合わせざるを得なくなる。業界インフラの完成。競合が参入してもデータ・ネットワーク・信頼性の壁が高すぎて追いつけない</p>
+    </div>
+  </div>
+  <div class="verdict" style="margin-top:14px">
+    <h4>戦略の核心：フォワーダーを「敵」ではなく「最初の顧客」にする</h4>
+    <p>Flexportが失敗したのはフォワーダーを飛び越えようとしたから。私たちはShopifyがAmazonに対抗した方法と同じアプローチを取る。<strong>まずフォワーダーの業務効率化を支援→彼らが顧客になる→データが集まる→荷主に直接価値を提供→フォワーダーはプラットフォーム上のサービスプロバイダーになる。</strong>フォワーダーを殺すのではなく、フォワーダーごとプラットフォームに取り込む。</p>
+  </div>
+</div>
+
+<!-- ═══ S17: 競合優位性 ═══ -->
+<div class="section" id="s17">
+  <div class="section-num">SECTION 17</div>
+  <div class="section-title">競合優位性 ─ 対Shippio・対デジタルFW・対従来型</div>
+  <div class="adv-grid">
+    <div class="adv-card" style="border-color:#1e3a8a">
+      <h4 style="color:#1e3a8a">① 圧倒的な資金力</h4>
+      <ul>
+        <li>Shippioは資金調達ベースで動くスタートアップ。大型調達がなければ機能拡張が止まる</li>
+        <li>自社は上場企業として安定した収益基盤。長期投資ができる</li>
+        <li>NACCS認定取得（数千万円）も自社負担で先行できる</li>
+        <li>M&Aで必要な機能を素早く補完できる（AI特化スタートアップの取得など）</li>
+      </ul>
+    </div>
+    <div class="adv-card" style="border-color:#15803d">
+      <h4 style="color:#15803d">② 既存顧客ネットワーク・信頼性</h4>
+      <ul>
+        <li>上場企業としての信用力がフォワーダーの「安心感」になる（失敗リスクを下げる）</li>
+        <li>既存の荷主顧客が「このフォワーダーにも使わせたい」と言うチャネルがある</li>
+        <li>長年の取引実績が与信・契約交渉を有利にする</li>
+        <li>スタートアップには出せない「責任を取れる会社」としてのポジション</li>
+      </ul>
+    </div>
+    <div class="adv-card" style="border-color:#b45309">
+      <h4 style="color:#b45309">③ 製品が現場に既に存在する</h4>
+      <ul>
+        <li>現在の製品（物流現場に関連するもの）がターゲット顧客企業で既に使われている可能性が高い</li>
+        <li>既存接点からデータ連携ハブへのクロスセルが可能</li>
+        <li>「新しい会社から買う」ではなく「知っている会社が新サービスを出した」という文脈で導入しやすい</li>
+        <li>初期のPoC打診が既存顧客担当者経由で可能</li>
+      </ul>
+    </div>
+  </div>
+  <table class="vs-table">
+    <thead>
+      <tr>
+        <th>比較軸</th>
+        <th>自社</th>
+        <th>Shippio</th>
+        <th>Flexport</th>
+        <th>CargoWise</th>
+        <th>従来型SIer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>資金力・継続性</td>
+        <td class="vs-win">◎ 上場企業・安定</td>
+        <td class="vs-lose">△ 調達依存</td>
+        <td class="vs-lose">✗ 苦境・縮小中</td>
+        <td class="vs-win">◎ 黒字安定</td>
+        <td>○ 大手は安定</td>
+      </tr>
+      <tr>
+        <td>日本語・日本法規対応</td>
+        <td class="vs-win">◎ ネイティブ</td>
+        <td class="vs-win">◎ ネイティブ</td>
+        <td class="vs-lose">✗ 不十分</td>
+        <td class="vs-lose">△ 限定的</td>
+        <td class="vs-win">○ 対応可</td>
+      </tr>
+      <tr>
+        <td>現場フローを変えない設計</td>
+        <td class="vs-win">◎ 設計原則</td>
+        <td class="vs-lose">△ 一部変更必要</td>
+        <td class="vs-lose">✗ 大幅変更必要</td>
+        <td class="vs-win">○ ERP型で柔軟</td>
+        <td class="vs-lose">✗ 大幅変更が多い</td>
+      </tr>
+      <tr>
+        <td>NACCS連携・通関特化</td>
+        <td class="vs-win">◎ 認定先行取得</td>
+        <td class="vs-win">◎ 中核機能</td>
+        <td class="vs-lose">△ 限定的</td>
+        <td class="vs-win">◎ 最高水準</td>
+        <td class="vs-draw">△ 要個別対応</td>
+      </tr>
+      <tr>
+        <td>データ蓄積・AI活用</td>
+        <td class="vs-win">◎ 設計の中核</td>
+        <td class="vs-draw">○ 強化中</td>
+        <td class="vs-draw">○ 停滞中</td>
+        <td class="vs-win">◎ 最高水準</td>
+        <td class="vs-lose">✗ 低い</td>
+      </tr>
+      <tr>
+        <td>既存顧客チャネル</td>
+        <td class="vs-win">◎ 荷主ネットワーク</td>
+        <td class="vs-lose">✗ ゼロから</td>
+        <td class="vs-lose">✗ ゼロから</td>
+        <td class="vs-lose">△ FW直販のみ</td>
+        <td class="vs-draw">△ 既存IT顧客</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ S18: 補足 ─ 検証すべき仮説・次のアクション ═══ -->
+<div class="section" id="s18">
+  <div class="section-num">SECTION 18 ─ SUPPLEMENT</div>
+  <div class="section-title">補足 ─ 検証すべき仮説 &amp; 次のアクション</div>
+  <div style="font-size:12px;font-weight:700;color:#1e3a8a;margin-bottom:12px">◆ 最初に検証すべき3つの仮説</div>
+  <div class="hypo-grid">
+    <div class="hypo-card">
+      <div class="hypo-num">01</div>
+      <div class="hypo-q">アクティビスト圧力下のフォワーダーは「DX実績を作るためだけに」月50万円以上払うか？</div>
+      <div class="hypo-why">支払い意欲の検証。「使いたい」ではなく「今すぐ契約できるか」まで踏み込む。株主総会6ヶ月前の企業に絞ってヒアリング</div>
+    </div>
+    <div class="hypo-card">
+      <div class="hypo-num">02</div>
+      <div class="hypo-q">「現場フローを変えない」設計で、実際にどこまで情報連携できるか？技術的に実現可能か？</div>
+      <div class="hypo-why">技術可能性の検証。既存のレガシーシステム（2003年代のフォワーダーシステム）とのAPI接続がどれだけ複雑か。3社のフォワーダーシステムでPoC</div>
+    </div>
+    <div class="hypo-card">
+      <div class="hypo-num">03</div>
+      <div class="hypo-q">荷主が「フォワーダーにこのシステムを使わせたい」と言ってくれる状況を作れるか？</div>
+      <div class="hypo-why">チャネル検証。荷主から推薦してもらうことでフォワーダーの導入障壁が下がる仮説。既存荷主顧客5社にヒアリング</div>
+    </div>
+  </div>
+  <div style="font-size:12px;font-weight:700;color:#1e3a8a;margin-top:20px;margin-bottom:12px">◆ 次の90日間のアクション</div>
+  <div class="action-grid">
+    <div class="action-card" style="border-color:#1e3a8a">
+      <div class="wk">Week 1〜4</div>
+      <h4>ターゲット特定・仮説検証ヒアリング</h4>
+      <p>IR情報からアクティビスト圧力下のフォワーダーを10社リストアップ。既存荷主顧客からの紹介を含め、決裁者（部長以上）に直接アプローチ。「月50万円払うか」まで踏み込む</p>
+    </div>
+    <div class="action-card" style="border-color:#0f766e">
+      <div class="wk">Week 5〜8</div>
+      <h4>技術PoC設計・NACCS認定調査</h4>
+      <p>フォワーダー2〜3社のシステム構成をヒアリングし、API接続の複雑さを評価。NACCS認定取得の詳細コスト・期間・要件を行政へ確認。最小PoC（コンプライアンスチェック機能）の設計開始</p>
+    </div>
+    <div class="action-card" style="border-color:#7c3aed">
+      <div class="wk">Week 9〜12</div>
+      <h4>PoC契約1〜2社・資金・体制確認</h4>
+      <p>ヒアリング結果をもとにPoC提案書作成。「3ヶ月で見える成果を出す」契約を1〜2社と締結。社内の開発リソース・予算・責任者を確定させ、本格プロジェクト化の稟議を通す</p>
+    </div>
+  </div>
+  <div class="warn-box" style="margin-top:16px">
+    ⚠️ <strong>最大のリスク：</strong>「現場フローを変えない」と約束しながら実際には変わってしまうケース。PoC初期の現場定着に失敗すると「また失敗した」になりビジネスが終わる。カスタマーサクセスへの投資を最優先に。プロダクトより人的サポートが先。
+  </div>
+</div>
+
+</div><!-- /container -->
+<footer>フォワーダーDX支援 事業企画書 ─ Confidential ─ 2026.05</footer>
+
+<script>
+(function(){
+const COMPANIES=[
+  {name:'Shippio',   color:'#ef4444'},
+  {name:'Flexport',  color:'#2563eb'},
+  {name:'Freightos', color:'#0891b2'},
+  {name:'Forto',     color:'#7c3aed'},
+  {name:'Twill',     color:'#0369a1'},
+  {name:'CargoWise', color:'#b45309'},
+  {name:'日本通運',   color:'#15803d'},
+  {name:'近鉄EX',    color:'#047857'},
+  {name:'郵船L',     color:'#065f46'}
+];
+
+const MAPS=[
+  {id:'map1',xL:'現場フロー変更（低→高）',yL:'DXの深さ（低→高）',
+   pts:[[5.5,8.5],[7.5,9.0],[3.5,5.5],[6.5,8.0],[4.0,5.5],[2.5,9.5],[2.0,3.5],[2.0,3.0],[2.0,3.5]]},
+  {id:'map2',xL:'日本市場特化度（低→高）',yL:'機能フルスタック度',
+   pts:[[9.0,7.5],[1.5,9.0],[1.0,4.5],[1.5,8.0],[2.0,5.0],[4.0,9.5],[9.5,8.5],[8.5,7.5],[8.5,7.5]]},
+  {id:'map3',xL:'初期コスト（低→高）',yL:'長期データ蓄積価値',
+   pts:[[5.5,7.5],[6.5,8.5],[2.5,4.5],[6.0,7.5],[2.5,4.0],[8.5,9.5],[7.5,5.5],[7.0,5.0],[7.0,5.5]]},
+  {id:'map4',xL:'ターゲット規模（中小→大手）',yL:'汎用→物流特化',
+   pts:[[3.0,8.5],[5.5,7.5],[2.5,6.0],[4.5,8.0],[2.0,7.0],[7.5,9.5],[9.0,9.0],[8.5,8.5],[8.5,8.5]]},
+  {id:'map5',xL:'フォワーダーへのメリット',yL:'荷主へのメリット',
+   pts:[[7.0,7.5],[4.5,9.0],[2.5,8.5],[6.0,7.5],[2.5,7.5],[9.5,3.0],[6.0,6.0],[5.5,5.5],[5.5,6.0]]},
+  {id:'map6',xL:'通関特化→全機能',yL:'サポート→代替',
+   pts:[[7.0,7.5],[8.5,8.5],[4.0,6.5],[8.0,8.0],[6.0,6.5],[9.5,3.5],[8.0,4.5],[7.5,4.5],[7.5,4.5]]},
+  {id:'map7',xL:'単機能→プラットフォーム',yL:'スイッチングコスト（低→高）',
+   pts:[[7.0,6.5],[8.5,7.5],[4.5,4.0],[7.5,7.0],[4.0,3.5],[9.5,9.5],[6.5,7.0],[6.0,6.5],[6.0,7.0]]},
+  {id:'map8',xL:'ネットワーク効果の強さ',yL:'標準化への貢献度',
+   pts:[[6.0,5.5],[7.5,6.5],[7.5,7.5],[5.5,5.5],[4.0,4.0],[8.5,8.5],[5.0,3.5],[4.5,3.5],[4.5,3.5]]},
+  {id:'map9',xL:'収益化スピード（遅→速）',yL:'参入障壁の高さ',
+   pts:[[6.5,7.5],[5.0,8.0],[7.5,5.5],[5.5,7.5],[7.0,5.0],[7.5,9.5],[8.0,8.5],[7.5,8.0],[7.5,8.0]]},
+  {id:'map10',xL:'今すぐ解決できるペイン',yL:'将来の戦略価値',
+   pts:[[7.5,7.5],[7.0,8.5],[8.5,4.5],[7.0,8.0],[7.5,4.5],[6.5,9.5],[5.0,4.5],[5.0,4.0],[5.0,4.5]]}
+];
+
+function drawMap(cfg){
+  const canvas=document.getElementById(cfg.id);
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const PL=58,PR=16,PT=16,PB=44;
+  const pw=W-PL-PR,ph=H-PT-PB;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+
+  // grid
+  ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+  for(let i=0;i<=10;i++){
+    const gx=PL+(i/10)*pw,gy=PT+(i/10)*ph;
+    ctx.beginPath();ctx.moveTo(gx,PT);ctx.lineTo(gx,PT+ph);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(PL,gy);ctx.lineTo(PL+pw,gy);ctx.stroke();
+  }
+
+  // quadrant shading (high-high)
+  ctx.fillStyle='rgba(220,252,231,0.35)';
+  ctx.fillRect(PL+pw*0.5,PT,pw*0.5,ph*0.5);
+  ctx.fillStyle='rgba(254,226,226,0.25)';
+  ctx.fillRect(PL,PT+ph*0.5,pw*0.5,ph*0.5);
+
+  // axes
+  ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(PL,PT+ph);ctx.lineTo(PL+pw+8,PT+ph);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(PL,PT+ph);ctx.lineTo(PL,PT-8);ctx.stroke();
+
+  // arrow heads
+  ctx.fillStyle='#94a3b8';
+  ctx.beginPath();ctx.moveTo(PL+pw+8,PT+ph);ctx.lineTo(PL+pw,PT+ph-4);ctx.lineTo(PL+pw,PT+ph+4);ctx.fill();
+  ctx.beginPath();ctx.moveTo(PL,PT-8);ctx.lineTo(PL-4,PT);ctx.lineTo(PL+4,PT);ctx.fill();
+
+  // axis labels
+  ctx.fillStyle='#475569';ctx.font='10px sans-serif';ctx.textAlign='center';
+  ctx.fillText(cfg.xL,PL+pw/2,H-6);
+  ctx.save();ctx.translate(12,PT+ph/2);ctx.rotate(-Math.PI/2);ctx.fillText(cfg.yL,0,0);ctx.restore();
+
+  // center lines
+  ctx.strokeStyle='#cbd5e1';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(PL+pw*0.5,PT);ctx.lineTo(PL+pw*0.5,PT+ph);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(PL,PT+ph*0.5);ctx.lineTo(PL+pw,PT+ph*0.5);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // jitter to avoid overlap
+  const used=[];
+  function jitter(px,py,name){
+    for(const u of used){
+      if(Math.abs(u[0]-px)<22&&Math.abs(u[1]-py)<16){
+        px+=14;py-=10;
+      }
+    }
+    used.push([px,py]);
+    return [px,py];
+  }
+
+  // dots
+  cfg.pts.forEach((pt,i)=>{
+    const px=PL+(pt[0]/10)*pw;
+    const py=PT+ph-(pt[1]/10)*ph;
+    const c=COMPANIES[i];
+    ctx.beginPath();ctx.arc(px,py,6,0,Math.PI*2);
+    ctx.fillStyle=c.color;ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+
+    const [lx,ly]=jitter(px,py,c.name);
+    ctx.fillStyle='#1e293b';ctx.font='bold 8px sans-serif';ctx.textAlign='center';
+    ctx.fillText(c.name,lx,ly-9);
+  });
+}
+
+window.addEventListener('load',function(){
+  MAPS.forEach(m=>drawMap(m));
+});
+})();
+</script>
+</body>
+</html>
+
