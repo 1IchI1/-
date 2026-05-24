@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>資料ビューア</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;background:#f0f4f8;color:#1e293b;min-height:100vh}
+header{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;padding:28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{font-size:18px;font-weight:700;letter-spacing:.03em}
+header .sub{font-size:11px;opacity:.6;margin-top:4px}
+.back{color:#93c5fd;font-size:11px;text-decoration:none;opacity:.8}
+.back:hover{opacity:1}
+.container{max-width:900px;margin:0 auto;padding:28px 20px}
+
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);overflow:hidden;margin-bottom:20px}
+.card-head{padding:18px 24px;display:flex;align-items:center;gap:16px}
+.card-head.pptx{background:linear-gradient(135deg,#c2410c,#ea580c)}
+.card-head.pdf{background:linear-gradient(135deg,#1e3a8a,#2563eb)}
+.card-icon{font-size:28px;width:44px;text-align:center;flex-shrink:0}
+.card-info{flex:1}
+.card-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:3px}
+.card-meta{font-size:11px;color:rgba(255,255,255,.7)}
+.card-body{padding:20px 24px}
+.card-desc{font-size:12px;color:#64748b;margin-bottom:16px;line-height:1.6}
+
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;cursor:pointer;border:none;transition:opacity .15s,transform .1s}
+.btn:hover{opacity:.88;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:#1e3a8a;color:#fff}
+.btn-orange{background:#c2410c;color:#fff}
+.btn-outline{background:#fff;color:#1e293b;border:1.5px solid #cbd5e1}
+.btn-green{background:#15803d;color:#fff}
+
+.viewer-wrap{margin-top:16px;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0;background:#000}
+.viewer-wrap iframe{display:block;width:100%;height:600px;border:none}
+
+.tip{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 16px;font-size:11px;color:#64748b;line-height:1.6;margin-top:14px}
+.tip strong{color:#1e293b}
+
+.tab-row{display:flex;gap:2px;margin-bottom:-1px;position:relative;z-index:1}
+.tab{padding:8px 16px;font-size:11px;font-weight:700;border:1px solid #e2e8f0;border-bottom:none;border-radius:6px 6px 0 0;background:#f8fafc;color:#64748b;cursor:pointer}
+.tab.active{background:#fff;color:#1e3a8a;border-color:#e2e8f0}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="sub">限定公開 ─ このURLを知っている人のみ閲覧可</div>
+    <h1>資料ビューア</h1>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- PPTX -->
+  <div class="card">
+    <div class="card-head pptx">
+      <div class="card-icon">📊</div>
+      <div class="card-info">
+        <div class="card-title">業務提案素材.pptx</div>
+        <div class="card-meta">PowerPoint ─ 8.1 MB ─ Microsoft Office Online で閲覧・コピー可</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-desc">
+        <strong>社用PCでのコピペ方法：</strong><br>
+        「Office Online で開く」→ スライドを選択してCtrl+C でコピー可能。ダウンロードして直接開いても使えます。
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-orange" id="btn-office" href="#" target="_blank">📂 Office Online で開く（コピペ可）</a>
+        <a class="btn btn-outline" id="btn-dl-pptx" href="#">⬇️ ダウンロード</a>
+      </div>
+      <div class="tip">
+        <strong>コピペ手順：</strong> Office Online で開く → 目的のスライドをクリック → テキストや図を選択 → Ctrl+C → 社用PCの PowerPoint / Word に Ctrl+V
+      </div>
+      <div class="tab-row" style="margin-top:16px">
+        <div class="tab active" id="tab-inline" onclick="togglePptxView('inline')">🖥 ここで直接プレビュー</div>
+        <div class="tab" id="tab-ext" onclick="togglePptxView('ext')">外部で開く</div>
+      </div>
+      <div class="viewer-wrap" id="pptx-viewer">
+        <iframe id="pptx-frame" src="" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF -->
+  <div class="card">
+    <div class="card-head pdf">
+      <div class="card-icon">📄</div>
+      <div class="card-info">
+        <div class="card-title">DBD企画書フォーマット.pdf</div>
+        <div class="card-meta">PDF ─ 2.1 MB ─ ブラウザで直接閲覧可</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-desc">
+        ブラウザ内でそのまま閲覧できます。ダウンロードも可能です。
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" id="btn-pdf" href="#" target="_blank">📄 PDFを別タブで開く</a>
+        <a class="btn btn-outline" id="btn-dl-pdf" href="#">⬇️ ダウンロード</a>
+      </div>
+      <div class="viewer-wrap" style="margin-top:16px">
+        <iframe id="pdf-frame" src="" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const BASE = 'https://1ichi1.github.io/-/';
+  const PPTX_PATH = encodeURIComponent('参考資料') + '/' + encodeURIComponent('業務提案素材.pptx');
+  const PDF_PATH  = encodeURIComponent('参考資料') + '/DBD' + encodeURIComponent('企画書フォーマット') + '.pdf';
+
+  const pptxUrl   = BASE + PPTX_PATH;
+  const pdfUrl    = BASE + PDF_PATH;
+  const officeUrl = 'https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent(pptxUrl);
+
+  document.getElementById('btn-office').href   = officeUrl;
+  document.getElementById('btn-dl-pptx').href  = pptxUrl;
+  document.getElementById('btn-pdf').href       = pdfUrl;
+  document.getElementById('btn-dl-pdf').href    = pdfUrl;
+
+  // inline PPTX preview (Office Online embedded)
+  document.getElementById('pptx-frame').src = officeUrl;
+  // PDF inline
+  document.getElementById('pdf-frame').src  = pdfUrl;
+})();
+
+function togglePptxView(mode) {
+  document.getElementById('tab-inline').classList.toggle('active', mode === 'inline');
+  document.getElementById('tab-ext').classList.toggle('active', mode === 'ext');
+}
+</script>
+</body>
+</html>

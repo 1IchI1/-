@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>事業戦略パターン 6案比較</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;background:#f0f4f8;color:#1e293b;font-size:13px;line-height:1.6}
+header{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;padding:36px 40px}
+header h1{font-size:23px;font-weight:700;letter-spacing:.03em;line-height:1.3}
+header .sub{font-size:13px;opacity:.72;margin-top:8px;line-height:1.55}
+header .date{font-size:10px;opacity:.45;margin-top:4px;letter-spacing:.06em}
+.nav{display:flex;gap:5px;flex-wrap:wrap;margin-top:16px}
+.nav a{color:#93c5fd;font-size:10px;background:rgba(255,255,255,.1);padding:3px 9px;border-radius:20px;text-decoration:none;white-space:nowrap}
+.nav a:hover{background:rgba(255,255,255,.22)}
+.container{max-width:1200px;margin:0 auto;padding:28px 20px}
+.section{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);padding:24px 28px;margin-bottom:24px}
+.section-title{font-size:15px;font-weight:700;color:#1e3a8a;border-left:4px solid #1e3a8a;padding-left:12px;margin-bottom:16px}
+.section-num{font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.1em;margin-bottom:4px;text-transform:uppercase}
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;color:#fff;margin:1px}
+.sep{height:1px;background:#e2e8f0;margin:20px 0}
+
+/* ── PATTERN CARDS ── */
+.pattern-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.pattern-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.pattern-grid{grid-template-columns:1fr}}
+
+.pcard{border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .15s,box-shadow .15s}
+.pcard:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.pcard-head{padding:18px 20px;color:#fff}
+.pcard-head.pa{background:linear-gradient(135deg,#1e3a8a,#3b82f6)}
+.pcard-head.pb{background:linear-gradient(135deg,#0f766e,#14b8a6)}
+.pcard-head.pc{background:linear-gradient(135deg,#7c2d12,#ea580c)}
+.pcard-head.pd{background:linear-gradient(135deg,#713f12,#d97706)}
+.pcard-head.pe{background:linear-gradient(135deg,#1a2e05,#4d7c0f)}
+.pcard-head.pf{background:linear-gradient(135deg,#3b0764,#9333ea)}
+.pcard-letter{font-size:11px;font-weight:800;opacity:.6;letter-spacing:.12em;margin-bottom:4px}
+.pcard-title{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:6px}
+.pcard-sub{font-size:11px;opacity:.82;line-height:1.55}
+.pcard-body{padding:16px 20px;background:#f8fafc}
+.pcard-row{display:flex;gap:8px;margin-bottom:8px;font-size:11px;border-bottom:1px dotted #e2e8f0;padding-bottom:8px}
+.pcard-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.pcard-label{font-size:9px;font-weight:700;color:#64748b;min-width:68px;flex-shrink:0;padding-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.pcard-val{color:#334155;line-height:1.5}
+
+/* ── COMPARISON MATRIX ── */
+.matrix-wrap{overflow-x:auto}
+.matrix{width:100%;border-collapse:collapse;font-size:11px}
+.matrix th{background:#0f172a;color:#fff;padding:8px 12px;text-align:left;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.matrix td{padding:8px 12px;border-bottom:1px solid #e2e8f0;vertical-align:top;line-height:1.5}
+.matrix tr:hover td{background:#f8fafc}
+.matrix .dim{font-weight:700;color:#1e293b;white-space:nowrap}
+.star{color:#f59e0b;font-size:12px}
+.star-empty{color:#e2e8f0;font-size:12px}
+.score-a{background:#dbeafe}
+.score-b{background:#ccfbf1}
+.score-c{background:#ffedd5}
+.score-d{background:#fef9c3}
+.score-e{background:#dcfce7}
+.score-f{background:#f3e8ff}
+
+/* ── VERDICT ── */
+.verdict{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #16a34a;border-radius:10px;padding:14px 18px;margin-top:14px}
+.verdict h4{color:#15803d;font-size:12px;font-weight:700;margin-bottom:5px}
+.verdict p{font-size:11px;color:#166534;line-height:1.6}
+.warn-box{background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:11px;color:#713f12}
+.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:11px;color:#1e3a8a}
+
+/* ── DEEP DIVE SECTIONS ── */
+.deep-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:12px}
+@media(max-width:700px){.deep-grid{grid-template-columns:1fr}}
+.deep-box{border-radius:10px;border:1px solid #e2e8f0;overflow:hidden}
+.deep-head{padding:10px 14px;font-size:11px;font-weight:700;color:#fff}
+.deep-head.blue{background:#1e3a8a}
+.deep-head.teal{background:#0f766e}
+.deep-head.orange{background:#c2410c}
+.deep-head.amber{background:#b45309}
+.deep-head.green{background:#15803d}
+.deep-head.purple{background:#7e22ce}
+.deep-body{padding:12px 14px;background:#fff;font-size:11px;line-height:1.6;color:#334155}
+.deep-body ul{list-style:none;padding:0}
+.deep-body li{padding:3px 0 3px 14px;position:relative;border-bottom:1px dotted #e2e8f0}
+.deep-body li:last-child{border-bottom:none}
+.deep-body li::before{content:'▸';position:absolute;left:0;color:#94a3b8;font-size:9px;top:5px}
+
+/* ── RADAR CHART ── */
+.radar-wrap{display:flex;justify-content:center;flex-wrap:wrap;gap:24px;padding:12px 0}
+.radar-item{text-align:center}
+.radar-label{font-size:10px;font-weight:700;margin-top:8px;color:#334155}
+.radar-sub{font-size:9px;color:#94a3b8}
+
+/* ── COMBO SECTION ── */
+.combo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+@media(max-width:800px){.combo-grid{grid-template-columns:1fr}}
+.combo-card{border-radius:10px;border:1px solid #e2e8f0;padding:14px 16px;background:#fff}
+.combo-arrow{text-align:center;font-size:20px;color:#94a3b8;padding:4px 0}
+.combo-title{font-size:12px;font-weight:700;color:#1e3a8a;margin-bottom:6px}
+.combo-desc{font-size:11px;color:#475569;line-height:1.55}
+.combo-tags{margin-top:8px;display:flex;gap:4px;flex-wrap:wrap}
+
+/* ── DECISION FLOW ── */
+.flow-wrap{overflow-x:auto}
+.flow{display:flex;align-items:flex-start;gap:0;min-width:900px}
+.flow-step{flex:1;position:relative}
+.flow-step::after{content:'→';position:absolute;right:-14px;top:22px;color:#94a3b8;font-size:18px;z-index:1}
+.flow-step:last-child::after{display:none}
+.flow-box{border-radius:10px;border:1px solid #e2e8f0;padding:12px 14px;background:#fff;margin:0 8px;min-height:110px}
+.flow-q{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.flow-ans{font-size:11px;color:#334155;line-height:1.5}
+.flow-ans span{display:block;padding:2px 0 2px 12px;position:relative}
+.flow-ans span::before{content:'→';position:absolute;left:0;color:#94a3b8}
+
+/* ── EXISTING SERVICES ── */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+@media(max-width:800px){.svc-grid{grid-template-columns:1fr 1fr}}
+.svc-card{border-radius:10px;border:1px solid #e2e8f0;padding:14px;background:#fff}
+.svc-name{font-size:12px;font-weight:700;color:#1e293b;margin-bottom:4px}
+.svc-cat{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}
+.svc-gap{font-size:10px;color:#64748b;line-height:1.5;margin-top:6px;border-top:1px dotted #e2e8f0;padding-top:6px}
+
+/* ── SOCIAL PROBLEM ── */
+.social-row{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid #e2e8f0}
+.social-row:last-child{border-bottom:none}
+.social-icon{font-size:22px;width:40px;flex-shrink:0;text-align:center}
+.social-name{font-size:12px;font-weight:700;color:#1e293b;margin-bottom:2px}
+.social-desc{font-size:11px;color:#64748b;line-height:1.5}
+.social-score{display:flex;gap:3px;margin-left:auto;flex-shrink:0}
+.social-dot{width:10px;height:10px;border-radius:50%;background:#e2e8f0}
+.social-dot.on{background:#f59e0b}
+</style>
+</head>
+<body>
+<header>
+  <div class="section-num">STRATEGY EXPLORATION</div>
+  <h1>事業戦略パターン 6案比較</h1>
+  <div class="sub">国際物流DX ─ 顧客・課題・社会問題・グローバル展開の軸で6方向を並列検討</div>
+  <div class="date">2026-05-21 ─ 本資料は検討の叩き台。深掘りするパターンを選定するための比較資料</div>
+  <nav class="nav">
+    <a href="#overview">概要比較</a>
+    <a href="#social">社会問題のキャッチー度</a>
+    <a href="#existing">既存サービス地図</a>
+    <a href="#patterns">6パターン詳細</a>
+    <a href="#matrix">評価マトリクス</a>
+    <a href="#combo">組み合わせ案</a>
+    <a href="#decision">意思決定フロー</a>
+    <a href="index.html">← 一覧に戻る</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- ═══ S0 QUESTION ═══ -->
+<div class="section" id="questions">
+  <div class="section-num">STARTING QUESTIONS</div>
+  <div class="section-title">今回の問い</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div style="background:#f8fafc;border-radius:8px;padding:14px;border-left:3px solid #6366f1">
+      <div style="font-size:10px;font-weight:700;color:#6366f1;letter-spacing:.07em;margin-bottom:6px">QUESTION 1</div>
+      <div style="font-size:12px;font-weight:700;color:#1e293b;line-height:1.5">顧客はフォワーダーでなければならないのか？</div>
+      <div style="font-size:11px;color:#64748b;margin-top:6px;line-height:1.5">荷主・通関業者・政府・製造業など他に深いペインを持つ顧客がいないか</div>
+    </div>
+    <div style="background:#f8fafc;border-radius:8px;padding:14px;border-left:3px solid #ea580c">
+      <div style="font-size:10px;font-weight:700;color:#ea580c;letter-spacing:.07em;margin-bottom:6px">QUESTION 2</div>
+      <div style="font-size:12px;font-weight:700;color:#1e293b;line-height:1.5">2024年問題レベルのキャッチーな社会課題が国際物流にあるか？</div>
+      <div style="font-size:11px;color:#64748b;margin-top:6px;line-height:1.5">誰でも理解できる「締め切り」「規制」「危機感」のある課題を特定する</div>
+    </div>
+    <div style="background:#f8fafc;border-radius:8px;padding:14px;border-left:3px solid #0f766e">
+      <div style="font-size:10px;font-weight:700;color:#0f766e;letter-spacing:.07em;margin-bottom:6px">QUESTION 3</div>
+      <div style="font-size:12px;font-weight:700;color:#1e293b;line-height:1.5">グローバル・横展開できるか？</div>
+      <div style="font-size:11px;color:#64748b;margin-top:6px;line-height:1.5">日本固有か、アジア・EUに展開できるか。市場の広がりを確認する</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S1 SOCIAL PROBLEMS ═══ -->
+<div class="section" id="social">
+  <div class="section-num">SECTION 01</div>
+  <div class="section-title">社会問題のキャッチー度 比較</div>
+  <p style="font-size:11px;color:#64748b;margin-bottom:14px">「2024年問題」は①締め切り ②法律 ③数字 ④メディア露出の4拍子が揃ったから機能した。国際物流で同等の問題を探す。</p>
+
+  <div class="social-row">
+    <div class="social-icon">🚛</div>
+    <div style="flex:1">
+      <div class="social-name">2024年問題（参照点）</div>
+      <div class="social-desc">トラックドライバー残業上限規制。2024年4月1日という明確な締め切り。ドライバー不足・輸送能力20%減という数字。メディア報道多数。</div>
+    </div>
+    <div class="social-score"><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div></div>
+  </div>
+
+  <div class="social-row">
+    <div class="social-icon">🌍</div>
+    <div style="flex:1">
+      <div class="social-name" style="color:#c2410c">CBAM（EU炭素国境調整メカニズム）★ 最有力</div>
+      <div class="social-desc">2026年1月から欧州への輸出品に炭素コスト申告が義務化。未対応で輸出禁止・罰金。鉄鋼・アルミ・肥料・電力・セメント・水素が対象。日本の対EU輸出企業約6,000社以上が影響。「2026年CBAM問題」と呼べる。</div>
+    </div>
+    <div class="social-score"><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div></div>
+  </div>
+
+  <div class="social-row">
+    <div class="social-icon">⚓</div>
+    <div style="flex:1">
+      <div class="social-name">地政学リスク・海上輸送遅延</div>
+      <div class="social-desc">紅海危機・中国リスク・台湾海峡緊張。漠然とした危機感はあるが「いつまでに何をしなければならない」という具体的締め切りがない。キャッチーさに欠ける。</div>
+    </div>
+    <div class="social-score"><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot"></div><div class="social-dot"></div><div class="social-dot"></div></div>
+  </div>
+
+  <div class="social-row">
+    <div class="social-icon">🌾</div>
+    <div style="flex:1">
+      <div class="social-name">食料安全保障・輸入依存リスク</div>
+      <div class="social-desc">日本の食料自給率38%。小麦・大豆・トウモロコシはほぼ輸入依存。戦争・気候変動で輸入途絶の可能性。「国策」にはなりやすいが、民間ビジネスとして誰が何を買うかが不明確。</div>
+    </div>
+    <div class="social-score"><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot"></div><div class="social-dot"></div></div>
+  </div>
+
+  <div class="social-row">
+    <div class="social-icon">🏭</div>
+    <div style="flex:1">
+      <div class="social-name">中小製造業の輸出停滞・廃業危機</div>
+      <div class="social-desc">日本の中小製造業30万社が輸出できないまま国内縮小市場で消滅しつつある。「町工場を世界へ」は情緒的にキャッチーだが、直接の締め切りがなく政策頼みになりやすい。</div>
+    </div>
+    <div class="social-score"><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot"></div><div class="social-dot"></div></div>
+  </div>
+
+  <div class="social-row">
+    <div class="social-icon">🔐</div>
+    <div style="flex:1">
+      <div class="social-name">輸出規制強化（EAR・外為法改正）</div>
+      <div class="social-desc">米国EAR（輸出管理規則）・日本外為法の強化で、先端半導体・量子コンピュータ部品の輸出に事前審査が必要に。罰則は厳しいが対象企業が特定業種に限られる。</div>
+    </div>
+    <div class="social-score"><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot"></div></div>
+  </div>
+
+  <div class="social-row">
+    <div class="social-icon">📦</div>
+    <div style="flex:1">
+      <div class="social-name">SCM可視化・サプライチェーン強靭化</div>
+      <div class="social-desc">コロナ禍・ウクライナ・半導体不足でSCM脆弱性が露呈。「サプライチェーン強靭化法」が各国で整備中。ただし「可視化ツール」はすでに競合が多く、差別化軸が見えにくい。</div>
+    </div>
+    <div class="social-score"><div class="social-dot on"></div><div class="social-dot on"></div><div class="social-dot"></div><div class="social-dot"></div><div class="social-dot"></div></div>
+  </div>
+
+  <div class="verdict">
+    <h4>結論：「2026年CBAM問題」が最もキャッチー</h4>
+    <p>締め切り（2026年1月）・法律（EU規制）・数字（6,000社以上）・輸出禁止という罰則 ─ 2024年問題と同じ4拍子が揃う。フォワーダー向けと組み合わせることも可能（荷主のCBAM対応をフォワーダー経由で行う）。</p>
+  </div>
+</div>
+
+<!-- ═══ S2 EXISTING SERVICES ═══ -->
+<div class="section" id="existing">
+  <div class="section-num">SECTION 02</div>
+  <div class="section-title">既存サービス地図</div>
+  <p style="font-size:11px;color:#64748b;margin-bottom:14px">領域ごとに主要プレイヤーと「埋まっていない隙間」を整理する。</p>
+
+  <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#94a3b8;text-transform:uppercase;margin-bottom:8px">フォワーダーDX・デジタルフォワーダー</div>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <div class="svc-name">Shippio</div>
+      <div class="svc-cat" style="color:#ef4444">日本 / Series C 34億円 / 2025成長継続</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">輸出入の書類・追跡・フォワーダー紹介をSaaS化。中小荷主向け。フォワーダーを代替する方向性。</div>
+      <div class="svc-gap">隙間：大手荷主・フォワーダー内部業務・NACCS連携は未対応</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">Flexport</div>
+      <div class="svc-cat" style="color:#2563eb">米国 / $25億調達 / 時価評価下落中</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">海空陸の一気通貫フォワーダー＋SaaS。大手荷主向け。日本市場はパートナー経由でカバー範囲限定的。</div>
+      <div class="svc-gap">隙間：日本語・NACCS対応・中小企業へのリーチ</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">CargoWise</div>
+      <div class="svc-cat" style="color:#b45309">豪州 / ERP型 / フォワーダー内部向け</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">フォワーダーの内部オペレーション（見積・運賃・書類）を一元管理するERPシステム。日本法人あり。</div>
+      <div class="svc-gap">隙間：荷主連携・リアルタイム可視化・AIによる差分検知</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">TradeWaltz</div>
+      <div class="svc-cat" style="color:#0f766e">日本 / 経産省主導 / 貿易書類電子化</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">電子B/L・貿易書類のブロックチェーン管理。大手商社・銀行が出資。政府主導ゆえ普及が遅い。</div>
+      <div class="svc-gap">隙間：中小企業への浸透・使いやすいUI・リアルオペレーションとの接続</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">Freightos</div>
+      <div class="svc-cat" style="color:#0891b2">イスラエル / 運賃比較マーケット</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">海上・航空運賃のリアルタイム比較・予約プラットフォーム。荷主とフォワーダーをつなぐ。</div>
+      <div class="svc-gap">隙間：書類・通関・日本国内接続</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">Forto (旧FreightHub)</div>
+      <div class="svc-cat" style="color:#7c3aed">ドイツ / 欧州フォワーダーDX</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">欧州中心のデジタルフォワーダー。サプライチェーン可視化に注力。日本展開は限定的。</div>
+      <div class="svc-gap">隙間：アジア発輸出・日本市場</div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+  <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#94a3b8;text-transform:uppercase;margin-bottom:8px">SCM可視化・リスク管理</div>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <div class="svc-name">project44</div>
+      <div class="svc-cat" style="color:#6366f1">米国 / リアルタイム輸送可視化</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">海上・陸上・航空のトラッキング一元化。大手製造業・小売向け。日本での普及は大手のみ。</div>
+      <div class="svc-gap">隙間：中小荷主・コスト・日本語対応</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">FourKites</div>
+      <div class="svc-cat" style="color:#0891b2">米国 / サプライチェーン可視化</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">輸送トラッキング＋需要予測AI。大手食品・小売向け。日本支社あり、導入は大手のみ。</div>
+      <div class="svc-gap">隙間：中小向けプラン・日本固有の通関情報連携</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">Resilinc</div>
+      <div class="svc-cat" style="color:#ea580c">米国 / サプライヤーリスクモニタリング</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">ニュース・地政学データからサプライヤーリスクを自動検知。大手製造業向け。高額。</div>
+      <div class="svc-gap">隙間：日本語・中堅企業向け・物流コスト連動</div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+  <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#94a3b8;text-transform:uppercase;margin-bottom:8px">CBAM・カーボン対応</div>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <div class="svc-name">Carbmee</div>
+      <div class="svc-cat" style="color:#15803d">ドイツ / CBAM申告支援SaaS</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">EU向け輸出品のカーボンフットプリント計算・CBAM申告書作成。欧州企業向け。</div>
+      <div class="svc-gap">隙間：日本の輸出企業向けローカライズ・フォワーダーとの連携</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">Sphera / EcoVadis</div>
+      <div class="svc-cat" style="color:#15803d">欧州 / ESGサプライチェーン評価</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">サプライヤーのESG評価・カーボン算定。大手企業向け。日本語対応は限定的。</div>
+      <div class="svc-gap">隙間：中小日本企業向け・物流由来の排出量計算</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">日本の既存ツール</div>
+      <div class="svc-cat" style="color:#94a3b8">日本 / ほぼ空白</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">CBAM対応の日本語SaaSはほぼ存在しない（2025年時点）。大手コンサルが個別対応しているのみ。</div>
+      <div class="svc-gap">★ ここが最大の隙間 ─ 6,000社以上の需要に対して供給がない</div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+  <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#94a3b8;text-transform:uppercase;margin-bottom:8px">輸出規制・コンプライアンス</div>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <div class="svc-name">Descartes Visual Compliance</div>
+      <div class="svc-cat" style="color:#6366f1">米国 / 輸出管理スクリーニング</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">EAR・OFAC制裁リストとの照合自動化。大手製造業・商社向け。高額・英語UI。</div>
+      <div class="svc-gap">隙間：日本の外為法対応・中堅企業向け・使いやすさ</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">Amber Road (GT Nexus統合済)</div>
+      <div class="svc-cat" style="color:#6366f1">米国 / 貿易コンプライアンス</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">輸出入コンプライアンス管理の大手。Infor傘下。エンタープライズ向け。</div>
+      <div class="svc-gap">隙間：日本企業向けローカライズ・SaaS型の低価格帯</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-name">日本の既存ツール</div>
+      <div class="svc-cat" style="color:#94a3b8">日本 / ほぼ空白</div>
+      <div style="font-size:11px;color:#334155;line-height:1.5">外為法・安全保障貿易管理に特化した日本語SaaSは事実上存在しない。三菱・丸紅が自社開発のみ。</div>
+      <div class="svc-gap">★ 中堅製造業・商社向けに大きな空白</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S3 PATTERN OVERVIEW ═══ -->
+<div class="section" id="overview">
+  <div class="section-num">SECTION 03</div>
+  <div class="section-title">6パターン 概要マップ</div>
+  <div class="pattern-grid">
+
+    <div class="pcard">
+      <div class="pcard-head pa">
+        <div class="pcard-letter">PATTERN A</div>
+        <div class="pcard-title">フォワーダー向けDX<br>（現行戦略・アクティビスト圧力）</div>
+        <div class="pcard-sub">業務効率化SaaSとして入り → データ蓄積 → デジタルフォワーダー化</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-row"><div class="pcard-label">顧客</div><div class="pcard-val">中堅〜大手フォワーダー（アクティビスト圧力下）</div></div>
+        <div class="pcard-row"><div class="pcard-label">課題</div><div class="pcard-val">書類・情報の分散。DX実績を株主に見せる必要性</div></div>
+        <div class="pcard-row"><div class="pcard-label">社会問題</div><div class="pcard-val">物流DX遅延・人手不足。キャッチーさは中程度</div></div>
+        <div class="pcard-row"><div class="pcard-label">競合</div><div class="pcard-val">Shippio（荷主側）・CargoWise（内部ERP）・NACCS</div></div>
+        <div class="pcard-row"><div class="pcard-label">グローバル</div><div class="pcard-val">NACCSは日本固有。アジア他国の税関APIに横展開可能</div></div>
+        <div class="pcard-row"><div class="pcard-label">強み活用</div><div class="pcard-val">既存顧客ネットワーク・NACCS認定・資金力</div></div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head pb">
+        <div class="pcard-letter">PATTERN B</div>
+        <div class="pcard-title">荷主向け<br>SCリスク可視化ハブ</div>
+        <div class="pcard-sub">地政学リスク・遅延リスクをリアルタイムで可視化。フォワーダーは使う側でなく接続先</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-row"><div class="pcard-label">顧客</div><div class="pcard-val">輸出入を行う中堅製造業・商社（SCM担当者）</div></div>
+        <div class="pcard-row"><div class="pcard-label">課題</div><div class="pcard-val">荷物がどこにあるか分からない。遅延が突然来る</div></div>
+        <div class="pcard-row"><div class="pcard-label">社会問題</div><div class="pcard-val">地政学リスク・紅海危機。締め切りなく漠然</div></div>
+        <div class="pcard-row"><div class="pcard-label">競合</div><div class="pcard-val">project44・FourKites（大手向け高額）。日本中小向け空白</div></div>
+        <div class="pcard-row"><div class="pcard-label">グローバル</div><div class="pcard-val">アジア発輸出企業全体に横展開可能。高いポテンシャル</div></div>
+        <div class="pcard-row"><div class="pcard-label">強み活用</div><div class="pcard-val">フォワーダーとの既存関係でデータ取得が有利</div></div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head pc">
+        <div class="pcard-letter">PATTERN C</div>
+        <div class="pcard-title">CBAM対応SaaS<br>「2026年CBAM問題」</div>
+        <div class="pcard-sub">EU炭素国境税への対応義務。2026年1月という明確な締め切り。日本製品の輸出継続に直結</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-row"><div class="pcard-label">顧客</div><div class="pcard-val">EU向け輸出企業（鉄鋼・アルミ・化学・肥料など）</div></div>
+        <div class="pcard-row"><div class="pcard-label">課題</div><div class="pcard-val">CBAMへの未対応 → EU輸出停止・罰金。準備方法が不明</div></div>
+        <div class="pcard-row"><div class="pcard-label">社会問題</div><div class="pcard-val">★★★★★ 締め切り×法律×罰則×数字が揃う。2024年問題級</div></div>
+        <div class="pcard-row"><div class="pcard-label">競合</div><div class="pcard-val">欧州SaaSは英語・欧州企業向け。日本語対応はほぼ空白</div></div>
+        <div class="pcard-row"><div class="pcard-label">グローバル</div><div class="pcard-val">CBAM対象はEU規制。台湾・韓国・中国も同様の問題あり</div></div>
+        <div class="pcard-row"><div class="pcard-label">強み活用</div><div class="pcard-val">フォワーダーと組めばサプライチェーン上流データが取れる</div></div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head pd">
+        <div class="pcard-letter">PATTERN D</div>
+        <div class="pcard-title">中小輸出製造業支援<br>「日本の町工場を世界へ」</div>
+        <div class="pcard-sub">輸出の壁（言語・書類・規制・物流）を一括解決。製造業の国際化を支援する輸出DX</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-row"><div class="pcard-label">顧客</div><div class="pcard-val">輸出未経験・輸出初期の中小製造業（従業員50〜300名）</div></div>
+        <div class="pcard-row"><div class="pcard-label">課題</div><div class="pcard-val">輸出の始め方がわからない。言語・書類・通関・フォワーダー選定</div></div>
+        <div class="pcard-row"><div class="pcard-label">社会問題</div><div class="pcard-val">中小製造業の廃業危機・国内市場縮小。情緒的にキャッチー</div></div>
+        <div class="pcard-row"><div class="pcard-label">競合</div><div class="pcard-val">Shopify（EC）・Shippio（一部）・JETRO（非営利）。統合ソリューションなし</div></div>
+        <div class="pcard-row"><div class="pcard-label">グローバル</div><div class="pcard-val">アジア全体の中小製造業に同じ問題あり。東南アジアへ横展開可能</div></div>
+        <div class="pcard-row"><div class="pcard-label">強み活用</div><div class="pcard-val">フォワーダー・通関士ネットワークを顧客獲得チャネルに</div></div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head pe">
+        <div class="pcard-letter">PATTERN E</div>
+        <div class="pcard-title">食料安全保障インフラ<br>（B2G / 準公共事業）</div>
+        <div class="pcard-sub">輸入食料の安定調達・代替ルート確保をシステムで支援。農水省・商社・商船三井との連携</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-row"><div class="pcard-label">顧客</div><div class="pcard-val">農林水産省・大手商社・穀物輸入事業者</div></div>
+        <div class="pcard-row"><div class="pcard-label">課題</div><div class="pcard-val">食料輸入ルートの脆弱性。代替ルート・在庫の可視化ができていない</div></div>
+        <div class="pcard-row"><div class="pcard-label">社会問題</div><div class="pcard-val">食料安全保障。国策レベルの重要性。ただし民間ビジネス化が難しい</div></div>
+        <div class="pcard-row"><div class="pcard-label">競合</div><div class="pcard-val">各商社の内製システム。独立したSaaSは存在しない</div></div>
+        <div class="pcard-row"><div class="pcard-label">グローバル</div><div class="pcard-val">日本固有の問題として見えやすい。輸出国との二国間システムに発展可能</div></div>
+        <div class="pcard-row"><div class="pcard-label">強み活用</div><div class="pcard-val">政府系への信頼性・大型案件への対応力</div></div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-head pf">
+        <div class="pcard-letter">PATTERN F</div>
+        <div class="pcard-title">輸出規制コンプライアンスAI<br>（安全保障貿易管理）</div>
+        <div class="pcard-sub">EAR・外為法・制裁リストの自動スクリーニング。違反リスクをAIで事前検知</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-row"><div class="pcard-label">顧客</div><div class="pcard-val">先端製品輸出企業・商社・フォワーダー（コンプライアンス部門）</div></div>
+        <div class="pcard-row"><div class="pcard-label">課題</div><div class="pcard-val">EAR・外為法違反は刑事罰。スクリーニングが属人・手動</div></div>
+        <div class="pcard-row"><div class="pcard-label">社会問題</div><div class="pcard-val">安全保障貿易管理の強化。重要性高いが対象企業が特定業種に限定</div></div>
+        <div class="pcard-row"><div class="pcard-label">競合</div><div class="pcard-val">Descartes（高額・英語）。日本向けSaaSは空白</div></div>
+        <div class="pcard-row"><div class="pcard-label">グローバル</div><div class="pcard-val">米国主導の規制なので多国籍企業に横展開可能</div></div>
+        <div class="pcard-row"><div class="pcard-label">強み活用</div><div class="pcard-val">通関士・弁護士ネットワーク。書類処理の知見</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ S4 MATRIX ═══ -->
+<div class="section" id="matrix">
+  <div class="section-num">SECTION 04</div>
+  <div class="section-title">評価マトリクス（6パターン × 8指標）</div>
+  <p style="font-size:11px;color:#64748b;margin-bottom:14px">★5が最高。自社の強みを活かしやすく・社会課題がキャッチーで・競合が少ない順に高い評価。</p>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="width:160px">評価軸</th>
+          <th class="score-a" style="text-align:center">A<br>フォワーダー</th>
+          <th class="score-b" style="text-align:center">B<br>荷主SCM</th>
+          <th class="score-c" style="text-align:center">C<br>CBAM</th>
+          <th class="score-d" style="text-align:center">D<br>中小製造</th>
+          <th class="score-e" style="text-align:center">E<br>食料安保</th>
+          <th class="score-f" style="text-align:center">F<br>輸出規制</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dim">社会問題のキャッチー度</td>
+          <td class="score-a" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-b" style="text-align:center"><span class="star">★★</span></td>
+          <td class="score-c" style="text-align:center"><span class="star">★★★★★</span></td>
+          <td class="score-d" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-e" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-f" style="text-align:center"><span class="star">★★★</span></td>
+        </tr>
+        <tr>
+          <td class="dim">締め切り・緊急性</td>
+          <td class="score-a" style="text-align:center"><span class="star">★★★★</span></td>
+          <td class="score-b" style="text-align:center"><span class="star">★★</span></td>
+          <td class="score-c" style="text-align:center"><span class="star">★★★★★</span></td>
+          <td class="score-d" style="text-align:center"><span class="star">★★</span></td>
+          <td class="score-e" style="text-align:center"><span class="star">★</span></td>
+          <td class="score-f" style="text-align:center"><span class="star">★★★★</span></td>
+        </tr>
+        <tr>
+          <td class="dim">競合の少なさ（隙間）</td>
+          <td class="score-a" style="text-align:center"><span class="star">★★</span></td>
+          <td class="score-b" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-c" style="text-align:center"><span class="star">★★★★★</span></td>
+          <td class="score-d" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-e" style="text-align:center"><span class="star">★★★★</span></td>
+          <td class="score-f" style="text-align:center"><span class="star">★★★★</span></td>
+        </tr>
+        <tr>
+          <td class="dim">自社強みとの親和性</td>
+          <td class="score-a" style="text-align:center"><span class="star">★★★★★</span></td>
+          <td class="score-b" style="text-align:center"><span class="star">★★★★</span></td>
+          <td class="score-c" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-d" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-e" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-f" style="text-align:center"><span class="star">★★★</span></td>
+        </tr>
+        <tr>
+          <td class="dim">グローバル展開可能性</td>
+          <td class="score-a" style="text-align:center"><span class="star">★★</span></td>
+          <td class="score-b" style="text-align:center"><span class="star">★★★★★</span></td>
+          <td class="score-c" style="text-align:center"><span class="star">★★★★</span></td>
+          <td class="score-d" style="text-align:center"><span class="star">★★★★★</span></td>
+          <td class="score-e" style="text-align:center"><span class="star">★★</span></td>
+          <td class="score-f" style="text-align:center"><span class="star">★★★★</span></td>
+        </tr>
+        <tr>
+          <td class="dim">初期売上の立てやすさ</td>
+          <td class="score-a" style="text-align:center"><span class="star">★★★★</span></td>
+          <td class="score-b" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-c" style="text-align:center"><span class="star">★★★★★</span></td>
+          <td class="score-d" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-e" style="text-align:center"><span class="star">★</span></td>
+          <td class="score-f" style="text-align:center"><span class="star">★★★</span></td>
+        </tr>
+        <tr>
+          <td class="dim">長期参入障壁</td>
+          <td class="score-a" style="text-align:center"><span class="star">★★★★★</span></td>
+          <td class="score-b" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-c" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-d" style="text-align:center"><span class="star">★★</span></td>
+          <td class="score-e" style="text-align:center"><span class="star">★★★★</span></td>
+          <td class="score-f" style="text-align:center"><span class="star">★★★★</span></td>
+        </tr>
+        <tr>
+          <td class="dim">社会インパクト</td>
+          <td class="score-a" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-b" style="text-align:center"><span class="star">★★★</span></td>
+          <td class="score-c" style="text-align:center"><span class="star">★★★★</span></td>
+          <td class="score-d" style="text-align:center"><span class="star">★★★★</span></td>
+          <td class="score-e" style="text-align:center"><span class="star">★★★★★</span></td>
+          <td class="score-f" style="text-align:center"><span class="star">★★★</span></td>
+        </tr>
+        <tr style="font-weight:700;background:#f8fafc">
+          <td class="dim">合計点（/40）</td>
+          <td class="score-a" style="text-align:center;font-size:14px">28</td>
+          <td class="score-b" style="text-align:center;font-size:14px">26</td>
+          <td class="score-c" style="text-align:center;font-size:14px;font-weight:800;color:#c2410c">35 ★</td>
+          <td class="score-d" style="text-align:center;font-size:14px">25</td>
+          <td class="score-e" style="text-align:center;font-size:14px">23</td>
+          <td class="score-f" style="text-align:center;font-size:14px">29</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict" style="margin-top:16px">
+    <h4>マトリクス上位：C（CBAM）が最高スコア、次にF（輸出規制）とA（フォワーダー）</h4>
+    <p>ただしスコアは一側面。AはNACCSデファクトスタンダード戦略という長期モートがあり、CはA（フォワーダー）と組み合わせることで相乗効果を生む。</p>
+  </div>
+</div>
+
+<!-- ═══ S5 COMBO ═══ -->
+<div class="section" id="combo">
+  <div class="section-num">SECTION 05</div>
+  <div class="section-title">組み合わせ案（パターンの掛け合わせ）</div>
+  <p style="font-size:11px;color:#64748b;margin-bottom:14px">単一パターンではなく、複数を組み合わせることで参入障壁と市場規模を同時に高められる。</p>
+
+  <div class="combo-grid">
+    <div class="combo-card" style="border-top:3px solid #ea580c">
+      <div class="combo-title">① A × C｜フォワーダー経由CBAM</div>
+      <div class="combo-desc">フォワーダーを顧客として入り（A）、荷主のCBAM申告データをフォワーダー経由で取得・処理する（C）。フォワーダーは「CBAM対応サービス」として荷主に提供でき、差別化になる。</div>
+      <div class="combo-tags">
+        <span class="tag" style="background:#1e3a8a">既存戦略継続</span>
+        <span class="tag" style="background:#ea580c">CBAM追加</span>
+        <span class="tag" style="background:#16a34a">推奨</span>
+      </div>
+    </div>
+    <div class="combo-card" style="border-top:3px solid #7c3aed">
+      <div class="combo-title">② A × F｜フォワーダー＋輸出規制</div>
+      <div class="combo-desc">フォワーダー向けDXツール（A）に輸出規制スクリーニング（F）を組み込む。フォワーダーは自社でEAR/外為法チェックをしなければならず、ツールとして自然な統合。</div>
+      <div class="combo-tags">
+        <span class="tag" style="background:#1e3a8a">既存戦略継続</span>
+        <span class="tag" style="background:#7c3aed">コンプライアンス</span>
+      </div>
+    </div>
+    <div class="combo-card" style="border-top:3px solid #0f766e">
+      <div class="combo-title">③ C × D｜CBAM×中小製造業</div>
+      <div class="combo-desc">EU向け輸出を行う・行いたい中小製造業（D）に対して、CBAM対応SaaS（C）を提供。「EUに売りたければCBAMを解決しなければならない」という明確なニーズがある。</div>
+      <div class="combo-tags">
+        <span class="tag" style="background:#ea580c">CBAM</span>
+        <span class="tag" style="background:#b45309">中小製造業</span>
+      </div>
+    </div>
+    <div class="combo-card" style="border-top:3px solid #6366f1">
+      <div class="combo-title">④ A × B × C｜フルスタック貿易OS</div>
+      <div class="combo-desc">フォワーダー（A）を基盤にデータを蓄積し、荷主へのSCM可視化（B）とCBAM対応（C）をプラットフォームとして提供。「貿易OS」ポジションを狙う。</div>
+      <div class="combo-tags">
+        <span class="tag" style="background:#6366f1">大型狙い</span>
+        <span class="tag" style="background:#94a3b8">長期戦略</span>
+      </div>
+    </div>
+    <div class="combo-card" style="border-top:3px solid #b45309">
+      <div class="combo-title">⑤ D × B｜アジア中小輸出支援</div>
+      <div class="combo-desc">日本の中小製造業（D）に輸出ノウハウを提供し、荷物可視化（B）まで一括提供。グローバル展開として台湾・タイなどアジア中小製造業に横展開できる。</div>
+      <div class="combo-tags">
+        <span class="tag" style="background:#b45309">中小製造業</span>
+        <span class="tag" style="background:#0f766e">グローバル</span>
+      </div>
+    </div>
+    <div class="combo-card" style="border-top:3px solid #ef4444">
+      <div class="combo-title">⑥ C × F｜規制対応ワンストップ</div>
+      <div class="combo-desc">CBAM（C）と輸出規制（F）をセットにした「輸出コンプライアンスSuite」。どちらも未対応で輸出停止になるリスクがあり、同一顧客に両方を売れる。</div>
+      <div class="combo-tags">
+        <span class="tag" style="background:#ea580c">CBAM</span>
+        <span class="tag" style="background:#7c3aed">輸出規制</span>
+        <span class="tag" style="background:#16a34a">推奨</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S6 DECISION ═══ -->
+<div class="section" id="decision">
+  <div class="section-num">SECTION 06</div>
+  <div class="section-title">意思決定フロー</div>
+  <p style="font-size:11px;color:#64748b;margin-bottom:16px">どのパターンを選ぶか ─ 優先順位の問いを順番に答えると絞り込める。</p>
+
+  <div class="flow-wrap">
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-box">
+          <div class="flow-q">問い 1</div>
+          <div style="font-size:12px;font-weight:700;color:#1e293b;margin-bottom:8px">スピードを重視するか？</div>
+          <div class="flow-ans">
+            <span>Yes → C（CBAM）が最優先</span>
+            <span>No → 次の問いへ</span>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box">
+          <div class="flow-q">問い 2</div>
+          <div style="font-size:12px;font-weight:700;color:#1e293b;margin-bottom:8px">長期の参入障壁を作りたいか？</div>
+          <div class="flow-ans">
+            <span>Yes → A（フォワーダー）でNACCSデファクト</span>
+            <span>No → 次の問いへ</span>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box">
+          <div class="flow-q">問い 3</div>
+          <div style="font-size:12px;font-weight:700;color:#1e293b;margin-bottom:8px">グローバル市場を狙いたいか？</div>
+          <div class="flow-ans">
+            <span>Yes → B or D（アジア展開）</span>
+            <span>No → 次の問いへ</span>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box">
+          <div class="flow-q">問い 4</div>
+          <div style="font-size:12px;font-weight:700;color:#1e293b;margin-bottom:8px">コンプライアンス領域が得意か？</div>
+          <div class="flow-ans">
+            <span>Yes → F（輸出規制）を先行</span>
+            <span>No → A×C の組み合わせへ</span>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box">
+          <div class="flow-q">問い 5</div>
+          <div style="font-size:12px;font-weight:700;color:#1e293b;margin-bottom:8px">社会インパクトを最大化したいか？</div>
+          <div class="flow-ans">
+            <span>Yes → E（食料安保）またはD</span>
+            <span>No → 既存戦略Aの深化</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-box" style="margin-top:16px">
+    <strong>注意：</strong>パターンCのCBAMは「2026年1月」という締め切りがあるため、今から着手しないと市場に入れなくなる可能性がある。CとAの同時並行が最もリスクを分散できる。
+  </div>
+</div>
+
+<!-- ═══ S7 DEEP DIVE A ═══ -->
+<div class="section" id="patterns">
+  <div class="section-num">SECTION 07</div>
+  <div class="section-title">各パターン 深掘り</div>
+
+  <div style="font-size:12px;font-weight:700;color:#1e3a8a;border-left:3px solid #1e3a8a;padding-left:8px;margin-bottom:12px">Pattern A ─ フォワーダー向けDX（現行戦略）</div>
+  <div class="deep-grid">
+    <div class="deep-box">
+      <div class="deep-head blue">最初の1社に売るストーリー</div>
+      <div class="deep-body">
+        <ul>
+          <li>アクティビスト株主から「DX推進」の書面要求を受けているフォワーダーを特定</li>
+          <li>次の株主総会（6月）までに「DX実績」を作る必要がある会社に集中営業</li>
+          <li>「書類確認のミス件数を〇%削減」という数字を3ヶ月で出す</li>
+          <li>その数字をIRに使ってもらう → 株主への説明材料になる</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deep-box">
+      <div class="deep-head blue">デファクトスタンダードへの道</div>
+      <div class="deep-body">
+        <ul>
+          <li>フォワーダー3〜5社にデータ連携ハブとして接続</li>
+          <li>荷主→フォワーダー→NACCS のデータフローを制御</li>
+          <li>NACCS認定取得で参入障壁を確立</li>
+          <li>NACCSが「むしろ御社に合わせたい」と言ってくるまでシェアを拡大</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deep-box">
+      <div class="deep-head blue">Shippioとの差別化</div>
+      <div class="deep-body">
+        <ul>
+          <li>Shippio：荷主目線・フォワーダーを「使う」側。中小荷主向け</li>
+          <li>御社：フォワーダー目線・フォワーダー内部業務を強化する。大手向け</li>
+          <li>Flexport競合を避けて国内大手フォワーダーを味方につける戦略</li>
+          <li>NACCS連携・通関士ネットワークで完全に別カテゴリを作る</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deep-box">
+      <div class="deep-head blue">リスク</div>
+      <div class="deep-body">
+        <ul>
+          <li>CargoWiseが日本を本気で攻略しに来たら競合激化</li>
+          <li>NACCSが自社でDXサービスを始める可能性（政府系の動き）</li>
+          <li>フォワーダー業界全体が縮小し荷主直DXに移行するシナリオ</li>
+          <li>大手フォワーダーの意思決定が遅くSalesサイクルが長い</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+  <div style="font-size:12px;font-weight:700;color:#c2410c;border-left:3px solid #c2410c;padding-left:8px;margin-bottom:12px">Pattern C ─ CBAM対応SaaS「2026年CBAM問題」★ 最注目</div>
+  <div class="deep-grid">
+    <div class="deep-box">
+      <div class="deep-head orange">最初の1社に売るストーリー</div>
+      <div class="deep-body">
+        <ul>
+          <li>鉄鋼・アルミ系の輸出企業のコンプライアンス・ESG担当に直接接触</li>
+          <li>「2026年1月から未申告のまま輸出するとEUから輸入禁止になる」と伝える</li>
+          <li>「今から準備しないと間に合わない」という締め切り感で動かす</li>
+          <li>無料の試算ツールで「あなたの会社の影響額はXX億円」を出す → 即座に検討</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deep-box">
+      <div class="deep-head orange">プロダクト構成案</div>
+      <div class="deep-body">
+        <ul>
+          <li>① CBAMスコア計算：製品ごとの組み込み炭素量を算定</li>
+          <li>② 申告書自動生成：EU向けCBAM申告書をワンクリックで作成</li>
+          <li>③ サプライヤー連携：素材・部品のカーボンデータを上流から収集</li>
+          <li>④ 経年トラッキング：年次でカーボン削減実績を可視化・ESGレポート連携</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deep-box">
+      <div class="deep-head orange">フォワーダー（A）との組み合わせ</div>
+      <div class="deep-body">
+        <ul>
+          <li>フォワーダーが荷主の輸出書類を扱う → CBAM申告データが自然に流れる</li>
+          <li>「フォワーダーに依頼するだけでCBAMも解決」という付加価値を提供</li>
+          <li>フォワーダー側：荷主に新しい付加価値サービスとして提供できる</li>
+          <li>御社：フォワーダーをチャネルとして6,000社以上の荷主に到達</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deep-box">
+      <div class="deep-head orange">グローバル展開</div>
+      <div class="deep-body">
+        <ul>
+          <li>CBAMはEU規制だが影響を受けるのは世界中の輸出企業</li>
+          <li>台湾・韓国・中国の鉄鋼・アルミ輸出企業にも同じツールが使える</li>
+          <li>日本で実績を作り → アジア展開 → 欧州で逆輸入という経路</li>
+          <li>日本語・英語・中国語・韓国語対応でアジアSaaSとして成長</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+  <div style="font-size:12px;font-weight:700;color:#0f766e;border-left:3px solid #0f766e;padding-left:8px;margin-bottom:12px">Pattern B ─ 荷主向けSCリスク可視化</div>
+  <div class="deep-grid">
+    <div class="deep-box">
+      <div class="deep-head teal">差別化ポイント</div>
+      <div class="deep-body">
+        <ul>
+          <li>project44・FourKitesは大手向け・高額。日本中小への導入事例なし</li>
+          <li>「日本語・NACCS連動・中堅向け月額低価格」で差別化できる</li>
+          <li>フォワーダーからデータを引っ張れる関係があれば精度が高い</li>
+          <li>地政学リスク（紅海・台湾）のアラート機能で緊急性を演出</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deep-box">
+      <div class="deep-head teal">課題・ハードル</div>
+      <div class="deep-body">
+        <ul>
+          <li>「見えるようにする」だけでは買ってもらえない。何を変えてくれるかが問われる</li>
+          <li>リアルタイムデータの取得：フォワーダー・船社のAPI連携交渉が必要</li>
+          <li>大手荷主はすでにproject44を使っていることが多い</li>
+          <li>中小荷主：予算がなく、可視化への投資優先度が低い</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+  <div style="font-size:12px;font-weight:700;color:#b45309;border-left:3px solid #b45309;padding-left:8px;margin-bottom:12px">Pattern D ─ 中小輸出製造業支援</div>
+  <div class="deep-grid">
+    <div class="deep-box">
+      <div class="deep-head amber">ユニークな切り口</div>
+      <div class="deep-body">
+        <ul>
+          <li>「輸出したいが方法が分からない」中小製造業は30万社以上存在</li>
+          <li>JETROは無料・非営利。有料SaaSとしての余地は大きい</li>
+          <li>バイヤーマッチング＋フォワーダー手配＋通関書類をワンストップ</li>
+          <li>アジア製造業：台湾・タイ・ベトナムの中小にも同じ問題あり</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deep-box">
+      <div class="deep-head amber">課題・ハードル</div>
+      <div class="deep-body">
+        <ul>
+          <li>中小企業はIT投資ができない・意思決定が遅い・SaaS月額を払いたがらない</li>
+          <li>成功報酬型でないと刺さらない可能性（輸出できたらいくら、という設計）</li>
+          <li>「輸出できる製品を持っているか」のスクリーニングが必要</li>
+          <li>グローバルバイヤーへのリーチが別途必要</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+  <div style="font-size:12px;font-weight:700;color:#7e22ce;border-left:3px solid #7e22ce;padding-left:8px;margin-bottom:12px">Pattern F ─ 輸出規制コンプライアンスAI</div>
+  <div class="deep-grid">
+    <div class="deep-box">
+      <div class="deep-head purple">なぜ今チャンスか</div>
+      <div class="deep-body">
+        <ul>
+          <li>2023年以降、米国EARの対中輸出規制が急速に強化されている</li>
+          <li>日本の外為法も2023年改正で規制品目が拡大</li>
+          <li>大手商社・製造業の輸出コンプライアンス担当が人手不足で悲鳴</li>
+          <li>1件の違反で刑事罰・輸出禁止になるリスクがあり、投資を正当化しやすい</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deep-box">
+      <div class="deep-head purple">課題・ハードル</div>
+      <div class="deep-body">
+        <ul>
+          <li>法律知識と技術の両方が必要。人材確保が難しい</li>
+          <li>対象企業が半導体・精密機械など特定業種に限られる</li>
+          <li>Descartes Visual Complianceが認知度高く、既存顧客の乗り換えが難しい</li>
+          <li>規制の変化が速く、データベースの維持コストが高い</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S8 RECOMMENDATION ═══ -->
+<div class="section" id="recommendation">
+  <div class="section-num">SECTION 08</div>
+  <div class="section-title">推奨：次のアクション</div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+    <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border:2px solid #ea580c;border-radius:10px;padding:16px">
+      <div style="font-size:10px;font-weight:700;color:#c2410c;letter-spacing:.08em;margin-bottom:6px">IMMEDIATE ACTION</div>
+      <div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:8px">C：CBAM深掘り調査</div>
+      <div style="font-size:11px;color:#7c2d12;line-height:1.6">CBAM対象の日本企業リストアップ・既存欧州ツールの機能・価格調査・EU要件の詳細把握。2026年1月まで時間がない。</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #1e3a8a;border-radius:10px;padding:16px">
+      <div style="font-size:10px;font-weight:700;color:#1e3a8a;letter-spacing:.08em;margin-bottom:6px">PARALLEL ACTION</div>
+      <div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:8px">A：フォワーダー戦略継続</div>
+      <div style="font-size:11px;color:#1e3a8a;line-height:1.6">アクティビスト圧力下のフォワーダーとの商談継続。CBAM機能を追加できる設計でプロダクト開発を進める。</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #16a34a;border-radius:10px;padding:16px">
+      <div style="font-size:10px;font-weight:700;color:#15803d;letter-spacing:.08em;margin-bottom:6px">CONSIDERATION</div>
+      <div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:8px">A×C 統合設計</div>
+      <div style="font-size:11px;color:#15803d;line-height:1.6">フォワーダー向けDXハブ（A）にCBAM申告機能（C）を組み込む設計を検討。フォワーダーが荷主に対してCBAMを含む付加価値を提供できるようにする。</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:16px">
+    <strong>今日の議論から見えた方向性：</strong><br>
+    顧客はフォワーダーだけでなくてもよい ─ だがフォワーダーを「チャネル」として使い、その先の荷主にCBAM・規制対応等のサービスを届ける構造は有効。国際物流の「キャッチーな社会課題」はCBAMが最有力。グローバル展開を考えるならBまたはCをアジア展開の軸にできる。
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer style="text-align:center;padding:28px;color:#94a3b8;font-size:11px">
+  <a href="index.html" style="color:#93c5fd;text-decoration:none">← 一覧に戻る</a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="フォワーダーDX_事業企画書.html" style="color:#93c5fd;text-decoration:none">フォワーダーDX 事業企画書 →</a>
+</footer>
+
+</body>
+</html>
